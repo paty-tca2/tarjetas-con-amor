@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const Footer = () => {
   return (
@@ -16,7 +17,14 @@ const Footer = () => {
         </div>
         
         <div className="flex flex-col items-center mt-8">
-          <img src="/icono-footer.png" alt="TCA Logo" className="w-20 h-20 mb-4" />
+          <div className="w-20 h-20 mb-4 relative">
+            <Image
+              src="/icono-footer.png"
+              alt="TCA Logo"
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
           <p className="text-sm sm:text-base md:text-lg text-white font-geometos text-center">
             COPYRIGHT © 2024 TAC. ALL RIGHTS RESERVED
           </p>

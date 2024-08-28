@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const products = [
   { title: 'Tarjetas', image: '/cards.jpeg' },
@@ -17,11 +18,12 @@ const ProductShowcase = () => {
             key={index} 
             className="flex flex-col items-center transition-transform duration-300 ease-in-out hover:-translate-y-4 group"
           >
-            <div className="w-32 h-32 sm:w-64 sm:h-64 mb-2 sm:mb-6 rounded-full overflow-hidden shadow-lg">
-              <img 
+            <div className="w-32 h-32 sm:w-64 sm:h-64 mb-2 sm:mb-6 rounded-full overflow-hidden shadow-lg relative">
+              <Image 
                 src={product.image} 
                 alt={product.title} 
-                className="w-full h-full object-cover"
+                layout="fill"
+                objectFit="cover"
               />
             </div>
             <h3 className="text-lg sm:text-3xl text-[#5D60a6] group-hover:text-[#04d9b2] font-geometos transition-colors duration-300">
