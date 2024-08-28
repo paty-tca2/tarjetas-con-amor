@@ -11,7 +11,7 @@ const products = [
 const ProductShowcase = () => {
   return (
     <div className="text-center p-8 sm:p-16 lg:p-24 bg-white">
-      <h2 className="text-4xl sm:text-7xl text-[#5D60a6] font-geometos mb-8 sm:mb-16">Nuestros productos</h2>
+      <h2 className="text-2xl sm:text-7xl text-[#5D60a6] font-geometos mb-8 sm:mb-16">Nuestros productos</h2>
       <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-4 sm:gap-16">
         {products.map((product, index) => (
           <div 

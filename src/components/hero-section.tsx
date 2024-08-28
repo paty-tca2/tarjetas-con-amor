@@ -26,7 +26,7 @@ const HeroSection = () => {
           />
         </div>
       </div>
-      <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 text-white text-sm sm:text-xl font-geometos text-center sm:text-left w-full sm:w-auto">
+      <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 text-white text-sm sm:text-xl font-geometos text-left sm:text-left w-full sm:w-auto">
         ENVIOS GRATIS A TODA LA REPUBLICA
       </div>
     </div>

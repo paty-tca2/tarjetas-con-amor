@@ -25,12 +25,12 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
       </div>
       <nav className="px-4 mt-4 sm:mt-8">
         <ul className="space-y-4 sm:space-y-6">
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos text-xl sm:text-2xl">TARJETAS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos text-xl sm:text-2xl">POSTALES</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos text-xl sm:text-2xl">CALENDARIOS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos text-xl sm:text-2xl">ALBUM DE FOTOS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos text-xl sm:text-2xl">SOBRE NOSOTROS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos text-xl sm:text-2xl">CONTACTO</a></li>
+          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">TARJETAS</a></li>
+          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">POSTALES</a></li>
+          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">CALENDARIOS</a></li>
+          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">ALBUM DE FOTOS</a></li>
+          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">SOBRE NOSOTROS</a></li>
+          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">CONTACTO</a></li>
         </ul>
       </nav>
       <div className="absolute bottom-4 left-4 right-4">
