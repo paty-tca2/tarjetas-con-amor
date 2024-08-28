@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom font definitions */
+@font-face {
+  font-family: 'Coneria Script';
+  src: url('/fonts/ConeriaScript.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geometos Soft';
+  src: url('/fonts/GeometosSoftRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
