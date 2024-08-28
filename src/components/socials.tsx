@@ -7,7 +7,10 @@ const SocialMediaIcons = () => {
   
   return (
     <div className="flex flex-col items-center space-y-6 sm:space-y-8 md:space-y-12 lg:space-y-16 p-6 sm:p-8 md:p-12 lg:p-16 bg-white">
-      <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-geometos text-[#5D60a6] mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-center">SIGUE NUESTRAS REDES</h2>
+      <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-geometos text-[#5D60a6] mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-center">
+  <span className="font-light">SIGUE NUESTRAS</span>{' '}
+  <span className='font-bold'> REDES</span>
+</h2>
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12">
       <a href="https://www.instagram.com/tarjetasconamor__oficial?igsh=MXgxdnRscmNlc3A3ZA%3D%3D&utm_source=qr" 
            className="hover:scale-110 transition-transform duration-300"

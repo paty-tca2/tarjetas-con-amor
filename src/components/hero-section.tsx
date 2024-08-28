@@ -11,6 +11,7 @@ const HeroSection = () => {
           layout="fill"
           objectFit="cover"
           priority
+          className="hero-bg"
         />
       </div>
       <div className="absolute inset-0 bg-black bg-opacity-50" />

@@ -14,27 +14,27 @@ const iconStyle = "w-8 h-8 sm:w-10 sm:h-10 text-[#5D60a6] hover:text-[#04d9b2] t
 
 const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
   return (
-    <div className={`fixed inset-y-0 left-0 w-[80vw] sm:w-96 bg-white shadow-lg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-50`}>
-      <div className="relative h-32 sm:h-40">
-        <button onClick={onClose} className="absolute top-4 right-4 text-[#04d9b2] hover:text-gray-700 font-bold">
-          <IoClose className="h-6 w-6" />
-        </button>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Image src="/icono-menu.png" alt="Menu Icon" width={100} height={100} className="w-24 h-24 sm:w-32 sm:h-32" />
+    <div className={`fixed top-0 left-0 w-[80vw] sm:w-96 h-[60vh] sm:h-full bg-white shadow-lg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-50 rounded-r-3xl sm:rounded-none`}>
+      <div className="relative h-24 sm:h-48">
+        <div className="absolute -top-3 left-0 right-0 flex justify-center">
+          <Image src="/icono-menu.png" alt="Menu Icon" width={120} height={120} className="w-28 h-28 sm:w-40 sm:h-40" />
         </div>
+        <button onClick={onClose} className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[#04d9b2] font-bold">
+          <IoClose className="h-6 w-6 sm:h-8 sm:w-8" />
+        </button>
       </div>
-      <nav className="px-4 mt-4 sm:mt-8">
-        <ul className="space-y-4 sm:space-y-6">
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">TARJETAS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">POSTALES</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">CALENDARIOS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">ALBUM DE FOTOS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">SOBRE NOSOTROS</a></li>
-          <li><a href="#" className="text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">CONTACTO</a></li>
+      <nav className="px-4 mt-2 sm:mt-4">
+        <ul className="space-y-4 sm:space-y-8">
+          <li><a href="#" className="block py-2 sm:py-1 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">TARJETAS</a></li>
+          <li><a href="#" className="block py-2 sm:py-1 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">POSTALES</a></li>
+          <li><a href="#" className="block py-2 sm:py-1 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">CALENDARIOS</a></li>
+          <li><a href="#" className="block py-2 sm:py-1 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">ALBUM DE FOTOS</a></li>
+          <li><a href="#" className="block py-2 sm:py-1 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">SOBRE NOSOTROS</a></li>
+          <li><a href="#" className="block py-2 sm:py-1 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl">CONTACTO</a></li>
         </ul>
       </nav>
-      <div className="absolute bottom-4 left-4 right-4">
-        <div className="flex justify-start space-x-4 sm:space-x-6">
+      <div className="absolute bottom-6 sm:bottom-4 left-4 right-4">
+        <div className="flex justify-between sm:justify-start sm:space-x-6">
           <a href="https://www.instagram.com/tarjetasconamor__oficial?igsh=MXgxdnRscmNlc3A3ZA%3D%3D&utm_source=qr" 
              className="hover:scale-110 transition-transform duration-300"
              target="_blank"

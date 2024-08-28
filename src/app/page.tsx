@@ -8,17 +8,18 @@ import SocialMediaIcons from '@/components/socials';
 import TestimonialsComponent from '@/components/testimonials';
 import React from 'react';
 
-
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col">
+    <div className="overflow-x-hidden min-h-screen flex flex-col">
       <Header />
-      <HeroSection/>
-      <ProductShowcase/>
-      <PromoSouvenirComponent/>
-      <TestimonialsComponent/>
-      <SocialMediaIcons/>
+      <main className="flex-grow pt-16 md:pt-24 lg:pt-28"> {/* Adjust these pt (padding-top) values as needed */}
+        <HeroSection/>
+        <ProductShowcase/>
+        <PromoSouvenirComponent/>
+        <TestimonialsComponent/>
+        <SocialMediaIcons/>
+      </main>
       <Footer/>
-    </main>
+    </div>
   );
 }
