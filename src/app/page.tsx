@@ -8,17 +8,14 @@ import SocialMediaIcons from '@/components/socials';
 import TestimonialsComponent from '@/components/testimonials';
 import React from 'react';
 import SignIn from "@/app/pages/signIn";
+import SignUp from "@/app/pages/signup";
 
 export default function Home() {
   return (
     <div className="overflow-x-hidden min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow md:pt-24 lg:pt-28">
-          <HeroSection/>
-          <ProductShowcase/>
-          <PromoSouvenirComponent/>
-          <TestimonialsComponent/>
-          <SocialMediaIcons/>
+          <SignUp/>
       </main>
       <Footer/>
     </div>
