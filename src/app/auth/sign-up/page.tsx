@@ -1,14 +1,14 @@
 // pages/index.js
-"use client"
-import Image from 'next/image';
-import Link from 'next/link';
-import styles from "./styles/signup.module.css";
+"use client";
+import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { RegisterUser } from "@/core/usecases/auth/RegisterUsecase";
 import { AuthRepositoryImpl } from "@/core/repositories/AuthRepository";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Either, fold } from "fp-ts/Either";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const authRepository = new AuthRepositoryImpl();
 const registerUserUseCase = new RegisterUser(authRepository);
@@ -20,7 +20,11 @@ export default function SignUp() {
         first_name: "",
         last_name: "",
     });
+
+    const [confirmEmail, setConfirmEmail] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [isChecked, setIsChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleCheckboxChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -29,14 +33,39 @@ export default function SignUp() {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserData({
-            ...userData,
-            [e.target.id]: e.target.value,
-        });
+        const { id, value } = e.target;
+        setUserData((prevData) => ({
+            ...prevData,
+            [id]: value,
+        }));
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setConfirmEmail(e.target.value);
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setConfirmPassword(e.target.value);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (userData.email !== confirmEmail) {
+            toast.error("Los correos electrónicos no coinciden", {
+                position: "top-center",
+            });
+            return;
+        }
+
+        if (userData.password !== confirmPassword) {
+            toast.error("Las contraseñas no coinciden", {
+                position: "top-center",
+            });
+            return;
+        }
+
+        setLoading(true);
 
         const result: Either<string, any> = await registerUserUseCase.execute(
             userData
@@ -44,16 +73,28 @@ export default function SignUp() {
 
         fold(
             (error: string) => {
-                toast.error(error);
+                toast.error(error, {
+                    position: "top-center",
+                });
             },
             (success: any) => {
-                toast.success("Usuario registrado con éxito");
+                toast.success("Usuario registrado con éxito", {
+                    position: "top-center",
+                });
             }
         )(result);
+
+        setLoading(false);
     };
 
     return (
-        <div className="relative flex flex-col min-h-screen justify-center items-center py-16">
+        <div className="relative flex flex-col min-h-screen justify-center items-center py-48">
+            {loading && (
+                <div className="absolute inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <ClipLoader color="#04d9b2" loading={loading} size={50} />
+                </div>
+            )}
+
             <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-black bg-opacity-65">
                 <div className="absolute inset-0 w-full h-full mix-blend-overlay">
                     <Image
@@ -76,9 +117,9 @@ export default function SignUp() {
                             </h1>
                         </div>
                         <Link href="/auth/login">
-                        <button
-                            className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[7rem] h-10 text-[1rem] sm:text-[1.25rem]">INGRESA
-                        </button>
+                            <button
+                                className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[7rem] h-10 text-[1rem] sm:text-[1.25rem]">INGRESA
+                            </button>
                         </Link>
                     </div>
                     <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
@@ -153,6 +194,8 @@ export default function SignUp() {
                                     className="w-full p-1 text-black"
                                     type="email"
                                     id="confirmEmail"
+                                    value={confirmEmail}
+                                    onChange={handleEmailChange}
                                 />
                             </div>
                             <div className="pt-2">
@@ -183,6 +226,8 @@ export default function SignUp() {
                                     className="w-full p-1 text-black"
                                     type="password"
                                     id="confirmPassword"
+                                    value={confirmPassword}
+                                    onChange={handlePasswordChange}
                                 />
                             </div>
 
@@ -208,9 +253,13 @@ export default function SignUp() {
                             <div className="col-span-2 my-3">
                                 <button
                                     type="submit"
-                                    className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-full h-10"
+                                    className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-full h-10 flex justify-center items-center"
                                 >
-                                    CREAR CUENTA
+                                    {loading ? (
+                                        <ClipLoader color="#ffffff" loading={loading} size={20} />
+                                    ) : (
+                                        "CREAR CUENTA"
+                                    )}
                                 </button>
                             </div>
 

@@ -1,0 +1,487 @@
+Index: src/app/page.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// src/app/page.tsx\r\nimport Footer from '@/components/footer';\r\nimport Header from '@/components/header';\r\nimport HeroSection from '@/components/hero-section';\r\nimport ProductShowcase from '@/components/productos';\r\nimport PromoSouvenirComponent from '@/components/promo-souvenir';\r\nimport SocialMediaIcons from '@/components/socials';\r\nimport TestimonialsComponent from '@/components/testimonials';\r\nimport React from 'react';\r\n\r\nexport default function Home() {\r\n  return (\r\n    <div className=\"overflow-x-hidden min-h-screen flex flex-col\">\r\n      <Header />\r\n      <main className=\"flex-grow pt-16 md:pt-24 lg:pt-28\"> {/* Adjust these pt (padding-top) values as needed */}\r\n        <HeroSection/>\r\n        <ProductShowcase/>\r\n        <PromoSouvenirComponent/>\r\n        <TestimonialsComponent/>\r\n        <SocialMediaIcons/>\r\n      </main>\r\n      <Footer/>\r\n    </div>\r\n  );\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+--- a/src/app/page.tsx	(revision f50026da6ca1beac37c26c05976a7e36e19cd548)
++++ b/src/app/page.tsx	(date 1724971221116)
+@@ -7,17 +7,14 @@
+ import SocialMediaIcons from '@/components/socials';
+ import TestimonialsComponent from '@/components/testimonials';
+ import React from 'react';
++import SignIn from "@/app/pages/signIn";
+ 
+ export default function Home() {
+   return (
+     <div className="overflow-x-hidden min-h-screen flex flex-col">
+       <Header />
+       <main className="flex-grow pt-16 md:pt-24 lg:pt-28"> {/* Adjust these pt (padding-top) values as needed */}
+-        <HeroSection/>
+-        <ProductShowcase/>
+-        <PromoSouvenirComponent/>
+-        <TestimonialsComponent/>
+-        <SocialMediaIcons/>
++        <SignIn/>
+       </main>
+       <Footer/>
+     </div>
+Index: tailwind.config.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import type { Config } from \"tailwindcss\"\r\n\r\nconst config = {\r\n  darkMode: [\"class\"],\r\n  content: [\r\n    \"./src/pages/**/*.{js,ts,jsx,tsx,mdx}\",\r\n    \"./src/components/**/*.{js,ts,jsx,tsx,mdx}\",\r\n    \"./src/app/**/*.{js,ts,jsx,tsx,mdx}\",\r\n\t],\r\n  prefix: \"\",\r\n  theme: {\r\n    container: {\r\n      center: true,\r\n      padding: \"2rem\",\r\n      screens: {\r\n        \"2xl\": \"1400px\",\r\n      },\r\n    },\r\n    extend: {\r\n      backgroundImage: {\r\n        \"gradient-radial\": \"radial-gradient(var(--tw-gradient-stops))\",\r\n        \"gradient-conic\":\r\n          \"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))\",\r\n      },\r\n      fontFamily: {\r\n        'coneria': ['Coneria Script', 'cursive'],\r\n        'geometos': ['Geometos Soft', 'sans-serif'],\r\n      },\r\n    },\r\n  },\r\n  plugins: [],\r\n};\r\nexport default config;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/tailwind.config.ts b/tailwind.config.ts
+--- a/tailwind.config.ts	(revision f50026da6ca1beac37c26c05976a7e36e19cd548)
++++ b/tailwind.config.ts	(date 1724958017364)
+@@ -25,7 +25,13 @@
+       fontFamily: {
+         'coneria': ['Coneria Script', 'cursive'],
+         'geometos': ['Geometos Soft', 'sans-serif'],
++        'barlow': ['Barlow', 'sans-serif']
+       },
++      opacity: {
++        '15': '0.15',
++        '35': '0.35',
++        '65': '0.65',
++      }
+     },
+   },
+   plugins: [],
+Index: src/app/pages/signup.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/app/pages/signup.tsx b/src/app/pages/signup.tsx
+new file mode 100644
+--- /dev/null	(date 1724971699430)
++++ b/src/app/pages/signup.tsx	(date 1724971699430)
+@@ -0,0 +1,182 @@
++// pages/index.js
++"use client"
++import Image from 'next/image';
++import styles from "./styles/signup.module.css";
++import React, { useState } from "react";
++
++
++export default function SignUp() {
++
++    const [isChecked, setIsChecked] = useState(false);
++
++    const handleCheckboxChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
++        setIsChecked(event.target.checked);
++    };
++
++
++    return (
++        <div className="relative flex flex-col min-h-screen justify-center items-center py-16">
++
++            <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-black bg-opacity-65">
++                <div className="absolute inset-0 w-full h-full mix-blend-overlay">
++                    <Image
++                        src="/fondo_singup.jpeg"
++                        alt="Descripción de la imagen"
++                        layout="fill"
++                        objectFit="cover"
++                        className={`w-full ${styles.customImage}`}
++                    />
++                </div>
++            </div>
++
++            {/* Contenedor principal */}
++            <div className="relative z-10 flex flex-col items-start justify-center p-6 min-h-screen">
++
++                {/* Texto encima del formulario */}
++                <div className="pb-4">
++                    <div
++                        className="flex sm:flex-row items-center justify-center sm:justify-start space-x-4 sm:space-x-10 md:space-x-20 pb-6">
++                        <div className="text-left">
++                            <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
++                                <span style={{color: "#ffffff"}}>¿Tienes </span>
++                                <span style={{color: "#04d7af"}}>cuenta?</span>
++                            </h1>
++                        </div>
++                        <button
++                            className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[7rem] h-10 text-[1rem] sm:text-[1.25rem]">INGRESA
++                        </button>
++                    </div>
++                    <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
++                        <span style={{color: "#ffffff"}}>¿No tienes? </span>
++                        <span style={{color: "#04d7af"}}>Regístrate ahora</span>
++                    </h1>
++                </div>
++
++                {/* Contenedor para las secciones de formulario e información */}
++                <div className="relative z-10 flex flex-col md:flex-row justify-center">
++
++                    {/* Sección del formulario */}
++                    <div className="border border-white w-full px-6 py-8 max-w-lg">
++                        <h2 className="text-2xl dark:text-white font-geometos">Empieza a crear memorias</h2>
++
++                        <form className="grid grid-rows-1 sm:grid-cols-2 gap-2 mt-4  items-center">
++                            <div>
++                                <label className="block text-white text-[0.78rem] font-geometos pb-1"
++                                       htmlFor="name">NOMBRE</label>
++                                <input
++                                    className="w-full p-1 text-black"
++                                    type="text"
++                                    id="name"
++                                />
++                            </div>
++                            <div>
++                                <label className="block text-white text-[0.78rem] font-geometos pb-1"
++                                       htmlFor="apellido">APELLIDO</label>
++                                <input
++                                    className="w-full p-1 text-black"
++                                    type="text"
++                                    id="apellido"
++                                />
++                            </div>
++                            <div className="pt-2">
++                                <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="email">INTRODUCE
++                                    TU
++                                    CORREO</label>
++                                <input
++                                    className="w-full p-1 text-black"
++                                    type="email"
++                                    id="email"
++                                />
++                            </div>
++                            <div className="pt-2">
++                                <label className="block text-white text-[0.78rem] font-geometos pb-1"
++                                       htmlFor="confirmEmail">CONFIRMA
++                                    TU CORREO</label>
++                                <input
++                                    className="w-full p-1 text-black"
++                                    type="email"
++                                    id="confirmEmail"
++                                />
++                            </div>
++                            <div className="pt-2">
++                                <label className="block text-white text-[0.78rem] font-geometos pb-1"
++                                       htmlFor="password">CONTRASEÑA</label>
++                                <input
++                                    className="w-full p-1 text-black placeholder:text-xs"
++                                    type="password"
++                                    id="password"
++                                    placeholder='Una mayuscula, un numero y un caracter especial'
++                                />
++                            </div>
++                            <div className="pt-2">
++                                <label className="block text-white text-[0.78rem] font-geometos pb-1"
++                                       htmlFor="confirmPassword">CONFIRMA
++                                    TU CONTRASEÑA</label>
++                                <input
++                                    className="w-full p-1 text-black"
++                                    type="password"
++                                    id="confirmPassword"
++                                />
++                            </div>
++                            {/* Checkbox para aceptar términos y condiciones */}
++                            <div className="col-span-2 flex items-center mt-4 text-center">
++                                <input
++                                    type="checkbox"
++                                    id="terms"
++                                    checked={isChecked}
++                                    onChange={handleCheckboxChange}
++                                    className="mr-2"
++                                />
++                                <label htmlFor="terms" className="text-white text-xs font-geometos">
++                                    Acepto los <a href="/terms" className="text-[#04d7af] underline">términos y
++                                    condiciones</a>
++                                </label>
++                            </div>
++
++                            <div className="col-span-2 my-3">
++                                <button
++                                    className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-full h-10">CREAR
++                                    CUENTA
++                                </button>
++                            </div>
++
++                            <div className="col-span-2 text-center">
++                                <a href="/privacy" className="text-xs font-geometos text-[#04d7af] underline">
++                                    Aviso de privacidad
++                                </a>
++                            </div>
++                        </form>
++                    </div>
++
++                    {/* Sección del contenedor de información */}
++                    <div className="border border-white w-full max-w-lg bg-white px-6 py-2 ">
++                        <div className="flex justify-center mb-4">
++                            <Image
++                                src="/logo-principal.png"
++                                alt="Descripción de la imagen"
++                                width={150}
++                                height={150}
++                                layout="intrinsic"
++                            />
++                        </div>
++                        <h2 className="text-lg font-bold mb-2 text-[#5d60a6] font-geometos text-center">Beneficios</h2>
++                        <div className="flex flex-col text-[#5d60a6] space-y-4 text-[0.88rem] font-barlow">
++                            <div className="normal-case">
++                                <p className="pb-3">1) Recordatorios:</p>
++                                <p>Nunca vuelvas a olvidar una ocasión especial.</p>
++                            </div>
++                            <div>
++                                <p className="pb-3">2) Ahorra tiempo y dinero:</p>
++                                <p>Direcciones y métodos de pago seleccionados.</p>
++                            </div>
++                            <div>
++                                <p className="pb-3">3) Promociones:</p>
++                                <p>Obtén potenciales descuentos de temporada y por cliente frecuente.</p>
++                            </div>
++                        </div>
++                    </div>
++                </div>
++            </div>
++        </div>
++    );
++}
+Index: src/app/globals.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@tailwind base;\r\n@tailwind components;\r\n@tailwind utilities;\r\n\r\n/* Custom font definitions */\r\n@font-face {\r\n  font-family: 'Coneria Script';\r\n  src: url('/fonts/ConeriaScript.ttf') format('truetype');\r\n  font-weight: normal;\r\n  font-style: normal;\r\n  font-display: swap;\r\n}\r\n\r\n@font-face {\r\n  font-family: 'Geometos Soft';\r\n  src: url('/fonts/GeometosSoftRegular.ttf') format('truetype');\r\n  font-weight: normal;\r\n  font-style: normal;\r\n  font-display: swap;\r\n}\r\n\r\n:root {\r\n  --foreground-rgb: 0, 0, 0;\r\n  --background-start-rgb: 214, 219, 220;\r\n  --background-end-rgb: 255, 255, 255;\r\n}\r\n\r\n@media (prefers-color-scheme: dark) {\r\n  :root {\r\n    --foreground-rgb: 255, 255, 255;\r\n    --background-start-rgb: 0, 0, 0;\r\n    --background-end-rgb: 0, 0, 0;\r\n  }\r\n}\r\n\r\nbody {\r\n  color: rgb(var(--foreground-rgb));\r\n  background: linear-gradient(\r\n      to bottom,\r\n      transparent,\r\n      rgb(var(--background-end-rgb))\r\n    )\r\n    rgb(var(--background-start-rgb));\r\n    overflow-x: hidden;\r\n}\r\n\r\nhtml {\r\n  overflow-x: hidden;\r\n}\r\n\r\n.hero-bg {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100vh;\r\n  object-fit: cover;\r\n  z-index: -1;\r\n}\r\n\r\n@layer utilities {\r\n  .text-balance {\r\n    text-wrap: balance;\r\n  }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/app/globals.css b/src/app/globals.css
+--- a/src/app/globals.css	(revision f50026da6ca1beac37c26c05976a7e36e19cd548)
++++ b/src/app/globals.css	(date 1724958017364)
+@@ -19,6 +19,15 @@
+   font-display: swap;
+ }
+ 
++@font-face {
++  font-family: 'Barlow';
++  src: url('/fonts/BarlowRegular.ttf') format('truetype');
++  font-weight: normal;
++  font-style: normal;
++  font-display: swap;
++}
++
++
+ :root {
+   --foreground-rgb: 0, 0, 0;
+   --background-start-rgb: 214, 219, 220;
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1724906953343)
++++ b/.idea/vcs.xml	(date 1724906953343)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: src/components/ui/button.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import * as React from \"react\"\r\nimport { Slot } from \"@radix-ui/react-slot\"\r\nimport { cva, type VariantProps } from \"class-variance-authority\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nconst buttonVariants = cva(\r\n  \"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50\",\r\n  {\r\n    variants: {\r\n      variant: {\r\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\r\n        destructive:\r\n          \"bg-destructive text-destructive-foreground hover:bg-destructive/90\",\r\n        outline:\r\n          \"border border-input bg-background hover:bg-accent hover:text-accent-foreground\",\r\n        secondary:\r\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\r\n        ghost: \"hover:bg-accent hover:text-accent-foreground\",\r\n        link: \"text-primary underline-offset-4 hover:underline\",\r\n      },\r\n      size: {\r\n        default: \"h-10 px-4 py-2\",\r\n        sm: \"h-9 rounded-md px-3\",\r\n        lg: \"h-11 rounded-md px-8\",\r\n        icon: \"h-10 w-10\",\r\n      },\r\n    },\r\n    defaultVariants: {\r\n      variant: \"default\",\r\n      size: \"default\",\r\n    },\r\n  }\r\n)\r\n\r\nexport interface ButtonProps\r\n  extends React.ButtonHTMLAttributes<HTMLButtonElement>,\r\n    VariantProps<typeof buttonVariants> {\r\n  asChild?: boolean\r\n}\r\n\r\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\r\n  ({ className, variant, size, asChild = false, ...props }, ref) => {\r\n    const Comp = asChild ? Slot : \"button\"\r\n    return (\r\n      <Comp\r\n        className={cn(buttonVariants({ variant, size, className }))}\r\n        ref={ref}\r\n        {...props}\r\n      />\r\n    )\r\n  }\r\n)\r\nButton.displayName = \"Button\"\r\n\r\nexport { Button, buttonVariants }\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/ui/button.tsx b/src/components/ui/button.tsx
+--- a/src/components/ui/button.tsx	(revision f50026da6ca1beac37c26c05976a7e36e19cd548)
++++ b/src/components/ui/button.tsx	(date 1724964751815)
+@@ -5,33 +5,31 @@
+ import { cn } from "@/lib/utils"
+ 
+ const buttonVariants = cva(
+-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+-  {
+-    variants: {
+-      variant: {
+-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+-        destructive:
+-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+-        outline:
+-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+-        secondary:
+-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+-        ghost: "hover:bg-accent hover:text-accent-foreground",
+-        link: "text-primary underline-offset-4 hover:underline",
+-      },
+-      size: {
+-        default: "h-10 px-4 py-2",
+-        sm: "h-9 rounded-md px-3",
+-        lg: "h-11 rounded-md px-8",
+-        icon: "h-10 w-10",
+-      },
+-    },
+-    defaultVariants: {
+-      variant: "default",
+-      size: "default",
+-    },
+-  }
+-)
++    "inline-flex items-center justify-center text-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
++    {
++        variants: {
++            variant: {
++                default: "bg-primary text-primary-foreground hover:bg-primary/90",
++                destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
++                outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
++                secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
++                ghost: "hover:bg-accent hover:text-accent-foreground",
++                link: "text-primary underline-offset-4 hover:underline",
++            },
++            size: {
++                default: "h-10 px-4",
++                sm: "h-9 rounded-md px-3",
++                lg: "h-11 rounded-md px-8",
++                icon: "h-10 w-10",
++            },
++        },
++        defaultVariants: {
++            variant: "default",
++            size: "default",
++        },
++    }
++);
++
+ 
+ export interface ButtonProps
+   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+Index: src/app/pages/signIn.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/app/pages/signIn.tsx b/src/app/pages/signIn.tsx
+new file mode 100644
+--- /dev/null	(date 1724972536979)
++++ b/src/app/pages/signIn.tsx	(date 1724972536979)
+@@ -0,0 +1,85 @@
++// pages/index.js
++"use client"
++import Image from 'next/image';
++import styles from "./styles/signup.module.css";
++import React, { useState } from "react";
++
++
++export default function SignIn() {
++
++    const [isChecked, setIsChecked] = useState(false);
++
++    const handleCheckboxChange = (event) => {
++        setIsChecked(event.target.checked);
++    };
++
++    return (
++        <div className="relative flex flex-col min-h-screen justify-center items-center py-16">
++
++            <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-black bg-opacity-65">
++                <div className="absolute w-full h-full mix-blend-overlay">
++                    <Image
++                        src="/fondo_singup.jpeg"
++                        alt="Descripción de la imagen"
++                        layout="fill"
++                        objectFit="cover"
++                    />
++                </div>
++            </div>
++
++            {/* Contenedor principal */}
++            <div className="relative z-10 flex flex-col items-center justify-center p-6 min-h-screen">
++
++                {/* Texto encima del formulario */}
++                <div className="mb-6 text-center">
++                    <div className="flex flex-col items-center space-y-4 sm:space-y-0 sm:flex-row sm:space-x-10 md:space-x-40 pb-6">
++                        <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
++                            <span style={{ color: "#ffffff" }}>¿No Tienes </span>
++                            <span style={{ color: "#04d7af" }}>cuenta?</span>
++                        </h1>
++                        <button className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[10rem] h-10 text-[1rem] sm:text-[1.25rem]">
++                            Registrate
++                        </button>
++                    </div>
++                    <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
++                        Ingresa
++                    </h1>
++                </div>
++
++                <form className="flex flex-col items-center justify-center space-y-4 w-full max-w-sm">
++                    <div className="w-full">
++                        <input
++                            className="w-full p-3 text-black text-[1rem] sm:text-[1.25rem] md:text-[1.5rem] placeholder:text-[0.78rem] sm:placeholder:text-[0.88rem] md:placeholder:text-[1rem]"
++                            type="email"
++                            id="email"
++                            placeholder="Correo electrónico"
++                        />
++                    </div>
++
++                    <div className="w-full">
++                        <input
++                            className="w-full p-3 text-black text-[1rem] sm:text-[1.25rem] md:text-[1.5rem] placeholder:text-[0.78rem] sm:placeholder:text-[0.88rem] md:placeholder:text-[1rem]"
++                            type="password"
++                            id="password"
++                            placeholder="Contraseña"
++                        />
++                    </div>
++
++                    <div className="text-center">
++                        <a href="/privacy" className="text-sm font-geometos text-[#04d7af] underline">
++                            Forgot your password?
++                        </a>
++                    </div>
++
++                    <div className="w-full mt-4">
++                        <button
++                            className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-full h-12 sm:h-14 md:h-16"
++                        >
++                            INICIAR SESIÓN
++                        </button>
++                    </div>
++                </form>
++            </div>
++        </div>
++    );
++}
+Index: src/app/pages/styles/signup.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/app/pages/styles/signup.module.css b/src/app/pages/styles/signup.module.css
+new file mode 100644
+--- /dev/null	(date 1724959168993)
++++ b/src/app/pages/styles/signup.module.css	(date 1724959168993)
+@@ -0,0 +1,6 @@
++
++
++.customImage {
++    height: 112% !important;
++    object-position: 46% -10px !important;
++}
+\ No newline at end of file
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+new file mode 100644
+--- /dev/null	(date 1724906953308)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1724906953308)
+@@ -0,0 +1,6 @@
++<component name="InspectionProjectProfileManager">
++  <profile version="1.0">
++    <option name="myName" value="Project Default" />
++    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
++  </profile>
++</component>
+\ No newline at end of file
