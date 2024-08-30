@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { IoMenu } from "react-icons/io5";
 import { FaSearch, FaStar, FaUser, FaShoppingCart } from "react-icons/fa";
 import SideMenu from './slide-in';
+import Link from 'next/link'; // Add this import
 
 const Header: React.FC = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
@@ -27,7 +28,9 @@ const Header: React.FC = () => {
         <div className="flex items-center space-x-2 md:space-x-4 ml-auto z-10">
           <FaSearch className="text-black h-6 w-6 md:h-8 md:w-8 hidden md:block" />
           <FaStar className="text-black h-6 w-6 md:h-8 md:w-8 hidden md:block" />
-          <FaUser className="text-black h-6 w-6 md:h-8 md:w-8" />
+          <Link href="/auth/sign-up">
+            <FaUser className="text-black h-6 w-6 md:h-8 md:w-8 cursor-pointer" />
+          </Link>
           <FaShoppingCart className="text-black h-6 w-6 md:h-8 md:w-8" />
         </div>
       </header>
