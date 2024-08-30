@@ -7,7 +7,7 @@ import PromoSouvenirComponent from '@/components/promo-souvenir';
 import SocialMediaIcons from '@/components/socials';
 import TestimonialsComponent from '@/components/testimonials';
 import React from 'react';
-import SignIn from "@/app/pages/signIn";
+
 
 export default function Home() {
   return (

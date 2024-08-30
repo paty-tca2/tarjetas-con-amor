@@ -1,7 +1,8 @@
 // pages/index.js
 "use client"
 import Image from 'next/image';
-import styles from "./styles/signup.module.css";
+import Link from 'next/link';
+
 import React, { useState } from "react";
 
 
@@ -24,7 +25,7 @@ export default function SignUp() {
                         alt="Descripción de la imagen"
                         layout="fill"
                         objectFit="cover"
-                        className={`w-full ${styles.customImage}`}
+                        className={`w-full`}
                     />
                 </div>
             </div>
@@ -42,9 +43,11 @@ export default function SignUp() {
                                 <span style={{color: "#04d7af"}}>cuenta?</span>
                             </h1>
                         </div>
+                        <Link href="/auth/login">
                         <button
                             className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[7rem] h-10 text-[1rem] sm:text-[1.25rem]">INGRESA
                         </button>
+                        </Link>
                     </div>
                     <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
                         <span style={{color: "#ffffff"}}>¿No tienes? </span>
@@ -160,7 +163,7 @@ export default function SignUp() {
                             />
                         </div>
                         <h2 className="text-lg font-bold mb-2 text-[#5d60a6] font-geometos text-center">Beneficios</h2>
-                        <div className="flex flex-col text-[#5d60a6] space-y-4 text-[0.88rem] font-barlow">
+                        <div className="flex flex-col text-[#5d60a6] space-y-4 text-[0.88rem] font-geometos">
                             <div className="normal-case">
                                 <p className="pb-3">1) Recordatorios:</p>
                                 <p>Nunca vuelvas a olvidar una ocasión especial.</p>
