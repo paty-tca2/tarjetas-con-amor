@@ -1,8 +1,10 @@
 import React from 'react';
-import { Gift, MapPin, User, CreditCard, Calendar, Users, Heart, Briefcase, LogOut } from 'lucide-react';
+import { MapPin, CreditCard, Calendar, LogOut } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
+import { FaUser, FaShoppingCart } from "react-icons/fa";
+import Image from 'next/image';
 
-const SidebarItem = ({ icon: Icon, text }: { icon: LucideIcon; text: string }) => (
+const SidebarItem = ({ icon: Icon, text }: { icon: LucideIcon | React.ElementType; text: string }) => (
   <div className="flex items-center space-x-2 py-2 px-4 hover:bg-gray-100 cursor-pointer">
     <Icon size={20} />
     <span>{text}</span>
@@ -10,9 +12,9 @@ const SidebarItem = ({ icon: Icon, text }: { icon: LucideIcon; text: string }) =
 );
 
 const Sidebar = () => (
-  <div className="w-64 bg-white border-r font-geometos border-gray-200 text-black h-screen">
-    <SidebarItem icon={Gift} text="Mi cuenta" />
-    <SidebarItem icon={User} text="Pedidos" />
+  <div className="w-64 bg-white border-r font-geometos border-gray-200 text-[#5D60a6] h-screen">
+    <SidebarItem icon={FaUser} text="Mi cuenta" />
+    <SidebarItem icon={FaShoppingCart} text="Pedidos" />
     <SidebarItem icon={MapPin} text="Direcciones de envio" />
     <SidebarItem icon={CreditCard} text="Metodos de pago" />
     <SidebarItem icon={Calendar} text="Recordatorios" />
@@ -23,11 +25,11 @@ const Sidebar = () => (
 );
 
 const Header = ({  }) => (
-  <div className="bg-white p-4 rounded-lg m-4 flex items-center space-x-4">
-    <img src="/api/placeholder/50/50" alt="Profile" className="w-12 h-12 rounded-full" />
+  <div className="bg-[#04d9b2] p-4 rounded-lg m-4 flex items-center space-x-4">
+    <Image src="/icono-tca.png" alt="Profile" width={48} height={48} className="rounded-full" />
     <div>
-      <h2 className="text-xl font-bold">Hey </h2>
-      <p className="text-gray-600">It's nice to see you, come on in...</p>
+      <h2 className="text-xl font-geometos">¡Hola! </h2>
+      <p className="text-[#5D60a6] font-geometos">Bienvenid@ a tu cuenta</p>
     </div>
   </div>
 );
