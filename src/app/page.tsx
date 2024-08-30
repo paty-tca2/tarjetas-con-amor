@@ -7,17 +7,18 @@ import PromoSouvenirComponent from '@/components/promo-souvenir';
 import SocialMediaIcons from '@/components/socials';
 import TestimonialsComponent from '@/components/testimonials';
 import React from 'react';
+import SignIn from "@/app/pages/signIn";
 
 export default function Home() {
   return (
     <div className="overflow-x-hidden min-h-screen flex flex-col">
       <Header />
-      <main className="flex-grow pt-16 md:pt-24 lg:pt-28"> {/* Adjust these pt (padding-top) values as needed */}
-        <HeroSection/>
-        <ProductShowcase/>
-        <PromoSouvenirComponent/>
-        <TestimonialsComponent/>
-        <SocialMediaIcons/>
+      <main className="flex-grow md:pt-24 lg:pt-28">
+          <HeroSection/>
+          <ProductShowcase/>
+          <PromoSouvenirComponent/>
+          <TestimonialsComponent/>
+          <SocialMediaIcons/>
       </main>
       <Footer/>
     </div>

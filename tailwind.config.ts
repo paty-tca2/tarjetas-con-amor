@@ -25,7 +25,13 @@ const config = {
       fontFamily: {
         'coneria': ['Coneria Script', 'cursive'],
         'geometos': ['Geometos Soft', 'sans-serif'],
+        'barlow': ['Barlow', 'sans-serif']
       },
+      opacity: {
+        '15': '0.15',
+        '35': '0.35',
+        '65': '0.65',
+      }
     },
   },
   plugins: [],
