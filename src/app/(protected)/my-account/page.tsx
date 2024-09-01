@@ -1,14 +1,14 @@
 "use client"
 import React, { useState } from 'react';
-import { MapPin, CreditCard, Calendar, LogOut } from 'lucide-react';
-import { LucideIcon } from 'lucide-react';
+import { MapPin, CreditCard, Calendar, LogOut, LucideIcon } from 'lucide-react';
 import { FaUser, FaShoppingCart } from "react-icons/fa";
 import Image from 'next/image';
 import Pedidos from '@/components/my-account/pedidos';
 import DireccionesEnvio from '@/components/my-account/direcciones';
 import Recordatorios from '@/components/my-account/recordatorios';
+import MiCuenta from '@/components/my-account/cuenta';
 
-const SidebarItem = ({ icon: Icon, text, onClick }: { icon: LucideIcon | React.ElementType; text: string; onClick?: () => void }) => (
+const SidebarItem = ({ icon: Icon, text, onClick }: { icon: LucideIcon| React.ElementType; text: string; onClick?: () => void }) => (
   <div className="flex items-center space-x-2 py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={onClick}>
     <Icon size={20} />
     <span>{text}</span>
@@ -16,16 +16,29 @@ const SidebarItem = ({ icon: Icon, text, onClick }: { icon: LucideIcon | React.E
 );
 
 const Sidebar = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => (
-  <div className="w-64 bg-white border-r font-geometos border-gray-200 text-[#5D60a6] h-screen">
+  <div className="hidden md:block w-64 bg-white border-r font-geometos border-gray-200 text-[#5D60a6] h-screen">
     <SidebarItem icon={FaUser} text="Mi cuenta" onClick={() => setActiveTab('account')} />
     <SidebarItem icon={FaShoppingCart} text="Pedidos" onClick={() => setActiveTab('pedidos')} />
     <SidebarItem icon={MapPin} text="Direcciones de envio" onClick={() => setActiveTab('direcciones')} />
     <SidebarItem icon={CreditCard} text="Metodos de pago" />
     <SidebarItem icon={Calendar} text="Recordatorios" onClick={() => setActiveTab('recordatorios')} />
     <div className="border-t border-gray-200 mt-4">
-      <SidebarItem icon={LogOut} text="Cerrar sesión" />
+      <SidebarItem icon={LogOut} text="Cerrar sesion" />
     </div>
   </div>
+);
+
+const MobileSelect = ({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) => (
+  <select
+    value={activeTab}
+    onChange={(e) => setActiveTab(e.target.value)}
+    className="w-full p-2 mb-4 font-geometos text-[#5D60a6] border border-gray-200 rounded-lg md:hidden"
+  >
+    <option value="account">Mi cuenta</option>
+    <option value="pedidos">Pedidos</option>
+    <option value="direcciones">Direcciones de envio</option>
+    <option value="recordatorios">Recordatorios</option>
+  </select>
 );
 
 const Header = () => (
@@ -38,20 +51,32 @@ const Header = () => (
   </div>
 );
 
+const LogoutButton = () => (
+  <div className="flex items-center space-x-2 py-2 px-4 bg-gray-100 text-[#5D60a6] font-geometos cursor-pointer">
+    <LogOut size={20} />
+    <span>Cerrar sesión</span>
+  </div>
+);
+
 const App = () => {
   const [activeTab, setActiveTab] = useState('account');
 
   return (
-    <div className="flex mt-28 bg-white">
+    <div className="flex flex-col md:flex-row mt-28 bg-white">
       <Sidebar setActiveTab={setActiveTab} />
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col min-h-screen">
+        <div className="p-4 md:hidden">
+          <MobileSelect activeTab={activeTab} setActiveTab={setActiveTab} />
+        </div>
         <Header />
-        <div className="p-4">
+        <div className="p-4 flex-grow">
           {activeTab === 'pedidos' && <Pedidos />}
-          {activeTab === 'account' && <div>Account content goes here</div>}
+          {activeTab === 'account' && <MiCuenta />}
           {activeTab === 'direcciones' && <DireccionesEnvio />}
           {activeTab === 'recordatorios' && <Recordatorios />}
-          {/* Add more conditions for other tabs */}
+        </div>
+        <div className="md:hidden mt-auto">
+          <LogoutButton />
         </div>
       </div>
     </div>

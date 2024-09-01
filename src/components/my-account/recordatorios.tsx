@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 
 interface Reminder {
   id: string;
-  date: Date;
+  day: number;
+  month: number;
   text: string;
-  name: string; // Add name to the Reminder interface
+  name: string;
 }
 
 const Recordatorios: React.FC = () => {
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [newReminder, setNewReminder] = useState<Omit<Reminder, 'id'>>({
-    date: new Date(),
+    day: 1,
+    month: 1,
     text: '',
-    name: '', // Add name to the newReminder state
+    name: '',
   });
 
-  const handleDateChange = (date: Date | null) => {
-    if (date) {
-      setNewReminder(prev => ({ ...prev, date }));
-    }
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNewReminder(prev => ({ ...prev, day: parseInt(e.target.value) }));
+  };
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNewReminder(prev => ({ ...prev, month: parseInt(e.target.value) }));
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,21 +37,38 @@ const Recordatorios: React.FC = () => {
     e.preventDefault();
     const id = Date.now().toString();
     setReminders(prev => [...prev, { id, ...newReminder }]);
-    setNewReminder({ date: new Date(), text: '', name: '' }); // Reset name as well
+    setNewReminder({ day: 1, month: 1, text: '', name: '' });
   };
+
+  const months = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
 
   return (
     <div className="recordatorios-container font-geometos text-[#5D60a6]">
       <h2 className="text-center text-3xl font-geometos text-[#5D60a6] mb-4">Recordatorios</h2>
       
       <form onSubmit={handleAddReminder} className="mb-6">
-        <div className="mb-4">
-          <DatePicker
-            selected={newReminder.date}
-            onChange={handleDateChange}
-            className="w-full p-2 border rounded"
-            dateFormat="dd/MM/yyyy"
-          />
+        <div className="mb-4 flex space-x-2">
+          <select
+            value={newReminder.day}
+            onChange={handleDayChange}
+            className="w-1/2 p-2 border rounded"
+          >
+            {[...Array(31)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>{i + 1}</option>
+            ))}
+          </select>
+          <select
+            value={newReminder.month}
+            onChange={handleMonthChange}
+            className="w-1/2 p-2 border rounded"
+          >
+            {months.map((month, i) => (
+              <option key={i + 1} value={i + 1}>{month}</option>
+            ))}
+          </select>
         </div>
         <input
           type="text"
@@ -63,7 +82,7 @@ const Recordatorios: React.FC = () => {
           type="text"
           value={newReminder.text}
           onChange={handleTextChange}
-          placeholder="Recordatorio"
+          placeholder="Ocasion"
           className="w-full mb-2 p-2 border rounded"
           required
         />
@@ -76,7 +95,7 @@ const Recordatorios: React.FC = () => {
         <ul className="reminder-list">
           {reminders.map((reminder) => (
             <li key={reminder.id} className="reminder-item mb-4 p-4 border rounded">
-              <p className="font-bold">{reminder.date.toLocaleDateString()}</p>
+              <p className="font-bold">{`${reminder.day.toString().padStart(2, '0')}/${reminder.month.toString().padStart(2, '0')}`}</p>
               <p className="font-semibold">{reminder.name}</p>
               <p>{reminder.text}</p>
             </li>

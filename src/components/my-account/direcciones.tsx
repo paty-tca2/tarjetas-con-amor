@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 interface Address {
   id: string;
+  name: string;
   street: string;
   city: string;
   state: string;
@@ -11,6 +12,7 @@ interface Address {
 const DireccionesEnvio: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [newAddress, setNewAddress] = useState<Omit<Address, 'id'>>({
+    name: '',
     street: '',
     city: '',
     state: '',
@@ -26,7 +28,7 @@ const DireccionesEnvio: React.FC = () => {
     e.preventDefault();
     const id = Date.now().toString();
     setAddresses(prev => [...prev, { id, ...newAddress }]);
-    setNewAddress({ street: '', city: '', state: '', zipCode: '' });
+    setNewAddress({ name: '', street: '', city: '', state: '', zipCode: '' });
   };
 
   return (
@@ -34,6 +36,15 @@ const DireccionesEnvio: React.FC = () => {
       <h2 className="text-center text-3xl font-geometos text-[#5D60a6] mb-4">Direcciones de Envío</h2>
       
       <form onSubmit={handleAddAddress} className="mb-6">
+      <input
+          type="text"
+          name="name"
+          value={newAddress.name}
+          onChange={handleInputChange}
+          placeholder="Nombre"
+          className="w-full mb-2 p-2 border font-geometos rounded"
+          required
+        />
         <input
           type="text"
           name="street"
@@ -79,6 +90,7 @@ const DireccionesEnvio: React.FC = () => {
         <ul className="address-list font-geometos">
           {addresses.map((address) => (
             <li key={address.id} className="address-item mb-4 p-4 border rounded">
+              <p>{address.name}</p>
               <p>{address.street}</p>
               <p>{address.city}, {address.state}</p>
               <p>{address.zipCode}</p>
