@@ -25,7 +25,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
         </div>
         <nav className="px-4 mt-2 sm:mt-4">
           <ul className="space-y-4 sm:space-y-8 lg:space-y-6">
-            <li><a href="#" className="block py-2 sm:py-1 lg:py-2 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl lg:text-xl">TARJETAS</a></li>
+            <li><a href="/cards" className="block py-2 sm:py-1 lg:py-2 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl lg:text-xl">TARJETAS</a></li>
             <li><a href="#" className="block py-2 sm:py-1 lg:py-2 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl lg:text-xl">POSTALES</a></li>
             <li><a href="#" className="block py-2 sm:py-1 lg:py-2 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl lg:text-xl">CALENDARIOS</a></li>
             <li><a href="#" className="block py-2 sm:py-1 lg:py-2 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl lg:text-xl">ALBUM DE FOTOS</a></li>
