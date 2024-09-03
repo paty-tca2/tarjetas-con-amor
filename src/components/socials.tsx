@@ -1,5 +1,6 @@
 import React from 'react';
 import { Instagram, Facebook, Youtube } from 'lucide-react';
+import { FaFacebook } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 
 const SocialMediaIcons = () => {
@@ -22,7 +23,7 @@ const SocialMediaIcons = () => {
            className="hover:scale-110 transition-transform duration-300"
            target="_blank"
            rel="noopener noreferrer">
-          <Facebook className={iconStyle} />
+          <FaFacebook className={iconStyle} />
         </a>
         <a href="#" className="hover:scale-110 transition-transform duration-300">
           <svg className={iconStyle} viewBox="0 0 24 24" fill="currentColor">

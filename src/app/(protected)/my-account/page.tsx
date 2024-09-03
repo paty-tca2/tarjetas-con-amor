@@ -50,12 +50,11 @@ const Header = () => (
     </div>
   </div>
 );
-
 const LogoutButton = () => (
-  <div className="flex items-center space-x-2 py-2 px-4 bg-gray-100 text-[#5D60a6] font-geometos cursor-pointer">
+  <button className="flex items-center space-x-2 py-2 px-4 bg-gray-100 text-[#5D60a6] font-geometos cursor-pointer w-full">
     <LogOut size={20} />
     <span>Cerrar sesión</span>
-  </div>
+  </button>
 );
 
 const App = () => {

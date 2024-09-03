@@ -114,7 +114,7 @@ export default function SignUp() {
                 <div className="pb-4">
                     <div className="flex sm:flex-row items-center justify-center sm:justify-start space-x-4 sm:space-x-10 md:space-x-20 pb-6">
                         <div className="text-left">
-                            <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
+                            <h1 className="text-[1.4rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
                                 <span style={{ color: "#ffffff" }}>¿Tienes </span>
                                 <span style={{ color: "#04d7af" }}>cuenta?</span>
                             </h1>

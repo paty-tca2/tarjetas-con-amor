@@ -15,15 +15,17 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 md:p-8 lg:p-10 bg-white shadow-md">
-        <div className="absolute left-2 md:left-6 lg:left-8 z-10">
+        <div className="absolute left-2 md:left-6 lg:left-8 z-10 mt-2 md:mt-4">
           <button onClick={toggleSideMenu}>
             <IoMenu className="text-black h-8 w-8 md:h-12 md:w-12" />
           </button>
         </div>
         <div className="flex-grow flex justify-center items-center absolute inset-x-0">
-          <h1 className="text-xl md:text-6xl text-[#04d9b2] font-coneria font-bold text-center">
-            compartiendo tus memorias...
-          </h1>
+          <Link href="/">
+            <h1 className="text-xl md:text-6xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer">
+              compartiendo tus memorias...
+            </h1>
+          </Link>
         </div>
         <div className="flex items-center space-x-2 md:space-x-4 ml-auto z-10">
           <FaSearch className="text-black h-6 w-6 md:h-8 md:w-8 hidden md:block" />

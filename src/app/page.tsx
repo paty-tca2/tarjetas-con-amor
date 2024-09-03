@@ -20,7 +20,7 @@ export default function Home() {
           <TestimonialsComponent/>
           <SocialMediaIcons/>
       </main>
-      <Footer/>
+    
     </div>
   );
 }

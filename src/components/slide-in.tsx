@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { IoClose } from "react-icons/io5";
 import { Instagram, Facebook } from 'lucide-react';
-import { FaYoutube } from 'react-icons/fa';
+import { FaFacebook, FaYoutube } from 'react-icons/fa';
 
 interface SideMenuProps {
   isOpen: boolean;
@@ -45,7 +45,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                className="hover:scale-110 transition-transform duration-300"
                target="_blank"
                rel="noopener noreferrer">
-              <Facebook className={iconStyle} />
+              <FaFacebook className={iconStyle} />
             </a>
             <a href="#" className="hover:scale-110 transition-transform duration-300">
               <svg className={iconStyle} viewBox="0 0 24 24" fill="currentColor">
