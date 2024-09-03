@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Either, fold } from "fp-ts/Either";
 import ClipLoader from "react-spinners/ClipLoader";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const authRepository = new AuthRepositoryImpl();
 const registerUserUseCase = new RegisterUser(authRepository);
@@ -22,7 +23,9 @@ export default function SignUp() {
     });
 
     const [confirmEmail, setConfirmEmail] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -142,6 +145,7 @@ export default function SignUp() {
                                 <label
                                     className="block text-white text-[0.78rem] font-geometos pb-1"
                                     htmlFor="first_name"
+                                    
                                 >
                                     NOMBRE
                                 </label>
@@ -151,6 +155,7 @@ export default function SignUp() {
                                     id="first_name"
                                     value={userData.first_name}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div>
@@ -166,6 +171,7 @@ export default function SignUp() {
                                     id="last_name"
                                     value={userData.last_name}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div className="pt-2">
@@ -181,6 +187,7 @@ export default function SignUp() {
                                     id="email"
                                     value={userData.email}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div className="pt-2">
@@ -196,6 +203,7 @@ export default function SignUp() {
                                     id="confirmEmail"
                                     value={confirmEmail}
                                     onChange={handleEmailChange}
+                                    required
                                 />
                             </div>
                             <div className="pt-2">
@@ -205,14 +213,30 @@ export default function SignUp() {
                                 >
                                     CONTRASEÑA
                                 </label>
-                                <input
-                                    className="w-full p-1 text-black placeholder:text-xs"
-                                    type="password"
-                                    id="password"
-                                    placeholder="Una mayuscula, un numero y un caracter especial"
-                                    value={userData.password}
-                                    onChange={handleChange}
-                                />
+                                <div className="relative">
+                                    <input
+                                        className="w-full p-1 text-black placeholder:text-xs pr-10"
+                                        type={showPassword ? "text" : "password"}
+                                        id="password"
+                                        placeholder="Una mayúscula, un número y un carácter especial"
+                                        value={userData.password}
+                                        onChange={handleChange}
+                                        pattern="(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}"
+                                        title="La contraseña debe contener al menos una mayúscula, un número y un carácter especial"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOffIcon className="h-5 w-5 text-gray-400" />
+                                        ) : (
+                                            <EyeIcon className="h-5 w-5 text-gray-400" />
+                                        )}
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="pt-2">
@@ -222,13 +246,29 @@ export default function SignUp() {
                                 >
                                     CONFIRMA TU CONTRASEÑA
                                 </label>
-                                <input
-                                    className="w-full p-1 text-black"
-                                    type="password"
-                                    id="confirmPassword"
-                                    value={confirmPassword}
-                                    onChange={handlePasswordChange}
-                                />
+                                <div className="relative">
+                                    <input
+                                        className="w-full p-1 text-black pr-10"
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        id="confirmPassword"
+                                        value={confirmPassword}
+                                        onChange={handlePasswordChange}
+                                        pattern="(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}"
+                                        title="La contraseña debe contener al menos una mayúscula, un número y un carácter especial"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    >
+                                        {showConfirmPassword ? (
+                                            <EyeOffIcon className="h-5 w-5 text-gray-400" />
+                                        ) : (
+                                            <EyeIcon className="h-5 w-5 text-gray-400" />
+                                        )}
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="col-span-2 flex items-center mt-4 text-center">
@@ -238,6 +278,7 @@ export default function SignUp() {
                                     checked={isChecked}
                                     onChange={handleCheckboxChange}
                                     className="mr-2"
+                                    required
                                 />
                                 <label
                                     htmlFor="terms"
