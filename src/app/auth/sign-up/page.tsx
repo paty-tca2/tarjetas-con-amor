@@ -1,4 +1,3 @@
-// pages/index.js
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,6 +50,23 @@ export default function SignUp() {
         setConfirmPassword(e.target.value);
     };
 
+    const validatePassword = (password: string) => {
+        const uppercasePattern = /[A-Z]/;
+        const numberPattern = /[0-9]/;
+        const specialCharacterPattern = /[^A-Za-z0-9]/;
+
+        if (!uppercasePattern.test(password)) {
+            return "La contraseña debe contener al menos una letra mayúscula";
+        }
+        if (!numberPattern.test(password)) {
+            return "La contraseña debe contener al menos un número";
+        }
+        if (!specialCharacterPattern.test(password)) {
+            return "La contraseña debe contener al menos un carácter especial";
+        }
+        return null;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -63,6 +79,14 @@ export default function SignUp() {
 
         if (userData.password !== confirmPassword) {
             toast.error("Las contraseñas no coinciden", {
+                position: "top-center",
+            });
+            return;
+        }
+
+        const passwordError = validatePassword(userData.password);
+        if (passwordError) {
+            toast.error(passwordError, {
                 position: "top-center",
             });
             return;
@@ -139,7 +163,7 @@ export default function SignUp() {
                         >
                             <div>
                                 <label
-                                    className="block text-white text-[0.78rem] font-geometos pb-1"
+                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="first_name"
                                     
                                 >
@@ -156,7 +180,7 @@ export default function SignUp() {
                             </div>
                             <div>
                                 <label
-                                    className="block text-white text-[0.78rem] font-geometos pb-1"
+                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="last_name"
                                 >
                                     APELLIDO
@@ -172,7 +196,7 @@ export default function SignUp() {
                             </div>
                             <div className="pt-2">
                                 <label
-                                    className="block text-white text-[0.78rem] font-geometos pb-1"
+                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="email"
                                 >
                                     INTRODUCE TU CORREO
@@ -188,7 +212,7 @@ export default function SignUp() {
                             </div>
                             <div className="pt-2">
                                 <label
-                                    className="block text-white text-[0.78rem] font-geometos pb-1"
+                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="confirmEmail"
                                 >
                                     CONFIRMA TU CORREO
@@ -204,7 +228,7 @@ export default function SignUp() {
                             </div>
                             <div className="pt-2">
                                 <label
-                                    className="block text-white text-[0.78rem] font-geometos pb-1"
+                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="password"
                                 >
                                     CONTRASEÑA
@@ -237,10 +261,8 @@ export default function SignUp() {
 
                             <div className="pt-2">
                                 <label
-                                    className="block text-white text-[0.78rem] font-geometos pb-1"
-                                    htmlFor="confirmPassword"
-                                >
-                                    CONFIRMA TU CONTRASEÑA
+                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
+                                    htmlFor="confirmPassword">CONFIRMA TU CONTRASEÑA
                                 </label>
                                 <div className="relative">
                                     <input
