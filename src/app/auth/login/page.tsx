@@ -58,28 +58,15 @@ export default function SignIn() {
                 </div>
             </div>
 
-            <div className="relative z-10 flex flex-col items-start justify-center p-6 py-48 min-h-screen">
-                <div className="pb-4">
-                    <div className="flex sm:flex-row items-center justify-center sm:justify-start space-x-4 sm:space-x-10 md:space-x-40 pb-6">
-                        <div className="text-left">
-                            <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
-                                <span style={{ color: "#ffffff" }}>¿No tienes </span>
-                                <span style={{ color: "#04d7af" }}>cuenta?</span>
-                            </h1>
-                        </div>
-                        <Link href="/auth/sign-up">
-                            <button className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white px-5 py-2 text-[1rem] sm:text-[1.1rem]">
-                                REGISTRATE
-                            </button>
-                        </Link>
-                    </div>
+            <div className="relative z-10 flex flex-col items-start justify-start p-6 py-16 sm:py-32 min-h-screen"> {/* Updated padding */}
+                <div className="pb-4 mb-8 sm:mb-0"> {/* Added margin-bottom */}
                     <h1 className="text-[1.6rem] sm:text-[1.8rem] md:text-[2.7rem] font-geometos">
                         <span style={{ color: "#ffffff" }}>INGRESA</span>
                     </h1>
                 </div>
 
-                <div className="w-full pl-16 max-w-md">
-                    <form className="flex flex-col mt-4 items-end justify-end space-y-4" onSubmit={handleSubmit}>
+                <div className="w-full max-w-md">
+                    <form className="flex flex-col mt-4 space-y-4 sm:mx-auto sm:max-w-md" onSubmit={handleSubmit}>
                         <div className="w-full">
                             <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="email">
                                 CORREO ELECTRONICO
@@ -130,6 +117,20 @@ export default function SignIn() {
                             </button>
                         </div>
                     </form>
+                </div>
+
+                {/* Separated "¿No tienes cuenta?" section */}
+                <div className="w-full max-w-md mt-12 sm:mt-16">
+                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                        <h1 className="text-[1.2rem] sm:text-[1.4rem] md:text-[1.6rem] font-geometos">
+                            <span style={{ color: "#ffffff" }}>¿No tienes </span><span style={{ color: "#04d7af" }}>cuenta?</span>
+                        </h1>
+                        <Link href="/auth/sign-up">
+                            <button className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white px-5 py-2 text-[0.9rem] sm:text-[1rem]">
+                                REGISTRATE
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
 
