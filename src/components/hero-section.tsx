@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const HeroSection = () => {
     return (
-        <div className="relative w-full overflow-hidden pt-16 md:pt-0 h-[50vh] sm:h-[60vh] md:h-[75vh] lg:h-screen">
+        <div className="relative w-full overflow-hidden pt-16 md:pt-0 h-[50vh] sm:h-[60vh] md:h-[75vh] lg:h-[85vh]">
             <div className="absolute inset-0">
                 <Image
                     src="/fondo-hero.jpg"
@@ -26,7 +26,7 @@ const HeroSection = () => {
                     />
                 </div>
             </div>
-            <div className="absolute bottom-4 left-2 bottom-0 sm:bottom-8 sm:left-8 text-white text-sm sm:text-xl font-geometos text-left sm:text-left w-full sm:w-auto">
+            <div className="absolute bottom-1 left-2 bottom-0 sm:bottom-8 sm:left-8 text-white text-sm sm:text-xl font-geometos text-left sm:text-left w-full sm:w-auto">
                 ENVIOS GRATIS A TODA LA REPUBLICA
             </div>
         </div>

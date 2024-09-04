@@ -19,8 +19,8 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
           <div className="absolute -top-3 left-0 right-0 flex justify-center">
             <Image src="/icono-menu.png" alt="Menu Icon" width={120} height={120} className="w-28 h-28 sm:w-40 sm:h-40" />
           </div>
-          <button onClick={onClose} className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[#04d9b2] font-bold">
-            <IoClose className="h-6 w-6 sm:h-8 sm:w-8" />
+          <button onClick={onClose} className="absolute top-1 right-2 sm:top-4 sm:right-4 text-[#04d9b2] font-bold">
+            <IoClose className="h-8 w-8 sm:h-10 sm:w-10" />
           </button>
         </div>
         <nav className="px-4 mt-2 sm:mt-4">

@@ -91,7 +91,7 @@ export default function SignUp() {
     };
 
     return (
-        <div className="relative flex flex-col min-h-screen justify-center items-center py-48">
+        <div className="relative flex flex-col min-h-screen justify-center items-center py-24 sm:py-32">
             {loading && (
                 <div className="absolute inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                     <ClipLoader color="#04d9b2" loading={loading} size={50} />
@@ -110,7 +110,7 @@ export default function SignUp() {
                 </div>
             </div>
 
-            <div className="relative z-10 flex flex-col items-start justify-center p-6 min-h-screen">
+            <div className="relative z-10 flex flex-col items-start justify-start sm:justify-center p-6 pt-1 min-h-screen sm:min-h-screen">
                 <div className="pb-4">
                     <div className="flex sm:flex-row items-center justify-center sm:justify-start space-x-4 sm:space-x-10 md:space-x-20 pb-6">
                         <div className="text-left">
@@ -133,12 +133,8 @@ export default function SignUp() {
 
                 <div className="relative z-10 flex flex-col md:flex-row justify-center">
                     <div className="border border-white w-full px-6 py-8 max-w-lg">
-                        <h2 className="text-2xl dark:text-white font-geometos">
-                            Empieza a crear memorias
-                        </h2>
-
                         <form
-                            className="grid grid-rows-1 sm:grid-cols-2 gap-2 mt-4 items-center"
+                            className="grid grid-rows-1 sm:grid-cols-2 gap-2 items-center"
                             onSubmit={handleSubmit}
                         >
                             <div>

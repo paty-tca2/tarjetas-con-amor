@@ -20,9 +20,9 @@ const Header: React.FC = () => {
             <IoMenu className="text-black h-8 w-8 md:h-12 md:w-12" />
           </button>
         </div>
-        <div className="flex-grow flex justify-center items-center absolute inset-x-0">
+        <div className="flex-grow flex justify-center items-center absolute sm:right-10 inset-x-0">
           <Link href="/">
-            <h1 className="text-xl md:text-6xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer">
+            <h1 className="text-lg md:text-6xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer">
               compartiendo tus memorias...
             </h1>
           </Link>
