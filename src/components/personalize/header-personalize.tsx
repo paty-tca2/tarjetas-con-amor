@@ -21,10 +21,10 @@ const PersonalizeHeader: React.FC<PersonalizeHeaderProps> = ({ onPreview, onAddT
           <X size={24} />
         </button>
         <div className="flex space-x-2 md:space-x-4 order-1 md:order-2">
-          <button onClick={onPreview} className="bg-[#5D60a6] hover:bg-[#04d9b2] text-white px-2 py-1 md:px-4 md:py-2 rounded font-geometos flex items-center text-sm md:text-base">
+          <button onClick={onPreview} className="bg-[#5D60a6] hover:bg-[#04d9b2] text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-geometos flex items-center text-sm md:text-base">
             Preview
           </button>
-          <button onClick={onAddToBasket} className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-2 py-1 md:px-4 md:py-2 rounded font-geometos flex items-center text-sm md:text-base">
+          <button onClick={onAddToBasket} className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-geometos flex items-center text-sm md:text-base">
             Añadir al carrito
           </button>
         </div>

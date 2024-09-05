@@ -16,6 +16,7 @@ export default function PersonalizePage() {
   const router = useRouter();
   const [template, setTemplate] = useState<CardTemplate | null>(null);
   const [cardOptions, setCardOptions] = useState<CardOptions>({ type: 'standard', quantity: 1 });
+  const [selectedPage, setSelectedPage] = useState(1);
 
   useEffect(() => {
     const selectedTemplate = cardTemplates.find(t => t.id === id);
@@ -40,11 +41,14 @@ export default function PersonalizePage() {
 
   return (
     <div className="container mx-auto pt-48 px-4 py-8">
-        <PersonalizeHeader onPreview={handlePreview} onAddToBasket={handleAddToBasket} />
+      <PersonalizeHeader onPreview={handlePreview} onAddToBasket={handleAddToBasket} />
       <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Personaliza tu tarjeta</h1>
       <div className="flex flex-col md:flex-row gap-6">
-        <Canvas template={template} />
-        {/* You can add additional components or toolbars here if needed */}
+        <Canvas 
+          template={template} 
+          selectedPage={selectedPage}
+          onPageChange={setSelectedPage}
+        />
       </div>
     </div>
   );

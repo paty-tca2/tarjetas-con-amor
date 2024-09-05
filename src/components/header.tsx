@@ -17,7 +17,7 @@ const Header: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 md:p-8 lg:p-10 bg-white shadow-md">
         <div className="absolute left-2 md:left-6 lg:left-8 z-10 mt-2 md:mt-4">
           <button onClick={toggleSideMenu}>
-            <IoMenu className="text-black h-8 w-8 md:h-12 md:w-12" />
+            <IoMenu className="text-black h-7 w-7 md:h-12 md:w-12" />
           </button>
         </div>
         <div className="flex-grow flex justify-center items-center absolute sm:right-10 inset-x-0">
@@ -31,9 +31,9 @@ const Header: React.FC = () => {
           <FaSearch className="text-black h-6 w-6 md:h-8 md:w-8 hidden md:block" />
           <FaStar className="text-black h-6 w-6 md:h-8 md:w-8 hidden md:block" />
           <Link href="/auth/sign-up">
-            <FaUser className="text-black h-6 w-6 md:h-8 md:w-8 cursor-pointer" />
+            <FaUser className="text-black h-5 w-5 md:h-8 md:w-8 cursor-pointer" />
           </Link>
-          <FaShoppingCart className="text-black h-6 w-6 md:h-8 md:w-8" />
+          <FaShoppingCart className="text-black h-5 w-5 md:h-8 md:w-8" />
         </div>
       </header>
       <SideMenu isOpen={isSideMenuOpen} onClose={() => setIsSideMenuOpen(false)} />

@@ -30,7 +30,7 @@ export default function CardsPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<CardTemplate | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [cardOptions, setCardOptions] = useState<CardOptions>({ type: 'standard', quantity: 1 });
-  const [selectedThumbnail, setSelectedThumbnail] = useState(0);
+  const [selectedPage, setSelectedPage] = useState(1);
   const router = useRouter();
 
   const handleCardClick = (template: CardTemplate) => {
@@ -63,31 +63,37 @@ export default function CardsPage() {
     ? Array(4).fill(selectedTemplate.imageUrl)
     : [];
 
-  return (
-    <div className="container mx-auto pt-48 px-4 py-8">
-      <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Tarjetas personalizadas</h1>
-      
-      {/* Desktop view */}
-      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {cardTemplates.map((template) => (
-          <div 
-            key={template.id} 
-            className="relative group cursor-pointer transition-all duration-300 transform hover:scale-105"
-            onClick={() => handleCardClick(template)}
-          >
-            <Image 
-              src={template.imageUrl} 
-              alt={template.id} 
-              width={300} 
-              height={400} 
-              className="w-full h-120 object-cover rounded-lg"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
-             
+    return (
+      <div className="container mx-auto pt-48 px-4 py-8">
+        <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Tarjetas personalizadas</h1>
+        
+        {/* Desktop view */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cardTemplates.map((template) => (
+            <div 
+              key={template.id} 
+              className="relative group cursor-pointer transition-all duration-300 transform hover:scale-105"
+              onClick={() => handleCardClick(template)}
+            >
+              <Image 
+                src={`/templates/TEMPLATE-${template.id}-1.webp`}
+                alt={template.id} 
+                width={300} 
+                height={400} 
+                className="w-full h-120 object-cover rounded-lg"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+                <Image 
+                  src={`/templates/TEMPLATE-${template.id}-1.webp`}
+                  alt={`${template.id} page 1`}
+                  width={300}
+                  height={400}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
       {/* Mobile view */}
       <div className="md:hidden">
@@ -105,7 +111,7 @@ export default function CardsPage() {
                 onClick={() => handleCardClick(template)}
               >
                 <Image 
-                  src={template.imageUrl} 
+                  src={`/templates/TEMPLATE-${template.id}-1.webp`}
                   alt={template.id} 
                   width={300} 
                   height={400} 
@@ -136,23 +142,23 @@ export default function CardsPage() {
               <div className="w-full md:w-1/2 mb-4 md:mb-0">
                 <div className="relative">
                   <Image 
-                    src={selectedTemplate.imageUrl} 
-                    alt={selectedTemplate.id} 
+                    src={`/templates/TEMPLATE-${selectedTemplate.id}-${selectedPage}.webp`}
+                    alt={`${selectedTemplate.id} page ${selectedPage}`}
                     width={300} 
                     height={400} 
                     className="w-full h-auto object-cover rounded-lg"
                   />
                 </div>
                 <div className="flex mt-2 space-x-2 overflow-x-auto">
-                  {thumbnails.map((thumb, index) => (
+                  {[1, 2, 3, 4].map((pageNum) => (
                     <div
-                      key={index}
-                      className={`w-16 h-16 flex-shrink-0 cursor-pointer ${index === selectedThumbnail ? 'border-2 border-[#04d9b2] rounded-lg' : ''}`}
-                      onClick={() => setSelectedThumbnail(index)}
+                      key={pageNum}
+                      className={`w-16 h-16 flex-shrink-0 cursor-pointer ${pageNum === selectedPage ? 'border-2 border-[#04d9b2] rounded-lg' : ''}`}
+                      onClick={() => setSelectedPage(pageNum)}
                     >
                       <Image
-                        src={thumb}
-                        alt={`Thumbnail ${index + 1}`}
+                        src={`/templates/TEMPLATE-${selectedTemplate.id}-${pageNum}.webp`}
+                        alt={`${selectedTemplate.id} page ${pageNum}`}
                         width={64}
                         height={64}
                         className="w-full h-full object-cover rounded"
@@ -204,13 +210,13 @@ export default function CardsPage() {
             <div className="flex flex-col md:flex-row justify-end space-y-2 md:space-y-0 md:space-x-4 mt-4">
               <button 
                 onClick={handlePersonalize}
-                className="bg-[#5D60a6] hover:bg-[#04d9b2] text-white px-4 py-2 rounded font-geometos w-full md:w-auto"
+                className="bg-[#5D60a6] hover:bg-[#04d9b2] text-white px-4 py-2 rounded-full font-geometos w-full md:w-auto"
               >
                 Personalizar
               </button>
               <button 
                 onClick={handleAddToBasket}
-                className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-4 py-2 rounded font-geometos w-full md:w-auto"
+                className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-4 py-2 rounded-full font-geometos w-full md:w-auto"
               >
                 Agregar al carrito
               </button>

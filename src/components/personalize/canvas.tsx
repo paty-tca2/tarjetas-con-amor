@@ -2,18 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import { CardTemplate } from '@/components/cards/card-templates';
 import { ChevronLeft, ChevronRight, Type, Image, X } from 'lucide-react';
 import { FileUpload } from './file-upload';
+import NextImage from 'next/image';
 
 const fonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier', 'Verdana', 'Georgia', 'Palatino', 'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Arial Black', 'Impact'];
 
 interface CanvasProps {
   template: CardTemplate;
+  selectedPage: number;
+  onPageChange: (page: number) => void;
 }
 
-const Canvas: React.FC<CanvasProps> = ({ template }) => {
+const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange }) => {
   const [cardText, setCardText] = useState('Hola Amigo');
   const [font, setFont] = useState('Arial');
   const [image, setImage] = useState<string | null>(null);
-  const [selectedTemplateImage, setSelectedTemplateImage] = useState(template.imageUrl);
   const [activeTab, setActiveTab] = useState('text');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -21,7 +23,7 @@ const Canvas: React.FC<CanvasProps> = ({ template }) => {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // Adjust this breakpoint as needed
+      setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -49,34 +51,12 @@ const Canvas: React.FC<CanvasProps> = ({ template }) => {
     setFont(e.target.value);
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => setImage(e.target?.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const templateImages = [
-    template.imageUrl,
-    template.imageUrl,
-    template.imageUrl,
-    "/fondo-1.jpeg"
-  ];
-
-  const handleTemplateImageSelect = (imageUrl: string) => {
-    setSelectedTemplateImage(imageUrl);
-  };
-
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'layout':
-        return <p className="text-gray-500">Layout options (placeholder)</p>;
       case 'text':
         return (
           <>
@@ -147,11 +127,14 @@ const Canvas: React.FC<CanvasProps> = ({ template }) => {
       {/* Main content */}
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-2/3 aspect-[3/4] rounded-lg overflow-hidden relative mb-4 md:mb-0">
-          {selectedTemplateImage && (
-            <img src={selectedTemplateImage} alt="Template" className="absolute inset-0 w-full h-full object-contain" />
-          )}
+          <NextImage
+            src={`/templates/TEMPLATE-${template.id}-${selectedPage}.webp`}
+            alt={`Template ${template.id} - Page ${selectedPage}`}
+            layout="fill"
+            objectFit="contain"
+          />
           {image && (
-            <img src={image} alt="Uploaded" className="absolute inset-0 w-full h-full object-contain" />
+            <NextImage src={image} alt="Uploaded" layout="fill" objectFit="contain" />
           )}
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <p className="text-lg md:text-xl text-center" style={{ fontFamily: font }}>{cardText}</p>
@@ -206,23 +189,34 @@ const Canvas: React.FC<CanvasProps> = ({ template }) => {
       
       {/* Template selector */}
       <div className="relative mt-4">
-        <button className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full">
+        <button 
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full"
+          onClick={() => onPageChange(Math.max(1, selectedPage - 1))}
+        >
           <ChevronLeft size={20} />
         </button>
         <div className="flex justify-center space-x-2 overflow-x-auto py-2">
-          {templateImages.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`Template 1 - Page ${index + 1}`}
-              className={`w-16 h-16 md:w-20 md:h-20 object-cover border-2 rounded cursor-pointer ${
-                selectedTemplateImage === img ? 'border-blue-500' : 'border-gray-300'
+          {[1, 2, 3, 4].map((pageNum) => (
+            <div
+              key={pageNum}
+              className={`w-16 h-16 md:w-20 md:h-20 relative cursor-pointer ${
+                selectedPage === pageNum ? 'border-2 border-blue-500' : 'border border-gray-300'
               }`}
-              onClick={() => handleTemplateImageSelect(img)}
-            />
+              onClick={() => onPageChange(pageNum)}
+            >
+              <NextImage
+                src={`/templates/TEMPLATE-${template.id}-${pageNum}.webp`}
+                alt={`Template ${template.id} - Page ${pageNum}`}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
           ))}
         </div>
-        <button className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full">
+        <button 
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full"
+          onClick={() => onPageChange(Math.min(4, selectedPage + 1))}
+        >
           <ChevronRight size={20} />
         </button>
       </div>
