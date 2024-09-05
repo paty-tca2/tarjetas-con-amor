@@ -145,7 +145,7 @@ export default function SignUp() {
                         </div>
                         <Link href="/auth/login">
                             <button
-                                className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[7rem] h-10 text-[1rem] sm:text-[1.25rem]">INGRESA
+                                className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[7rem] h-10 sm:w-80 text-[1rem] sm:text-[1.25rem]">INGRESA
                             </button>
                         </Link>
                     </div>
@@ -281,9 +281,9 @@ export default function SignUp() {
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                     >
                                         {showConfirmPassword ? (
-                                            <EyeOffIcon className="h-5 w-5 text-gray-400" />
-                                        ) : (
                                             <EyeIcon className="h-5 w-5 text-gray-400" />
+                                        ) : (
+                                            <EyeOffIcon className="h-5 w-5 text-gray-400" />
                                         )}
                                     </button>
                                 </div>

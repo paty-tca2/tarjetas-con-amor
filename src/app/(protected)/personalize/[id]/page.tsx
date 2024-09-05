@@ -1,14 +1,21 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { cardTemplates } from '@/components/cards/card-templates';
 import Canvas from '@/components/personalize/canvas';
 import { CardTemplate } from '@/components/cards/card-templates';
 import PersonalizeHeader from '@/components/personalize/header-personalize';
 
+type CardOptions = {
+  type: 'ecard' | 'standard';
+  quantity: number;
+};
+
 export default function PersonalizePage() {
   const { id } = useParams();
+  const router = useRouter();
   const [template, setTemplate] = useState<CardTemplate | null>(null);
+  const [cardOptions, setCardOptions] = useState<CardOptions>({ type: 'standard', quantity: 1 });
 
   useEffect(() => {
     const selectedTemplate = cardTemplates.find(t => t.id === id);
@@ -20,7 +27,11 @@ export default function PersonalizePage() {
   };
 
   const handleAddToBasket = () => {
-    // Implement add to basket logic
+    if (template) {
+      localStorage.setItem('selectedTemplate', JSON.stringify(template));
+      localStorage.setItem('selectedOptions', JSON.stringify(cardOptions));
+      router.push('/carrito');
+    }
   };
 
   if (!template) {
