@@ -158,7 +158,7 @@ export default function SignUp() {
                 <div className="relative z-10 flex flex-col md:flex-row justify-center">
                     <div className="border border-white w-full px-6 py-8 max-w-lg">
                         <form
-                            className="grid grid-rows-1 sm:grid-cols-2 gap-2 items-center"
+                            className="flex flex-col gap-2"
                             onSubmit={handleSubmit}
                         >
                             <div>
@@ -194,7 +194,7 @@ export default function SignUp() {
                                     required
                                 />
                             </div>
-                            <div className="pt-2">
+                            <div>
                                 <label
                                     className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="email"
@@ -210,7 +210,7 @@ export default function SignUp() {
                                     required
                                 />
                             </div>
-                            <div className="pt-2">
+                            <div>
                                 <label
                                     className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="confirmEmail"
@@ -226,7 +226,7 @@ export default function SignUp() {
                                     required
                                 />
                             </div>
-                            <div className="pt-2">
+                            <div>
                                 <label
                                     className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="password"
@@ -235,7 +235,7 @@ export default function SignUp() {
                                 </label>
                                 <div className="relative">
                                     <input
-                                        className="w-full p-1 text-black placeholder:text-xs pr-10"
+                                        className="w-full p-1 text-black placeholder:text-[10px] pr-10"
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         placeholder="Una mayúscula, un número y un carácter especial"
@@ -251,15 +251,15 @@ export default function SignUp() {
                                         onClick={() => setShowPassword(!showPassword)}
                                     >
                                         {showPassword ? (
-                                            <EyeOffIcon className="h-5 w-5 text-gray-400" />
-                                        ) : (
                                             <EyeIcon className="h-5 w-5 text-gray-400" />
+                                        ) : (
+                                            <EyeOffIcon className="h-5 w-5 text-gray-400" />
                                         )}
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="pt-2">
+                            <div>
                                 <label
                                     className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
                                     htmlFor="confirmPassword">CONFIRMA TU CONTRASEÑA
@@ -289,7 +289,7 @@ export default function SignUp() {
                                 </div>
                             </div>
 
-                            <div className="col-span-2 flex items-center mt-4 text-center">
+                            <div className="flex items-center mt-4 text-center">
                                 <input
                                     type="checkbox"
                                     id="terms"
@@ -297,6 +297,7 @@ export default function SignUp() {
                                     onChange={handleCheckboxChange}
                                     className="mr-2"
                                     required
+                                    title="Por favor, acepta los términos y condiciones"
                                 />
                                 <label
                                     htmlFor="terms"
@@ -304,12 +305,17 @@ export default function SignUp() {
                                 >
                                     Acepto los{" "}
                                     <a href="/terms" className="text-[#04d7af] underline">
-                                        términos y condiciones
-                                    </a>
+                                        terminos y condiciones
+                                    </a> y el  <a
+                                    href="/privacy"
+                                    className="text-xs font-geometos text-[#04d7af] underline"
+                                >
+                                    Aviso de privacidad
+                                </a>
                                 </label>
                             </div>
 
-                            <div className="col-span-2 my-3">
+                            <div className="my-3">
                                 <button
                                     type="submit"
                                     className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-full h-10 flex justify-center items-center"
@@ -321,15 +327,6 @@ export default function SignUp() {
                                     )}
                                 </button>
                             </div>
-
-                            <div className="col-span-2 text-center">
-                                <a
-                                    href="/privacy"
-                                    className="text-xs font-geometos text-[#04d7af] underline"
-                                >
-                                    Aviso de privacidad
-                                </a>
-                            </div>
                         </form>
                     </div>
 
@@ -338,12 +335,12 @@ export default function SignUp() {
                             <Image
                                 src="/logo-principal.png"
                                 alt="Descripción de la imagen"
-                                width={150}
-                                height={150}
+                                width={260}
+                                height={260}
                                 layout="intrinsic"
                             />
                         </div>
-                        <h2 className="text-lg font-bold mb-2 text-[#5d60a6] font-geometos text-center">Beneficios</h2>
+                        <h2 className="text-lg font-bold  text-[#5d60a6] font-geometos text-center">Beneficios</h2>
                         <div className="flex flex-col text-[#5d60a6] space-y-4 text-[0.88rem] font-geometos">
                             <div className="normal-case">
                                 <p className="pb-3">1) Recordatorios:</p>

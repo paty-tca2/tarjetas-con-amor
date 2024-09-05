@@ -26,9 +26,9 @@ const Pedidos: React.FC = () => {
         </ul>
       ) : (
         <div className="text-center">
-          <p className="no-orders-message text-xl font-geometos text-[#5D60a6] mb-4">Parece que no has hecho ningún pedido.</p>
+          <p className="no-orders-message text-xl font-geometos text-[#5D60a6] mb-4">Parece que no has hecho ningun pedido.</p>
           <Link href="/">
-            <button className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded">
+            <button className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded-full">
               Comienza a comprar
             </button>
           </Link>

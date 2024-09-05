@@ -86,7 +86,7 @@ const Recordatorios: React.FC = () => {
           className="w-full mb-2 p-2 border rounded"
           required
         />
-        <button type="submit" className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded w-full">
+        <button type="submit" className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded-full">
           Agregar Recordatorio
         </button>
       </form>
@@ -102,7 +102,7 @@ const Recordatorios: React.FC = () => {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-xl font-geometos text-[#5D60a6]">No hay recordatorios guardados.</p>
+        <p className="text-center text-xl font-geometos text-[#5D60a6]">No hay recordatorios guardados</p>
       )}
     </div>
   );

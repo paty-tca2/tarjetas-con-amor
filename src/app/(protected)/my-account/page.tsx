@@ -9,22 +9,25 @@ import Recordatorios from '@/components/my-account/recordatorios';
 import MiCuenta from '@/components/my-account/cuenta';
 
 const SidebarItem = ({ icon: Icon, text, onClick }: { icon: LucideIcon| React.ElementType; text: string; onClick?: () => void }) => (
-  <div className="flex items-center space-x-2 py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={onClick}>
+  <div className="flex items-center space-x-2 py-2 px-4 cursor-pointer" onClick={onClick}>
     <Icon size={20} />
     <span>{text}</span>
   </div>
 );
 
 const Sidebar = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => (
-  <div className="hidden md:block w-64 bg-white border-r font-geometos border-gray-200 text-[#5D60a6] h-screen">
+  <div className="hidden md:block w-64 bg-white font-geometos text-[#5D60a6] h-screen">
     <SidebarItem icon={FaUser} text="Mi cuenta" onClick={() => setActiveTab('account')} />
+    <div className="my-6"></div>
     <SidebarItem icon={FaShoppingCart} text="Pedidos" onClick={() => setActiveTab('pedidos')} />
+    <div className="my-6"></div>
     <SidebarItem icon={MapPin} text="Direcciones de envio" onClick={() => setActiveTab('direcciones')} />
+    <div className="my-6"></div>
     <SidebarItem icon={CreditCard} text="Metodos de pago" />
+    <div className="my-6"></div>
     <SidebarItem icon={Calendar} text="Recordatorios" onClick={() => setActiveTab('recordatorios')} />
-    <div className="border-t border-gray-200 mt-4">
-      <SidebarItem icon={LogOut} text="Cerrar sesion" />
-    </div>
+    <div className="border-t border-gray-200 my-6"></div>
+    <SidebarItem icon={LogOut} text="Cerrar sesion" />
   </div>
 );
 
@@ -42,11 +45,11 @@ const MobileSelect = ({ activeTab, setActiveTab }: { activeTab: string; setActiv
 );
 
 const Header = () => (
-  <div className="bg-[#04d9b2] p-4 rounded-lg m-4 flex items-center space-x-4">
-    <Image src="/icono-tca.png" alt="Profile" width={48} height={48} className="rounded-full" />
-    <div>
-      <h2 className="text-xl font-geometos">¡Hola! </h2>
-      <p className="text-[#5D60a6] font-geometos">Bienvenid@ a tu cuenta</p>
+  <div className="bg-[#04d9b2] p-4 rounded-lg m-4 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+    <Image src="/logo-principal.png" alt="Profile" width={120} height={120} className="rounded-full" />
+    <div className="text-center sm:text-left">
+      <h2 className="text-3xl sm:text-5xl font-geometos">¡Hola! </h2>
+      <p className="text-[#5D60a6] text-xl sm:text-3xl font-geometos">Bienvenid@ a tu cuenta</p>
     </div>
   </div>
 );

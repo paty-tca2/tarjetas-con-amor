@@ -39,8 +39,11 @@ export default function CardsPage() {
   };
 
   const handleAddToBasket = () => {
-    console.log('Added to basket:', selectedTemplate, cardOptions);
-    setShowModal(false);
+    if (selectedTemplate) {
+      localStorage.setItem('selectedTemplate', JSON.stringify(selectedTemplate));
+      localStorage.setItem('selectedOptions', JSON.stringify(cardOptions));
+      router.push('/carrito');
+    }
   };
 
   const handleSizeChange = (type: CardOptions['type']) => {

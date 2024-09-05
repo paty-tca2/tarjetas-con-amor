@@ -33,7 +33,7 @@ const DireccionesEnvio: React.FC = () => {
 
   return (
     <div className="direcciones-envio-container text-black">
-      <h2 className="text-center text-3xl font-geometos text-[#5D60a6] mb-4">Direcciones de Envío</h2>
+      <h2 className="text-center text-3xl font-geometos text-[#5D60a6] mb-4">Direcciones de Envio</h2>
       
       <form onSubmit={handleAddAddress} className="mb-6">
       <input
@@ -77,12 +77,12 @@ const DireccionesEnvio: React.FC = () => {
           name="zipCode"
           value={newAddress.zipCode}
           onChange={handleInputChange}
-          placeholder="Código Postal"
+          placeholder="Codigo Postal"
           className="w-full mb-2 p-2 border font-geometos rounded"
           required
         />
-        <button type="submit" className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded w-full">
-          Agregar Dirección
+        <button type="submit" className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded-full">
+          Agregar Direccion
         </button>
       </form>
 
@@ -98,7 +98,7 @@ const DireccionesEnvio: React.FC = () => {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-xl font-geometos text-[#5D60a6]">No hay direcciones guardadas.</p>
+        <p className="text-center text-xl font-geometos text-[#5D60a6]">No hay direcciones guardadas</p>
       )}
     </div>
   );
