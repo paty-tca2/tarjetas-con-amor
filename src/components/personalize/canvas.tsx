@@ -39,6 +39,7 @@ interface CanvasElement {
   align?: 'left' | 'center' | 'right';
   width: number;
   height: number;
+  isStatic?: boolean;
 }
 
 const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange }) => {
@@ -53,6 +54,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
   const [colorModalOpen, setColorModalOpen] = useState(false);
   const [activeSubTab, setActiveSubTab] = useState<string | null>(null);
+  const [staticElements, setStaticElements] = useState<CanvasElement[]>([]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -75,6 +77,25 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isDrawerOpen, isMobile]);
+
+  useEffect(() => {
+    // Convert static placeholders to CanvasElements
+    const currentPagePlaceholders = template.pages.find(p => p.pageNumber === selectedPage)?.staticPlaceholders || [];
+    const staticCanvasElements = currentPagePlaceholders.map(placeholder => ({
+      id: placeholder.id,
+      type: placeholder.type,
+      content: placeholder.content || placeholder.placeholder || '',
+      position: placeholder.position,
+      font: 'Arial', // Default font, adjust as needed
+      size: placeholder.type === 'text' ? 16 : undefined, // Default font size for text, adjust as needed
+      color: '#000000', // Default color, adjust as needed
+      align: 'left', // Default alignment, adjust as needed
+      width: placeholder.size.width,
+      height: placeholder.size.height,
+      isStatic: true
+    }));
+    setStaticElements(staticCanvasElements as CanvasElement[]);
+  }, [template, selectedPage]);
 
   const addTextElement = () => {
     const newElement: CanvasElement = {
@@ -366,6 +387,44 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
               Your browser does not support SVG
             </object>
             <div className="absolute inset-0">
+              {staticElements.map((element) => (
+                <div
+                  key={element.id}
+                  style={{
+                    position: 'absolute',
+                    left: `${element.position.x}px`,
+                    top: `${element.position.y}px`,
+                    width: `${element.width}px`,
+                    height: `${element.height}px`,
+                  }}
+                >
+                  {element.type === 'image' ? (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <Image size={24} />
+                    </div>
+                  ) : (
+                    <div
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="w-full h-full border border-gray-300 p-2"
+                      style={{
+                        fontFamily: 'Arial, sans-serif',
+                        fontSize: '18px',
+                        textAlign: 'center',
+                      }}
+                      onBlur={(e) => {
+                        // Update the content of the static element
+                        const updatedElements = staticElements.map(el => 
+                          el.id === element.id ? { ...el, content: e.currentTarget.textContent || '' } : el
+                        );
+                        setStaticElements(updatedElements);
+                      }}
+                    >
+                      {element.content}
+                    </div>
+                  )}
+                </div>
+              ))}
               {elements.map((element) => (
                 <Draggable
                   key={element.id}
