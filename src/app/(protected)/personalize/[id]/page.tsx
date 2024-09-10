@@ -44,11 +44,13 @@ export default function PersonalizePage() {
       <PersonalizeHeader onPreview={handlePreview} onAddToBasket={handleAddToBasket} />
       <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Personaliza tu tarjeta</h1>
       <div className="flex flex-col md:flex-row gap-6">
-        <Canvas 
-          template={template} 
-          selectedPage={selectedPage}
-          onPageChange={setSelectedPage}
-        />
+        {template && (
+          <Canvas 
+            template={template} 
+            selectedPage={selectedPage}
+            onPageChange={setSelectedPage}
+          />
+        )}
       </div>
     </div>
   );

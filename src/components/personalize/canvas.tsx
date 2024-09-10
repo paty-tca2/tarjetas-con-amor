@@ -330,6 +330,10 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
     setElements(elements.map(el => el.id === id ? { ...el, ...size } : el));
   };
 
+  const getSvgPath = (pageNum: number) => {
+    return `/templates/template-${template.id}/${pageNum}.svg`;
+  };
+
   return (
     <div className="w-full">
       {/* Mobile top bar */}
@@ -356,7 +360,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
           <div className="aspect-[3/4] rounded-lg overflow-hidden relative mb-4 border-4 border-gray-300" style={{ width: isMobile ? '80%' : '60%' }}>
             <object
               type="image/svg+xml"
-              data={`/templates/${selectedPage}.svg`}
+              data={getSvgPath(selectedPage)}
               className="w-full h-full"
             >
               Your browser does not support SVG
@@ -407,7 +411,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
                             height: '100%',
                             overflow: 'hidden',
                             padding: '4px',
-                            background: 'rgba(255, 255, 255, 0.5)',
+                            background: activeElement === element.id ? 'rgba(255, 255, 255, 0.5)' : 'transparent',
                           }}
                         >
                           {element.content}
@@ -454,7 +458,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
             >
               <object
                 type="image/svg+xml"
-                data={`/templates/${pageNum}.svg`}
+                data={getSvgPath(pageNum)}
                 className="w-full h-full"
               >
                 Your browser does not support SVG
