@@ -24,15 +24,15 @@ const Header: React.FC = () => {
 
           <div className="flex-grow flex justify-center">
             <Link href="/">
-              <h1 className="text-sm sm:text-lg md:text-3xl lg:text-4xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer">
+              <h1 className="text-lg sm:text-lg md:text-3xl lg:text-4xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer pl-4 sm:pl-0">
                 compartiendo tus memorias...
               </h1>
             </Link>
           </div>
 
           <div className="flex items-center space-x-3 md:space-x-5">
-            <FaSearch className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
-            <FaStar className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <FaSearch className="hidden md:block text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <FaStar className="hidden md:block text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
             <Link href="/auth/sign-up">
               <FaUser className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 cursor-pointer" />
             </Link>

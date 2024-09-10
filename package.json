@@ -22,6 +22,7 @@
     "nodemailer": "^6.9.14",
     "re-resizable": "^6.9.18",
     "react": "^18",
+    "react-calendar": "^5.0.0",
     "react-datepicker": "^7.3.0",
     "react-dom": "^18",
     "react-draggable": "^4.4.6",

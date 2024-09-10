@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 interface Reminder {
   id: string;
-  day: number;
-  month: number;
+  date: Date;
   text: string;
   name: string;
 }
 
 const Recordatorios: React.FC = () => {
   const [reminders, setReminders] = useState<Reminder[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [newReminder, setNewReminder] = useState<Omit<Reminder, 'id'>>({
-    day: 1,
-    month: 1,
+    date: new Date(),
     text: '',
     name: '',
   });
 
-  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewReminder(prev => ({ ...prev, day: parseInt(e.target.value) }));
-  };
-
-  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewReminder(prev => ({ ...prev, month: parseInt(e.target.value) }));
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+    setNewReminder(prev => ({ ...prev, date }));
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,73 +35,77 @@ const Recordatorios: React.FC = () => {
     e.preventDefault();
     const id = Date.now().toString();
     setReminders(prev => [...prev, { id, ...newReminder }]);
-    setNewReminder({ day: 1, month: 1, text: '', name: '' });
+    setNewReminder({ date: selectedDate, text: '', name: '' });
   };
 
-  const months = [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-  ];
+  const tileContent = ({ date, view }: { date: Date; view: string }) => {
+    if (view === 'month') {
+      const dayReminders = reminders.filter(
+        reminder => reminder.date.toDateString() === date.toDateString()
+      );
+      if (dayReminders.length > 0) {
+        return <div className="dot"></div>;
+      }
+    }
+    return null;
+  };
 
   return (
     <div className="recordatorios-container font-geometos text-[#5D60a6]">
       <h2 className="text-center text-3xl font-geometos text-[#5D60a6] mb-4">Recordatorios</h2>
       
-      <form onSubmit={handleAddReminder} className="mb-6">
-        <div className="mb-4 flex space-x-2">
-          <select
-            value={newReminder.day}
-            onChange={handleDayChange}
-            className="w-1/2 p-2 border rounded"
-          >
-            {[...Array(31)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>{i + 1}</option>
-            ))}
-          </select>
-          <select
-            value={newReminder.month}
-            onChange={handleMonthChange}
-            className="w-1/2 p-2 border rounded"
-          >
-            {months.map((month, i) => (
-              <option key={i + 1} value={i + 1}>{month}</option>
-            ))}
-          </select>
+      <div className="flex flex-col md:flex-row gap-6 justify-center">
+        <div className="md:w-1/2 flex justify-center">
+          <Calendar
+            onChange={(value) => {
+              if (value instanceof Date) {
+                handleDateChange(value);
+              }
+            }}
+            value={selectedDate}
+            tileContent={tileContent}
+            className="w-full max-w-md"
+          />
         </div>
-        <input
-          type="text"
-          value={newReminder.name}
-          onChange={handleNameChange}
-          placeholder="Nombre"
-          className="w-full mb-2 p-2 font-geometos border rounded"
-          required
-        />
-        <input
-          type="text"
-          value={newReminder.text}
-          onChange={handleTextChange}
-          placeholder="Ocasion"
-          className="w-full mb-2 p-2 border rounded"
-          required
-        />
-        <button type="submit" className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded-full">
-          Agregar Recordatorio
-        </button>
-      </form>
+        
+        <div className="md:w-1/2">
+          <form onSubmit={handleAddReminder} className="mb-6">
+            <input
+              type="text"
+              value={newReminder.name}
+              onChange={handleNameChange}
+              placeholder="Nombre"
+              className="w-full mb-2 p-2 font-geometos border rounded"
+              required
+            />
+            <input
+              type="text"
+              value={newReminder.text}
+              onChange={handleTextChange}
+              placeholder="Ocasión"
+              className="w-full mb-2 p-2 border rounded"
+              required
+            />
+            <button type="submit" className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos py-2 px-4 rounded-full">
+              Agregar Recordatorio
+            </button>
+          </form>
 
-      {reminders.length > 0 ? (
-        <ul className="reminder-list">
-          {reminders.map((reminder) => (
-            <li key={reminder.id} className="reminder-item mb-4 p-4 border rounded">
-              <p className="font-bold">{`${reminder.day.toString().padStart(2, '0')}/${reminder.month.toString().padStart(2, '0')}`}</p>
-              <p className="font-semibold">{reminder.name}</p>
-              <p>{reminder.text}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center text-xl font-geometos text-[#5D60a6]">No hay recordatorios guardados</p>
-      )}
+          {reminders.length > 0 ? (
+            <ul className="reminder-list">
+              {reminders.map((reminder) => (
+                <li key={reminder.id} className="reminder-item mb-4 p-4 border rounded">
+                  <p className="font-bold">{reminder.date.toLocaleDateString()}</p>
+                  <p className="font-semibold">{reminder.name}</p>
+                  <p>{reminder.text}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-center text-xl font-geometos text-[#5D60a6]">No hay recordatorios guardados</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
