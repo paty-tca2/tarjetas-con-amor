@@ -115,7 +115,7 @@ export default function SignUp() {
     };
 
     return (
-        <div className="relative flex flex-col min-h-screen justify-center items-center py-24 sm:py-32">
+        <div className="relative flex flex-col min-h-screen justify-center items-center py-24 sm:py-32 mt-10">
             {loading && (
                 <div className="absolute inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                     <ClipLoader color="#04d9b2" loading={loading} size={50} />
@@ -337,6 +337,7 @@ export default function SignUp() {
                                 alt="Descripción de la imagen"
                                 width={260}
                                 height={260}
+                                className="w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] md:w-[300px] md:h-[300px]"
                                 layout="intrinsic"
                             />
                         </div>

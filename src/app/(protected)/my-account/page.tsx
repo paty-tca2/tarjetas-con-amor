@@ -9,14 +9,14 @@ import Recordatorios from '@/components/my-account/recordatorios';
 import MiCuenta from '@/components/my-account/cuenta';
 
 const SidebarItem = ({ icon: Icon, text, onClick }: { icon: LucideIcon| React.ElementType; text: string; onClick?: () => void }) => (
-  <div className="flex items-center space-x-2 py-2 px-4 cursor-pointer" onClick={onClick}>
-    <Icon size={20} />
-    <span>{text}</span>
+  <div className="flex items-center space-x-2 py-2 px-4 cursor-pointer group text-[#5D60a6] " onClick={onClick}>
+    <Icon size={20}  className="group-hover:text-[#04d9b2] transition-colors duration-300 mr-2" />
+    <span className="group-hover:text-[#04d9b2] transition-colors duration-300">{text}</span>
   </div>
 );
 
 const Sidebar = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => (
-  <div className="hidden md:block w-64 bg-white font-geometos text-[#5D60a6] h-screen">
+  <div className="hidden md:block w-72 bg-white font-geometos h-screen mt-10">
     <SidebarItem icon={FaUser} text="Mi cuenta" onClick={() => setActiveTab('account')} />
     <div className="my-6"></div>
     <SidebarItem icon={FaShoppingCart} text="Pedidos" onClick={() => setActiveTab('pedidos')} />
@@ -46,8 +46,14 @@ const MobileSelect = ({ activeTab, setActiveTab }: { activeTab: string; setActiv
 
 const Header = () => (
   <div className="bg-[#04d9b2] p-4 rounded-lg m-4 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
-    <Image src="/logo-principal.png" alt="Profile" width={120} height={120} className="rounded-full" />
-    <div className="text-center sm:text-left">
+      <Image
+          src="/logo-principal.png"
+          alt="Profile"
+          width={120}
+          height={120}
+          className="rounded-full w-[100px] h-[100px] sm:w-[100px] sm:h-[100px] md:w-[170px] md:h-[170px]"
+      />
+      <div className="text-center sm:text-left">
       <h2 className="text-3xl sm:text-5xl font-geometos">¡Hola! </h2>
       <p className="text-[#5D60a6] text-xl sm:text-3xl font-geometos">Bienvenid@ a tu cuenta</p>
     </div>

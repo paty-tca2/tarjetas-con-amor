@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { IoMenu } from "react-icons/io5";
 import { FaSearch, FaStar, FaUser, FaShoppingCart } from "react-icons/fa";
 import SideMenu from './slide-in';
-import Link from 'next/link'; // Add this import
+import Link from 'next/link';
 
 const Header: React.FC = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
@@ -13,31 +13,36 @@ const Header: React.FC = () => {
   };
 
   return (
-    <>
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 md:p-8 lg:p-10 bg-white shadow-md">
-        <div className="absolute left-2 md:left-6 lg:left-8 z-10 mt-2 md:mt-4">
-          <button onClick={toggleSideMenu}>
-            <IoMenu className="text-black h-7 w-7 md:h-12 md:w-12" />
-          </button>
-        </div>
-        <div className="flex-grow flex justify-center items-center absolute sm:right-10 inset-x-0">
-          <Link href="/">
-            <h1 className="text-lg md:text-6xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer">
-              compartiendo tus memorias...
-            </h1>
-          </Link>
-        </div>
-        <div className="flex items-center space-x-2 md:space-x-4 ml-auto z-10">
-          <FaSearch className="text-black h-6 w-6 md:h-8 md:w-8 hidden md:block" />
-          <FaStar className="text-black h-6 w-6 md:h-8 md:w-8 hidden md:block" />
-          <Link href="/auth/sign-up">
-            <FaUser className="text-black h-5 w-5 md:h-8 md:w-8 cursor-pointer" />
-          </Link>
-          <FaShoppingCart className="text-black h-5 w-5 md:h-8 md:w-8" />
-        </div>
-      </header>
-      <SideMenu isOpen={isSideMenuOpen} onClose={() => setIsSideMenuOpen(false)} />
-    </>
+      <>
+        <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 py-9 md:px-8 md:py-9 bg-white shadow-md">
+
+          <div className="flex items-center">
+            <button onClick={toggleSideMenu}>
+              <IoMenu className="text-black h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8" />
+            </button>
+          </div>
+
+          <div className="flex-grow flex justify-center">
+            <Link href="/">
+              <h1 className="text-sm sm:text-lg md:text-3xl lg:text-4xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer">
+                compartiendo tus memorias...
+              </h1>
+            </Link>
+          </div>
+
+          <div className="flex items-center space-x-3 md:space-x-5">
+            <FaSearch className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <FaStar className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <Link href="/auth/sign-up">
+              <FaUser className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 cursor-pointer" />
+            </Link>
+            <FaShoppingCart className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+          </div>
+        </header>
+
+        {/* Menú lateral */}
+        <SideMenu isOpen={isSideMenuOpen} onClose={() => setIsSideMenuOpen(false)} />
+      </>
   );
 };
 
