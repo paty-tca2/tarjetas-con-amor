@@ -29,6 +29,7 @@ interface CanvasProps {
 }
 
 interface CanvasElement {
+  placeholder: string;
   id: string;
   type: 'text' | 'image';
   content: string;
@@ -86,10 +87,10 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       type: placeholder.type,
       content: placeholder.content || placeholder.placeholder || '',
       position: placeholder.position,
-      font: 'Arial', // Default font, adjust as needed
-      size: placeholder.type === 'text' ? 16 : undefined, // Default font size for text, adjust as needed
-      color: '#000000', // Default color, adjust as needed
-      align: 'left', // Default alignment, adjust as needed
+      font: placeholder.font || 'Lust Script',
+      size: placeholder.type === 'text' ? 16 : undefined,
+      color: placeholder.color || '#04D9B2',
+      align: 'left',
       width: placeholder.size.width,
       height: placeholder.size.height,
       isStatic: true
@@ -109,6 +110,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       align: 'left',
       width: 200,
       height: 50,
+      placeholder: ''
     };
     setElements(prevElements => [...prevElements, newElement]);
     setActiveElement(newElement.id);
@@ -122,6 +124,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       position: { x: 50, y: 50 },
       width: 200,
       height: 200,
+      placeholder: ''
     };
     setElements([...elements, newElement]);
     setActiveElement(newElement.id);
@@ -129,6 +132,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
 
   const updateElement = (id: string, updates: Partial<CanvasElement>) => {
     setElements(elements.map(el => el.id === id ? { ...el, ...updates } : el));
+    setStaticElements(staticElements.map(el => el.id === id ? { ...el, ...updates } : el));
   };
 
   const removeElement = (id: string) => {
@@ -432,10 +436,11 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
                       <div
                         contentEditable
                         suppressContentEditableWarning
-                        className="w-full h-full border border-gray-300 p-2"
+                        className="w-full h-full p-2"
                         style={{
-                          fontFamily: 'Arial, sans-serif',
-                          fontSize: '18px',
+                          fontFamily: element.font || 'Lust Script, Arial, sans-serif',
+                          fontSize: `${element.size || 18}px`,
+                          color: element.color || '#04D9B2',
                           textAlign: 'center',
                         }}
                         onBlur={(e) => {
@@ -446,7 +451,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
                           setStaticElements(updatedElements);
                         }}
                       >
-                        {element.content}
+                        {element.content || element.placeholder}
                       </div>
                     )}
                   </div>
@@ -551,7 +556,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
           {fonts.map((font) => (
             <button
               key={font}
-              className="p-2 bg-gray-200 rounded text-sm"
+              className="p-2 bg-[#04D9B2] hover:bg-[#5D60a6] rounded text-sm"
               style={{ fontFamily: font }}
               onClick={() => {
                 if (activeElement) {
@@ -571,8 +576,8 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
         <div className="grid grid-cols-3 gap-2">
           {fontSizes.map((size) => (
             <button
-              key={size}
-              className="p-2 bg-gray-200 rounded text-sm"
+                key={size}
+              className="p-2 bg-[#04D9B2] hover:bg-[#5D60a6] rounded text-sm"
               onClick={() => {
                 if (activeElement) {
                   updateElement(activeElement, { size });

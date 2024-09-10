@@ -28,7 +28,7 @@ const Pedidos: React.FC = () => {
         <div className="text-center">
           <div className="bg-white shadow-md rounded-lg p-6 mb-6 max-w-md mx-auto">
             <div className="mb-4">
-              <img src="/templates/1.svg" alt="Template Preview" className="w-40 h-40 mx-auto" />
+              <img src="/templates/template-1/1.svg" alt="Template Preview" className="w-40 h-40 mx-auto" />
             </div>
             <h3 className="text-xl font-geometos text-[#5D60a6] mb-2">Pedido #12345</h3>
             <p className="text-gray-600 mb-2">Fecha: 15 de agosto, 2023</p>

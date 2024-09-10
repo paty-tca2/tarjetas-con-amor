@@ -4,6 +4,8 @@ export type CardTemplate = {
   pages: {
     pageNumber: number;
     staticPlaceholders: {
+      color: string;
+      font: string;
       id: string;
       type: 'image' | 'text';
       position: { x: number; y: number };
@@ -22,13 +24,15 @@ export const cardTemplates: CardTemplate[] = [
       {
         pageNumber: 1,
         staticPlaceholders: [
-          { 
-            id: 'title', 
-            type: 'text', 
-            position: { x: 50, y: 30 }, 
-            size: { width: 300, height: 50 }, 
-            content: '', 
-            placeholder: 'Enter your title here'
+          {
+            id: 'title',
+            type: 'text',
+            position: { x: 50, y: 30 },
+            size: { width: 300, height: 50 },
+            content: '',
+            placeholder: 'Hola',
+            font: "Lust Script", // Changed to Lust Script
+            color: '#04D9B2', // Changed to #04D9B2
           },
           // ... other placeholders for this page
         ]
