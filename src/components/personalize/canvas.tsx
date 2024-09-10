@@ -1,11 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CardTemplate } from '@/components/cards/card-templates';
-import { ChevronLeft, ChevronRight, Type, Image, X, Trash2, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Type, Image, X, Trash2, AlignLeft, AlignCenter, AlignRight, Palette, Maximize } from 'lucide-react';
 import { FileUpload } from './file-upload';
-import NextImage from 'next/image';
 import Draggable from 'react-draggable';
+import Modal from './modal';
 
-const fonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier', 'Verdana', 'Georgia', 'Palatino', 'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Arial Black', 'Impact'];
+const fonts = [
+  'Bavex',
+  'Poppins',
+  'Lust Script',
+  'Melodrama',
+  'Now Cloud',
+  'Reselu',
+  'Stardom',
+  'Telma',
+  'Blenny',
+  'Geometos Soft',
+  'Coneria Script',
+  'Helvetica Neue'
+];
 
 interface CanvasProps {
   template: CardTemplate;
@@ -22,6 +35,8 @@ interface CanvasElement {
   size?: number;
   color?: string;
   align?: 'left' | 'center' | 'right';
+  width: number;
+  height: number;
 }
 
 const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange }) => {
@@ -31,6 +46,11 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const [resizingElement, setResizingElement] = useState<string | null>(null);
+  const [fontModalOpen, setFontModalOpen] = useState(false);
+  const [sizeModalOpen, setSizeModalOpen] = useState(false);
+  const [colorModalOpen, setColorModalOpen] = useState(false);
+  const [activeSubTab, setActiveSubTab] = useState<string | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -58,14 +78,16 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
     const newElement: CanvasElement = {
       id: `text-${Date.now()}`,
       type: 'text',
-      content: 'New text',
-      position: { x: 50, y: 50 },
+      content: 'Escribe tu texto aquí',
+      position: { x: Math.random() * 100, y: Math.random() * 100 },
       font: 'Arial',
       size: 16,
       color: '#000000',
       align: 'left',
+      width: 200,
+      height: 50,
     };
-    setElements([...elements, newElement]);
+    setElements(prevElements => [...prevElements, newElement]);
     setActiveElement(newElement.id);
   };
 
@@ -75,6 +97,8 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       type: 'image',
       content: imageUrl,
       position: { x: 50, y: 50 },
+      width: 200,
+      height: 200,
     };
     setElements([...elements, newElement]);
     setActiveElement(newElement.id);
@@ -89,66 +113,207 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
     setActiveElement(null);
   };
 
-  const renderEditorContent = () => (
-    <div className="bg-white rounded-lg p-4">
-      {activeTab === 'text' ? (
-        <div>
+  const fontSizes = [12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 60];
+  const colors = ['#5D60A6', '#070A40', '#2D4BA6', '#737373', '#04D9B2'];
+
+  const handleResizeStart = (e: React.MouseEvent, id: string, corner: 'nw' | 'ne' | 'sw' | 'se') => {
+    e.stopPropagation();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const element = elements.find(el => el.id === id);
+    if (!element) return;
+
+    const startWidth = element.width;
+    const startHeight = element.height;
+    const startFontSize = element.size || 16;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaY = moveEvent.clientY - startY;
+
+      let newWidth = startWidth;
+      let newHeight = startHeight;
+
+      switch (corner) {
+        case 'nw':
+          newWidth = startWidth - deltaX;
+          newHeight = startHeight - deltaY;
+          break;
+        case 'ne':
+          newWidth = startWidth + deltaX;
+          newHeight = startHeight - deltaY;
+          break;
+        case 'sw':
+          newWidth = startWidth - deltaX;
+          newHeight = startHeight + deltaY;
+          break;
+        case 'se':
+          newWidth = startWidth + deltaX;
+          newHeight = startHeight + deltaY;
+          break;
+      }
+
+      const scaleFactor = Math.min(newWidth / startWidth, newHeight / startHeight);
+      const newFontSize = Math.max(8, Math.round(startFontSize * scaleFactor));
+
+      updateElement(id, { 
+        width: Math.max(20, newWidth), 
+        height: Math.max(20, newHeight),
+        size: newFontSize
+      });
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      setResizingElement(null);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleCanvasClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setActiveElement(null);
+      setActiveSubTab(null);
+    }
+  };
+
+  const renderMobileButtons = () => {
+    if (activeElement && elements.find(el => el.id === activeElement)?.type === 'text') {
+      return (
+        <>
           <button
-            className="w-full p-2 mb-2 bg-[#04d9b2] hover:bg-[#5D60a6] text-white font-geometos rounded flex items-center justify-center rounded-full"
+            className="flex flex-col items-center justify-center p-2 rounded"
+            onClick={() => setFontModalOpen(true)}
+          >
+            <Type size={20} className="text-gray-500" />
+            <span className="text-xs mt-1">Font</span>
+          </button>
+          <button
+            className="flex flex-col items-center justify-center p-2 rounded"
+            onClick={() => setSizeModalOpen(true)}
+          >
+            <Type size={20} className="text-gray-500" />
+            <span className="text-xs mt-1">Size</span>
+          </button>
+          <button
+            className="flex flex-col items-center justify-center p-2 rounded"
+            onClick={() => setColorModalOpen(true)}
+          >
+            <Palette size={20} className="text-gray-500" />
+            <span className="text-xs mt-1">Color</span>
+          </button>
+          <button
+            className="flex flex-col items-center justify-center p-2 rounded"
+            onClick={() => {
+              const currentAlign = elements.find(el => el.id === activeElement)?.align || 'left';
+              const nextAlign = currentAlign === 'left' ? 'center' : currentAlign === 'center' ? 'right' : 'left';
+              updateElement(activeElement, { align: nextAlign });
+            }}
+          >
+            <AlignCenter size={20} className="text-gray-500" />
+            <span className="text-xs mt-1">Align</span>
+          </button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <button
+            className="flex flex-col items-center justify-center p-2 rounded"
             onClick={addTextElement}
           >
-            <Type size={20} className="mr-2" /> Añadir texto
+            <Type size={20} className={activeTab === 'text' ? 'text-blue-500' : 'text-gray-500'} />
+            <span className="text-xs mt-1">Text</span>
           </button>
-          {activeElement && elements.find(el => el.id === activeElement)?.type === 'text' && (
-            <div className="mt-4">
-              <select
-                value={elements.find(el => el.id === activeElement)?.font}
-                onChange={(e) => updateElement(activeElement, { font: e.target.value })}
-                className="w-full p-2 mb-2 border rounded text-black"
-              >
-                {fonts.map((f) => (
-                  <option key={f} value={f}>{f}</option>
-                ))}
-              </select>
-              <input
-                type="number"
-                value={elements.find(el => el.id === activeElement)?.size}
-                onChange={(e) => updateElement(activeElement, { size: parseInt(e.target.value) })}
-                className="w-full text-black p-2 mb-2 border rounded"
-                placeholder="Font size"
-              />
-              <input
-                type="color"
-                value={elements.find(el => el.id === activeElement)?.color}
-                onChange={(e) => updateElement(activeElement, { color: e.target.value })}
-                className="w-full p-2 mb-2 border rounded"
-              />
-              <div className="flex justify-between mb-2">
-                <button onClick={() => updateElement(activeElement, { align: 'left' })}><AlignLeft size={20} /></button>
-                <button onClick={() => updateElement(activeElement, { align: 'center' })}><AlignCenter size={20} /></button>
-                <button onClick={() => updateElement(activeElement, { align: 'right' })}><AlignRight size={20} /></button>
-              </div>
-              <button
-                className="w-full p-2 bg-red-500 text-white rounded flex items-center font-geometos justify-center rounded-full"
-                onClick={() => removeElement(activeElement)}
-              >
-                <Trash2 size={20} className="mr-2" /> Quitar
-              </button>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div>
-          <FileUpload onChange={(files: File[]) => {
-            if (files.length > 0) {
-              const file = files[0];
-              const reader = new FileReader();
-              reader.onload = (e) => addImageElement(e.target?.result as string);
-              reader.readAsDataURL(file);
-            }
-          }} />
-        </div>
-      )}
+          <label className="flex flex-col items-center justify-center p-2 rounded cursor-pointer">
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => addImageElement(event.target?.result as string);
+                  reader.readAsDataURL(file);
+                }
+              }}
+            />
+            <Image size={20} className={activeTab === 'image' ? 'text-blue-500' : 'text-gray-500'} />
+            <span className="text-xs mt-1">Image</span>
+          </label>
+        </>
+      );
+    }
+  };
+
+  const renderEditorContent = () => (
+    <div className="bg-white rounded-lg p-4">
+      <div className="flex flex-col items-center">
+        <button
+          className="w-24 h-24 p-2 mb-4 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+          onClick={addTextElement}
+        >
+          <Type size={20} />
+          <span className="text-xs mt-1">Texto</span>
+        </button>
+        <label className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200 cursor-pointer">
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => addImageElement(event.target?.result as string);
+                reader.readAsDataURL(file);
+              }
+            }}
+          />
+          <Image size={20} />
+          <span className="text-xs mt-1">Imagen</span>
+        </label>
+        {activeElement && elements.find(el => el.id === activeElement)?.type === 'text' && (
+          <div className="w-full space-y-2 flex flex-col items-center mt-4">
+            <button
+              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              onClick={() => setFontModalOpen(true)}
+            >
+              <Type size={20} />
+              <span className="text-xs mt-1">Font</span>
+            </button>
+            <button
+              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              onClick={() => setSizeModalOpen(true)}
+            >
+              <Type size={20} />
+              <span className="text-xs mt-1">Size</span>
+            </button>
+            <button
+              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              onClick={() => setColorModalOpen(true)}
+            >
+              <Palette size={20} />
+              <span className="text-xs mt-1">Color</span>
+            </button>
+            <button
+              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              onClick={() => {
+                const currentAlign = elements.find(el => el.id === activeElement)?.align || 'left';
+                const nextAlign = currentAlign === 'left' ? 'center' : currentAlign === 'center' ? 'right' : 'left';
+                updateElement(activeElement, { align: nextAlign });
+              }}
+            >
+              <AlignCenter size={20} />
+              <span className="text-xs mt-1">Align</span>
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 
@@ -157,22 +322,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       {/* Mobile top bar */}
       {isMobile && (
         <div className="bg-white rounded-lg p-2 mb-4 flex justify-center space-x-4">
-          {[
-            { icon: Type, label: 'Text', id: 'text' },
-            { icon: Image, label: 'Photos', id: 'image' },
-          ].map(({ icon: Icon, label, id }) => (
-            <button
-              key={id}
-              className={`flex flex-col items-center justify-center p-2 rounded ${activeTab === id ? 'bg-gray-100' : ''}`}
-              onClick={() => {
-                setActiveTab(id as 'text' | 'image');
-                setIsDrawerOpen(true);
-              }}
-            >
-              <Icon size={20} className={activeTab === id ? 'text-blue-500' : 'text-gray-500'} />
-              <span className="text-xs mt-1">{label}</span>
-            </button>
-          ))}
+          {renderMobileButtons()}
         </div>
       )}
 
@@ -181,87 +331,87 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
         {/* Desktop left sidebar */}
         {!isMobile && (
           <div className="w-1/4 pr-4">
-            <div className="bg-white rounded-lg p-4">
-              <div className="flex flex-col mb-4">
-                <button
-                  className={`p-2 mb-2 ${activeTab === 'text' ? 'bg-[#04d9b2]' : 'bg-gray-200'}`}
-                  onClick={() => setActiveTab('text')}
-                >
-                  <Type size={20} className="mx-auto" />
-                  <span className="text-xs text-black font-geometos mt-1">Texto</span>
-                </button>
-                <button
-                  className={`p-2 ${activeTab === 'image' ? 'bg-[#04d9b2]' : 'bg-gray-200'}`}
-                  onClick={() => setActiveTab('image')}
-                >
-                  <Image size={20} className="mx-auto" />
-                  <span className="text-xs text-black font-geometos mt-1">Imagen</span>
-                </button>
-              </div>
-              {renderEditorContent()}
-            </div>
+            {renderEditorContent()}
           </div>
         )}
 
         {/* Canvas area */}
-        <div className={`${isMobile ? 'w-full' : 'w-3/4'} aspect-[3/4] rounded-lg overflow-hidden relative mb-4`}>
-          <NextImage
-            src={`/templates/TEMPLATE-${template.id}-${selectedPage}.webp`}
-            alt={`Template ${template.id} - Page ${selectedPage}`}
-            layout="fill"
-            objectFit="contain"
-          />
-          {elements.map((element) => (
-            <Draggable
-              key={element.id}
-              position={element.position}
-              onStop={(e, data) => updateElement(element.id, { position: { x: data.x, y: data.y } })}
-              onMouseDown={() => setActiveElement(element.id)}
+        <div 
+          className={`${isMobile ? 'w-full' : 'w-3/4'} flex justify-center items-center`}
+          onClick={handleCanvasClick}
+        >
+          <div className="aspect-[3/4] rounded-lg overflow-hidden relative mb-4 border-4 border-gray-300" style={{ width: '80%' }}>
+            <object
+              type="image/svg+xml"
+              data={`/templates/${selectedPage}.svg`}
+              className="w-full h-full"
             >
-              <div className={`absolute cursor-move ${activeElement === element.id ? 'ring-2 ring-blue-500' : ''}`}>
-                {element.type === 'text' ? (
-                  <div
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) => updateElement(element.id, { content: e.currentTarget.textContent || '' })}
+              Your browser does not support SVG
+            </object>
+            <div className="absolute inset-0">
+              {elements.map((element) => (
+                <Draggable
+                  key={element.id}
+                  position={element.position}
+                  onStop={(e, data) => updateElement(element.id, { position: { x: data.x, y: data.y } })}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    setActiveElement(element.id);
+                  }}
+                >
+                  <div 
+                    className={`absolute cursor-move ${activeElement === element.id ? 'ring-2 ring-blue-500' : ''}`}
                     style={{
-                      fontFamily: element.font,
-                      fontSize: `${element.size}px`,
-                      color: element.color,
-                      textAlign: element.align,
+                      width: `${element.width}px`,
+                      height: `${element.height}px`,
                     }}
                   >
-                    {element.content}
+                    {element.type === 'text' ? (
+                      <div
+                        contentEditable
+                        suppressContentEditableWarning
+                        onBlur={(e) => updateElement(element.id, { content: e.currentTarget.textContent || '' })}
+                        style={{
+                          fontFamily: element.font,
+                          fontSize: `${element.size}px`,
+                          color: element.color,
+                          textAlign: element.align,
+                          width: '100%',
+                          height: '100%',
+                          overflow: 'hidden',
+                          padding: '4px',
+                          background: 'rgba(255, 255, 255, 0.5)',
+                        }}
+                      >
+                        {element.content}
+                      </div>
+                    ) : (
+                      <img src={element.content} alt="Uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    )}
+                    <button
+                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full transform translate-x-1/2 -translate-y-1/2 opacity-0 hover:opacity-100 transition-opacity duration-200"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeElement(element.id);
+                      }}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                    {resizingElement === element.id && (
+                      <>
+                        <div className="absolute top-0 left-0 w-4 h-4 bg-blue-500 rounded-full cursor-nwse-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'nw')} />
+                        <div className="absolute top-0 right-0 w-4 h-4 bg-blue-500 rounded-full cursor-nesw-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'ne')} />
+                        <div className="absolute bottom-0 left-0 w-4 h-4 bg-blue-500 rounded-full cursor-nesw-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'sw')} />
+                        <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-full cursor-nwse-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'se')} />
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <img src={element.content} alt="Uploaded" className="max-w-full max-h-full" />
-                )}
-              </div>
-            </Draggable>
-          ))}
-        </div>
-      </div>
-      
-      {/* Mobile Bottom Drawer */}
-      {isMobile && isDrawerOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setIsDrawerOpen(false)}>
-          <div 
-            ref={drawerRef}
-            className="fixed inset-x-0 bottom-0 z-50 transition-transform duration-300 ease-in-out translate-y-0"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="bg-white rounded-t-2xl p-4 shadow-lg max-h-[50vh] overflow-y-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">{activeTab === 'text' ? 'Text' : 'Photos'}</h3>
-                <button onClick={() => setIsDrawerOpen(false)}>
-                  <X size={24} />
-                </button>
-              </div>
-              {renderEditorContent()}
+                </Draggable>
+              ))}
             </div>
           </div>
         </div>
-      )}
+      </div>
       
       {/* Template selector */}
       <div className="relative mt-4">
@@ -280,12 +430,13 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
               }`}
               onClick={() => onPageChange(pageNum)}
             >
-              <NextImage
-                src={`/templates/TEMPLATE-${template.id}-${pageNum}.webp`}
-                alt={`Template ${template.id} - Page ${pageNum}`}
-                layout="fill"
-                objectFit="cover"
-              />
+              <object
+                type="image/svg+xml"
+                data={`/templates/${pageNum}.svg`}
+                className="w-full h-full"
+              >
+                Your browser does not support SVG
+              </object>
             </div>
           ))}
         </div>
@@ -296,6 +447,66 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
           <ChevronRight size={20} />
         </button>
       </div>
+
+      {/* Font Modal */}
+      <Modal isOpen={fontModalOpen} onClose={() => setFontModalOpen(false)} title="Select Font">
+        <div className="grid grid-cols-2 gap-2">
+          {fonts.map((font) => (
+            <button
+              key={font}
+              className="p-2 bg-gray-200 rounded text-sm"
+              style={{ fontFamily: font }}
+              onClick={() => {
+                if (activeElement) {
+                  updateElement(activeElement, { font });
+                }
+                setFontModalOpen(false);
+              }}
+            >
+              {font}
+            </button>
+          ))}
+        </div>
+      </Modal>
+
+      {/* Size Modal */}
+      <Modal isOpen={sizeModalOpen} onClose={() => setSizeModalOpen(false)} title="Select Font Size">
+        <div className="grid grid-cols-3 gap-2">
+          {fontSizes.map((size) => (
+            <button
+              key={size}
+              className="p-2 bg-gray-200 rounded text-sm"
+              onClick={() => {
+                if (activeElement) {
+                  updateElement(activeElement, { size });
+                }
+                setSizeModalOpen(false);
+              }}
+            >
+              {size}px
+            </button>
+          ))}
+        </div>
+      </Modal>
+
+      {/* Color Modal */}
+      <Modal isOpen={colorModalOpen} onClose={() => setColorModalOpen(false)} title="Select Color">
+        <div className="grid grid-cols-3 gap-2">
+          {colors.map((color) => (
+            <button
+              key={color}
+              className="w-12 h-12 rounded-full"
+              style={{ backgroundColor: color }}
+              onClick={() => {
+                if (activeElement) {
+                  updateElement(activeElement, { color });
+                }
+                setColorModalOpen(false);
+              }}
+            />
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 };
