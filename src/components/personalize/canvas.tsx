@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight, Type, Image, X, Trash2, AlignLeft, AlignCent
 import { FileUpload } from './file-upload';
 import Draggable from 'react-draggable';
 import Modal from './modal';
+import { VscTextSize } from 'react-icons/vsc';
+import { Resizable } from 're-resizable';
 
 const fonts = [
   'Bavex',
@@ -185,36 +187,36 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       return (
         <>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => setFontModalOpen(true)}
           >
-            <Type size={20} className="text-gray-500" />
-            <span className="text-xs mt-1">Font</span>
+            <Type size={20} />
+            <span className="text-xs mt-1">Fuente</span>
           </button>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => setSizeModalOpen(true)}
           >
-            <Type size={20} className="text-gray-500" />
-            <span className="text-xs mt-1">Size</span>
+            <VscTextSize size={20} />
+            <span className="text-xs mt-1">Tamaño</span>
           </button>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => setColorModalOpen(true)}
           >
-            <Palette size={20} className="text-gray-500" />
+            <Palette size={20} />
             <span className="text-xs mt-1">Color</span>
           </button>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => {
               const currentAlign = elements.find(el => el.id === activeElement)?.align || 'left';
               const nextAlign = currentAlign === 'left' ? 'center' : currentAlign === 'center' ? 'right' : 'left';
               updateElement(activeElement, { align: nextAlign });
             }}
           >
-            <AlignCenter size={20} className="text-gray-500" />
-            <span className="text-xs mt-1">Align</span>
+            <AlignCenter size={20} />
+            <span className="text-xs mt-1">Alinear</span>
           </button>
         </>
       );
@@ -222,29 +224,36 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       return (
         <>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded"
+            className={`flex flex-col items-center justify-center p-2 rounded-full ${
+              activeTab === 'text' ? 'bg-[#04D9b2] text-white' : 'bg-[#5D60a6] text-white'
+            }`}
             onClick={addTextElement}
           >
-            <Type size={20} className={activeTab === 'text' ? 'text-blue-500' : 'text-gray-500'} />
-            <span className="text-xs mt-1">Text</span>
+            <Type size={20} />
+            <span className="text-xs mt-1">Texto</span>
           </button>
-          <label className="flex flex-col items-center justify-center p-2 rounded cursor-pointer">
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
+          <button
+            className={`flex flex-col items-center justify-center p-2 rounded-full ${
+              activeTab === 'image' ? 'bg-[#5D60a6] text-white' : 'bg-[#04D9b2] text-white'
+            }`}
+            onClick={() => {
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.accept = 'image/*';
+              input.onchange = (e) => {
+                const file = (e.target as HTMLInputElement).files?.[0];
                 if (file) {
                   const reader = new FileReader();
                   reader.onload = (event) => addImageElement(event.target?.result as string);
                   reader.readAsDataURL(file);
                 }
-              }}
-            />
-            <Image size={20} className={activeTab === 'image' ? 'text-blue-500' : 'text-gray-500'} />
-            <span className="text-xs mt-1">Image</span>
-          </label>
+              };
+              input.click();
+            }}
+          >
+            <Image size={20} />
+            <span className="text-xs mt-1">Imagen</span>
+          </button>
         </>
       );
     }
@@ -284,14 +293,14 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
               onClick={() => setFontModalOpen(true)}
             >
               <Type size={20} />
-              <span className="text-xs mt-1">Font</span>
+              <span className="text-xs mt-1">Fuente</span>
             </button>
             <button
               className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
               onClick={() => setSizeModalOpen(true)}
             >
-              <Type size={20} />
-              <span className="text-xs mt-1">Size</span>
+              <VscTextSize size={20} />
+              <span className="text-xs mt-1">Tamaño</span>
             </button>
             <button
               className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
@@ -309,13 +318,17 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
               }}
             >
               <AlignCenter size={20} />
-              <span className="text-xs mt-1">Align</span>
+              <span className="text-xs mt-1">Alinear</span>
             </button>
           </div>
         )}
       </div>
     </div>
   );
+
+  const updateElementSize = (id: string, size: { width: number; height: number }) => {
+    setElements(elements.map(el => el.id === id ? { ...el, ...size } : el));
+  };
 
   return (
     <div className="w-full">
@@ -327,20 +340,20 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       )}
 
       {/* Main content */}
-      <div className="flex flex-row">
+      <div className="flex flex-row justify-center">
         {/* Desktop left sidebar */}
         {!isMobile && (
-          <div className="w-1/4 pr-4">
+          <div className="w-1/6 pr-2">
             {renderEditorContent()}
           </div>
         )}
 
         {/* Canvas area */}
         <div 
-          className={`${isMobile ? 'w-full' : 'w-3/4'} flex justify-center items-center`}
+          className={`${isMobile ? 'w-full' : 'w-4/6'} flex justify-center items-center`}
           onClick={handleCanvasClick}
         >
-          <div className="aspect-[3/4] rounded-lg overflow-hidden relative mb-4 border-4 border-gray-300" style={{ width: '80%' }}>
+          <div className="aspect-[3/4] rounded-lg overflow-hidden relative mb-4 border-4 border-gray-300" style={{ width: isMobile ? '80%' : '60%' }}>
             <object
               type="image/svg+xml"
               data={`/templates/${selectedPage}.svg`}
@@ -358,54 +371,63 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
                     e.stopPropagation();
                     setActiveElement(element.id);
                   }}
+                  bounds="parent"
                 >
-                  <div 
-                    className={`absolute cursor-move ${activeElement === element.id ? 'ring-2 ring-blue-500' : ''}`}
-                    style={{
-                      width: `${element.width}px`,
-                      height: `${element.height}px`,
+                  <Resizable
+                    size={{ width: element.width, height: element.height }}
+                    onResizeStop={(e, direction, ref, d) => {
+                      updateElementSize(element.id, {
+                        width: element.width + d.width,
+                        height: element.height + d.height
+                      });
                     }}
+                    minWidth={50}
+                    minHeight={50}
+                    maxWidth={500}
+                    maxHeight={500}
                   >
-                    {element.type === 'text' ? (
-                      <div
-                        contentEditable
-                        suppressContentEditableWarning
-                        onBlur={(e) => updateElement(element.id, { content: e.currentTarget.textContent || '' })}
-                        style={{
-                          fontFamily: element.font,
-                          fontSize: `${element.size}px`,
-                          color: element.color,
-                          textAlign: element.align,
-                          width: '100%',
-                          height: '100%',
-                          overflow: 'hidden',
-                          padding: '4px',
-                          background: 'rgba(255, 255, 255, 0.5)',
-                        }}
-                      >
-                        {element.content}
-                      </div>
-                    ) : (
-                      <img src={element.content} alt="Uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    )}
-                    <button
-                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full transform translate-x-1/2 -translate-y-1/2 opacity-0 hover:opacity-100 transition-opacity duration-200"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeElement(element.id);
+                    <div 
+                      className={`absolute cursor-move ${activeElement === element.id ? 'ring-2 ring-blue-500' : ''}`}
+                      style={{
+                        width: '100%',
+                        height: '100%',
                       }}
                     >
-                      <Trash2 size={16} />
-                    </button>
-                    {resizingElement === element.id && (
-                      <>
-                        <div className="absolute top-0 left-0 w-4 h-4 bg-blue-500 rounded-full cursor-nwse-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'nw')} />
-                        <div className="absolute top-0 right-0 w-4 h-4 bg-blue-500 rounded-full cursor-nesw-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'ne')} />
-                        <div className="absolute bottom-0 left-0 w-4 h-4 bg-blue-500 rounded-full cursor-nesw-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'sw')} />
-                        <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-full cursor-nwse-resize" onMouseDown={(e) => handleResizeStart(e, element.id, 'se')} />
-                      </>
-                    )}
-                  </div>
+                      {element.type === 'text' ? (
+                        <div
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) => updateElement(element.id, { content: e.currentTarget.textContent || '' })}
+                          style={{
+                            fontFamily: element.font,
+                            fontSize: `${element.size}px`,
+                            color: element.color,
+                            textAlign: element.align,
+                            width: '100%',
+                            height: '100%',
+                            overflow: 'hidden',
+                            padding: '4px',
+                            background: 'rgba(255, 255, 255, 0.5)',
+                          }}
+                        >
+                          {element.content}
+                        </div>
+                      ) : (
+                        <img src={element.content} alt="Uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      )}
+                      {activeElement === element.id && (
+                        <button
+                          className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full transform translate-x-1/2 -translate-y-1/2 z-50"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeElement(element.id);
+                          }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                  </Resizable>
                 </Draggable>
               ))}
             </div>
@@ -449,7 +471,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       </div>
 
       {/* Font Modal */}
-      <Modal isOpen={fontModalOpen} onClose={() => setFontModalOpen(false)} title="Select Font">
+      <Modal isOpen={fontModalOpen} onClose={() => setFontModalOpen(false)} title="Seleccionar Fuente">
         <div className="grid grid-cols-2 gap-2">
           {fonts.map((font) => (
             <button
@@ -470,7 +492,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       </Modal>
 
       {/* Size Modal */}
-      <Modal isOpen={sizeModalOpen} onClose={() => setSizeModalOpen(false)} title="Select Font Size">
+      <Modal isOpen={sizeModalOpen} onClose={() => setSizeModalOpen(false)} title="Seleccionar Tamaño de Fuente">
         <div className="grid grid-cols-3 gap-2">
           {fontSizes.map((size) => (
             <button
@@ -490,7 +512,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       </Modal>
 
       {/* Color Modal */}
-      <Modal isOpen={colorModalOpen} onClose={() => setColorModalOpen(false)} title="Select Color">
+      <Modal isOpen={colorModalOpen} onClose={() => setColorModalOpen(false)} title="Seleccionar Color">
         <div className="grid grid-cols-3 gap-2">
           {colors.map((color) => (
             <button
@@ -511,4 +533,4 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
   );
 };
 
-export default Canvas;
+export default Canvas; 
