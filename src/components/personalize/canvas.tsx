@@ -202,6 +202,26 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       setActiveSubTab(null);
     }
   };
+  
+  const renderSideImage = (pageNum: number) => (
+    <div className="w-1/5 flex items-center justify-center">
+      <div 
+        className={`aspect-[3/4] w-full cursor-pointer transition-all duration-300 ${
+          selectedPage === pageNum ? 'opacity-100 scale-100' : 'opacity-50 scale-90 hover:opacity-75 hover:scale-95'
+        }`}
+        onClick={() => onPageChange(pageNum)}
+        style={{ width: '400px', height: '533px' }}
+      >
+        <object
+          type="image/svg+xml"
+          data={getSvgPath(pageNum)}
+          className="w-full h-full"
+        >
+          Your browser does not support SVG
+        </object>
+      </div>
+    </div>
+  );
 
   const renderMobileButtons = () => {
     if (activeElement && elements.find(el => el.id === activeElement)?.type === 'text') {
@@ -357,7 +377,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
 
   return (
     <div className="w-full">
-      {/* Mobile top bar */}
+      {/* Mobile controls */}
       {isMobile && (
         <div className="bg-white rounded-lg p-2 mb-4 flex justify-center space-x-4">
           {renderMobileButtons()}
@@ -365,169 +385,161 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       )}
 
       {/* Main content */}
-      <div className="flex flex-row justify-center">
-        {/* Desktop left sidebar */}
-        {!isMobile && (
-          <div className="w-1/6 pr-2">
-            {renderEditorContent()}
-          </div>
-        )}
+      <div className="flex flex-row justify-between items-start">
+        {/* Left side image */}
+        {!isMobile && renderSideImage(selectedPage > 1 ? selectedPage - 1 : 4)}
 
-        {/* Canvas area */}
-        <div 
-          className={`${isMobile ? 'w-full' : 'w-4/6'} flex justify-center items-center`}
-          onClick={handleCanvasClick}
-        >
-          <div className="aspect-[3/4] rounded-lg overflow-hidden relative mb-4 border-4 border-gray-300" style={{ width: isMobile ? '80%' : '60%' }}>
-            <object
-              type="image/svg+xml"
-              data={getSvgPath(selectedPage)}
-              className="w-full h-full"
-            >
-              Your browser does not support SVG
-            </object>
-            <div className="absolute inset-0">
-              {staticElements.map((element) => (
-                <div
-                  key={element.id}
-                  style={{
-                    position: 'absolute',
-                    left: `${element.position.x}px`,
-                    top: `${element.position.y}px`,
-                    width: `${element.width}px`,
-                    height: `${element.height}px`,
-                  }}
-                >
-                  {element.type === 'image' ? (
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <Image size={24} />
-                    </div>
-                  ) : (
-                    <div
-                      contentEditable
-                      suppressContentEditableWarning
-                      className="w-full h-full border border-gray-300 p-2"
-                      style={{
-                        fontFamily: 'Arial, sans-serif',
-                        fontSize: '18px',
-                        textAlign: 'center',
-                      }}
-                      onBlur={(e) => {
-                        // Update the content of the static element
-                        const updatedElements = staticElements.map(el => 
-                          el.id === element.id ? { ...el, content: e.currentTarget.textContent || '' } : el
-                        );
-                        setStaticElements(updatedElements);
-                      }}
-                    >
-                      {element.content}
-                    </div>
-                  )}
-                </div>
-              ))}
-              {elements.map((element) => (
-                <Draggable
-                  key={element.id}
-                  position={element.position}
-                  onStop={(e, data) => updateElement(element.id, { position: { x: data.x, y: data.y } })}
-                  onMouseDown={(e) => {
-                    e.stopPropagation();
-                    setActiveElement(element.id);
-                  }}
-                  bounds="parent"
-                >
-                  <Resizable
-                    size={{ width: element.width, height: element.height }}
-                    onResizeStop={(e, direction, ref, d) => {
-                      updateElementSize(element.id, {
-                        width: element.width + d.width,
-                        height: element.height + d.height
-                      });
-                    }}
-                    minWidth={50}
-                    minHeight={50}
-                    maxWidth={500}
-                    maxHeight={500}
-                  >
-                    <div 
-                      className={`absolute cursor-move ${activeElement === element.id ? 'ring-2 ring-blue-500' : ''}`}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    >
-                      {element.type === 'text' ? (
-                        <div
-                          contentEditable
-                          suppressContentEditableWarning
-                          onBlur={(e) => updateElement(element.id, { content: e.currentTarget.textContent || '' })}
-                          style={{
-                            fontFamily: element.font,
-                            fontSize: `${element.size}px`,
-                            color: element.color,
-                            textAlign: element.align,
-                            width: '100%',
-                            height: '100%',
-                            overflow: 'hidden',
-                            padding: '4px',
-                            background: activeElement === element.id ? 'rgba(255, 255, 255, 0.5)' : 'transparent',
-                          }}
-                        >
-                          {element.content}
-                        </div>
-                      ) : (
-                        <img src={element.content} alt="Uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                      )}
-                      {activeElement === element.id && (
-                        <button
-                          className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full transform translate-x-1/2 -translate-y-1/2 z-50"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeElement(element.id);
-                          }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      )}
-                    </div>
-                  </Resizable>
-                </Draggable>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Template selector */}
-      <div className="relative mt-4">
-        <button 
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full"
-          onClick={() => onPageChange(Math.max(1, selectedPage - 1))}
-        >
-          <ChevronLeft size={20} />
-        </button>
-        <div className="flex justify-center space-x-2 overflow-x-auto py-2">
-          {[1, 2, 3, 4].map((pageNum) => (
-            <div
-              key={pageNum}
-              className={`w-16 h-16 md:w-20 md:h-20 relative cursor-pointer ${
-                selectedPage === pageNum ? 'border-2 border-blue-500' : 'border border-gray-300'
-              }`}
-              onClick={() => onPageChange(pageNum)}
+        {/* Canvas area and options */}
+        <div className={`${isMobile ? 'w-full' : 'w-3/5'} flex flex-col items-center`}>
+          <div className="flex w-full justify-center">
+            {/* Canvas options */}
+            {!isMobile && (
+              <div className="w-48 mr-4">
+                {renderEditorContent()}
+              </div>
+            )}
+
+            {/* Canvas */}
+            <div 
+              className="aspect-[3/4] rounded-lg overflow-hidden relative border-4 border-gray-300" 
+              style={{ width: '400px', height: '533px' }}
+              onClick={handleCanvasClick}
             >
               <object
                 type="image/svg+xml"
-                data={getSvgPath(pageNum)}
-                className="w-full h-full"
+                data={getSvgPath(selectedPage)}
+                className="w-full h-full absolute top-0 left-0"
               >
                 Your browser does not support SVG
               </object>
+              <div className="absolute inset-0">
+                {staticElements.map((element) => (
+                  <div
+                    key={element.id}
+                    style={{
+                      position: 'absolute',
+                      left: `${element.position.x}px`,
+                      top: `${element.position.y}px`,
+                      width: `${element.width}px`,
+                      height: `${element.height}px`,
+                    }}
+                  >
+                    {element.type === 'image' ? (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <Image size={24} />
+                      </div>
+                    ) : (
+                      <div
+                        contentEditable
+                        suppressContentEditableWarning
+                        className="w-full h-full border border-gray-300 p-2"
+                        style={{
+                          fontFamily: 'Arial, sans-serif',
+                          fontSize: '18px',
+                          textAlign: 'center',
+                        }}
+                        onBlur={(e) => {
+                          // Update the content of the static element
+                          const updatedElements = staticElements.map(el => 
+                            el.id === element.id ? { ...el, content: e.currentTarget.textContent || '' } : el
+                          );
+                          setStaticElements(updatedElements);
+                        }}
+                      >
+                        {element.content}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {elements.map((element) => (
+                  <Draggable
+                    key={element.id}
+                    position={element.position}
+                    onStop={(e, data) => updateElement(element.id, { position: { x: data.x, y: data.y } })}
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      setActiveElement(element.id);
+                    }}
+                    bounds="parent"
+                  >
+                    <Resizable
+                      size={{ width: element.width, height: element.height }}
+                      onResizeStop={(e, direction, ref, d) => {
+                        updateElementSize(element.id, {
+                          width: element.width + d.width,
+                          height: element.height + d.height
+                        });
+                      }}
+                      minWidth={50}
+                      minHeight={50}
+                      maxWidth={500}
+                      maxHeight={500}
+                    >
+                      <div 
+                        className={`absolute cursor-move ${activeElement === element.id ? 'ring-2 ring-blue-500' : ''}`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      >
+                        {element.type === 'text' ? (
+                          <div
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => updateElement(element.id, { content: e.currentTarget.textContent || '' })}
+                            style={{
+                              fontFamily: element.font,
+                              fontSize: `${element.size}px`,
+                              color: element.color,
+                              textAlign: element.align,
+                              width: '100%',
+                              height: '100%',
+                              overflow: 'hidden',
+                              padding: '4px',
+                              background: activeElement === element.id ? 'rgba(255, 255, 255, 0.5)' : 'transparent',
+                            }}
+                          >
+                            {element.content}
+                          </div>
+                        ) : (
+                          <img src={element.content} alt="Uploaded" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        )}
+                        {activeElement === element.id && (
+                          <button
+                            className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full transform translate-x-1/2 -translate-y-1/2 z-50"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeElement(element.id);
+                            }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                      </div>
+                    </Resizable>
+                  </Draggable>
+                ))}
+              </div>
             </div>
-          ))}
+          </div>
         </div>
+
+        {/* Right side image */}
+        {!isMobile && renderSideImage(selectedPage < 4 ? selectedPage + 1 : 1)}
+      </div>
+
+      {/* Page navigation */}
+      <div className="flex justify-center items-center mt-4 space-x-4">
         <button 
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full"
-          onClick={() => onPageChange(Math.min(4, selectedPage + 1))}
+          className="bg-gray-200 p-2 rounded-full"
+          onClick={() => onPageChange(selectedPage > 1 ? selectedPage - 1 : 4)}
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <span className="font-bold">{selectedPage} / 4</span>
+        <button 
+          className="bg-gray-200 p-2 rounded-full"
+          onClick={() => onPageChange(selectedPage < 4 ? selectedPage + 1 : 1)}
         >
           <ChevronRight size={20} />
         </button>
@@ -596,4 +608,4 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
   );
 };
 
-export default Canvas; 
+export default Canvas;
