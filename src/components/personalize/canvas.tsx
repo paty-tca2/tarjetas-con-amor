@@ -207,53 +207,35 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
     }
   };
   
-  const renderSideImage = (pageNum: number) => (
-    <div className="w-1/5 flex items-center justify-center">
-      <div 
-        className={`aspect-[3/4] w-full cursor-pointer transition-all duration-300 ${
-          selectedPage === pageNum ? 'opacity-100 scale-100' : 'opacity-50 scale-90 hover:opacity-75 hover:scale-95'
-        }`}
-        onClick={() => onPageChange(pageNum)}
-        style={{ width: '400px', height: '533px' }}
-      >
-        <object
-          type="image/svg+xml"
-          data={getSvgPath(pageNum)}
-          className="w-full h-full"
-        >
-          Your browser does not support SVG
-        </object>
-      </div>
-    </div>
-  );
+
 
   const renderMobileButtons = () => {
     if (activeElement && elements.find(el => el.id === activeElement)?.type === 'text') {
       return (
         <>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => setFontModalOpen(true)}
           >
             <Type size={20} />
             <span className="text-xs mt-1">Fuente</span>
           </button>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => setSizeModalOpen(true)}
           >
             <VscTextSize size={20} />
             <span className="text-xs mt-1">Tamaño</span>
           </button>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => setColorModalOpen(true)}
           >
             <Palette size={20} />
             <span className="text-xs mt-1">Color</span>
           </button>
           <button
-            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#04D9b2] hover:bg-[#5D60a6] text-white transition-colors duration-200"
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#5D60a6] text-white transition-colors duration-200"
             onClick={() => {
               const currentAlign = elements.find(el => el.id === activeElement)?.align || 'left';
               const nextAlign = currentAlign === 'left' ? 'center' : currentAlign === 'center' ? 'right' : 'left';
@@ -270,7 +252,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
         <>
           <button
             className={`flex flex-col items-center justify-center p-2 rounded-full ${
-              activeTab === 'text' ? 'bg-[#04D9b2] text-white' : 'bg-[#5D60a6] text-white'
+              activeTab === 'text' ? 'bg-[#5D60a6] text-white' : 'bg-[#04D9b2] text-white'
             }`}
             onClick={addTextElement}
           >
@@ -278,9 +260,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
             <span className="text-xs mt-1">Texto</span>
           </button>
           <button
-            className={`flex flex-col items-center justify-center p-2 rounded-full ${
-              activeTab === 'image' ? 'bg-[#5D60a6] text-white' : 'bg-[#04D9b2] text-white'
-            }`}
+            className="flex flex-col items-center justify-center p-2 rounded-full bg-[#5D60a6] text-white"
             onClick={() => {
               const input = document.createElement('input');
               input.type = 'file';
@@ -306,15 +286,15 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
 
   const renderEditorContent = () => (
     <div className="bg-white rounded-lg p-4">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-wrap justify-center gap-4">
         <button
-          className="w-24 h-24 p-2 mb-4 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+          className="w-24 h-24 p-2 mb-4 bg-[#5D60a6] hover:bg-[#04D9b2]text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
           onClick={addTextElement}
         >
           <Type size={20} />
           <span className="text-xs mt-1">Texto</span>
         </button>
-        <label className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200 cursor-pointer">
+        <label className="w-24 h-24 p-2 bg-[#5D60a6] hover:bg-[#04D9b2] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200 cursor-pointer">
           <input
             type="file"
             accept="image/*"
@@ -334,28 +314,28 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
         {activeElement && elements.find(el => el.id === activeElement)?.type === 'text' && (
           <div className="w-full space-y-2 flex flex-col items-center mt-4">
             <button
-              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              className="w-24 h-24 p-2 bg-[#5D60a6] hover:bg-[#04D9b2] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
               onClick={() => setFontModalOpen(true)}
             >
               <Type size={20} />
               <span className="text-xs mt-1">Fuente</span>
             </button>
             <button
-              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              className="w-24 h-24 p-2 bg-[#5D60a6] hover:bg-[#04D9b2] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
               onClick={() => setSizeModalOpen(true)}
             >
               <VscTextSize size={20} />
               <span className="text-xs mt-1">Tamaño</span>
             </button>
             <button
-              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              className="w-24 h-24 p-2 bg-[#5D60a6] hover:bg-[#04D9b2] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
               onClick={() => setColorModalOpen(true)}
             >
               <Palette size={20} />
               <span className="text-xs mt-1">Color</span>
             </button>
             <button
-              className="w-24 h-24 p-2 bg-[#04D9b2] hover:bg-[#5D60a6] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
+              className="w-24 h-24 p-2 bg-[#5D60a6] hover:bg-[#04D9b2] text-white font-geometos rounded-full flex flex-col items-center justify-center transition-colors duration-200"
               onClick={() => {
                 const currentAlign = elements.find(el => el.id === activeElement)?.align || 'left';
                 const nextAlign = currentAlign === 'left' ? 'center' : currentAlign === 'center' ? 'right' : 'left';
@@ -379,6 +359,47 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
     return `/templates/template-${template.id}/${pageNum}.svg`;
   };
 
+  const renderPageNavigation = () => (
+    <div className="flex justify-center items-center space-x-4 mb-4">
+      <button 
+        className="bg-gray-200 p-2 rounded-full"
+        onClick={() => onPageChange(selectedPage > 1 ? selectedPage - 1 : 4)}
+      >
+        <ChevronLeft size={20} />
+      </button>
+      <span className="font-bold">{selectedPage} / 4</span>
+      <button 
+        className="bg-gray-200 p-2 rounded-full"
+        onClick={() => onPageChange(selectedPage < 4 ? selectedPage + 1 : 1)}
+      >
+        <ChevronRight size={20} />
+      </button>
+    </div>
+  );
+
+  const renderPageThumbnails = () => (
+    <div className="flex justify-center space-x-4 mt-4">
+      {[1, 2, 3, 4].map((pageNum) => (
+        <button
+          key={pageNum}
+          onClick={() => onPageChange(pageNum)}
+          className={`relative w-16 h-24 border-2 ${
+            selectedPage === pageNum ? 'border-blue-500' : 'border-gray-300'
+          } rounded overflow-hidden transition-all duration-200 hover:border-blue-300`}
+        >
+          <img
+            src={getSvgPath(pageNum)}
+            alt={`Page ${pageNum}`}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs py-1">
+            {pageNum}
+          </div>
+        </button>
+      ))}
+    </div>
+  );
+
   return (
     <div className="w-full">
       {/* Mobile controls */}
@@ -389,16 +410,16 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
       )}
 
       {/* Main content */}
-      <div className="flex flex-row justify-between items-start">
-        {/* Left side image */}
-        {!isMobile && renderSideImage(selectedPage > 1 ? selectedPage - 1 : 4)}
+      <div className="flex flex-col items-center">
+        {/* Page navigation for desktop */}
+        {!isMobile && renderPageNavigation()}
 
-        {/* Canvas area and options */}
-        <div className={`${isMobile ? 'w-full' : 'w-3/5'} flex flex-col items-center`}>
-          <div className="flex w-full justify-center">
+        <div className="flex flex-col items-center w-full max-w-4xl">
+          {/* Canvas area and options */}
+          <div className="flex flex-col md:flex-row items-center justify-center w-full">
             {/* Canvas options */}
             {!isMobile && (
-              <div className="w-48 mr-4">
+              <div className="w-48 mb-4 md:mb-0 md:mr-4">
                 {renderEditorContent()}
               </div>
             )}
@@ -527,28 +548,14 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
               </div>
             </div>
           </div>
+
+          {/* Page thumbnails */}
+          {!isMobile && renderPageThumbnails()}
         </div>
-
-        {/* Right side image */}
-        {!isMobile && renderSideImage(selectedPage < 4 ? selectedPage + 1 : 1)}
       </div>
 
-      {/* Page navigation */}
-      <div className="flex justify-center items-center mt-4 space-x-4">
-        <button 
-          className="bg-gray-200 p-2 rounded-full"
-          onClick={() => onPageChange(selectedPage > 1 ? selectedPage - 1 : 4)}
-        >
-          <ChevronLeft size={20} />
-        </button>
-        <span className="font-bold">{selectedPage} / 4</span>
-        <button 
-          className="bg-gray-200 p-2 rounded-full"
-          onClick={() => onPageChange(selectedPage < 4 ? selectedPage + 1 : 1)}
-        >
-          <ChevronRight size={20} />
-        </button>
-      </div>
+      {/* Page navigation for mobile */}
+      {isMobile && renderPageNavigation()}
 
       {/* Font Modal */}
       <Modal isOpen={fontModalOpen} onClose={() => setFontModalOpen(false)} title="Seleccionar Fuente">
@@ -556,7 +563,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
           {fonts.map((font) => (
             <button
               key={font}
-              className="p-2 bg-[#04D9B2] hover:bg-[#5D60a6] rounded text-sm"
+              className="p-2 bg-[#5D60a6] hover:bg-[#04D9B2] rounded text-sm"
               style={{ fontFamily: font }}
               onClick={() => {
                 if (activeElement) {
@@ -576,8 +583,8 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
         <div className="grid grid-cols-3 gap-2">
           {fontSizes.map((size) => (
             <button
-                key={size}
-              className="p-2 bg-[#04D9B2] hover:bg-[#5D60a6] rounded text-sm"
+              key={size}
+              className="p-2 bg-[#5D60a6] hover:bg-[#04D9B2] rounded text-sm"
               onClick={() => {
                 if (activeElement) {
                   updateElement(activeElement, { size });

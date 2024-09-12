@@ -93,8 +93,11 @@ const Recordatorios: React.FC = () => {
 
           {reminders.length > 0 ? (
             <ul className="reminder-list">
-              {reminders.map((reminder) => (
-                <li key={reminder.id} className="reminder-item mb-4 p-4 border rounded">
+              {reminders.map((reminder, index) => (
+                <li key={reminder.id} className="reminder-item mb-4 p-4 border rounded relative">
+                  <span className="absolute top-2 right-2 bg-[#04d9b2] text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    {index + 1}
+                  </span>
                   <p className="font-bold">{reminder.date.toLocaleDateString()}</p>
                   <p className="font-semibold">{reminder.name}</p>
                   <p>{reminder.text}</p>

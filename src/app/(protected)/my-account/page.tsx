@@ -49,12 +49,12 @@ const Header = () => (
       <Image
           src="/logo-principal.png"
           alt="Profile"
-          width={120}
-          height={120}
-          className="rounded-full w-[100px] h-[100px] sm:w-[100px] sm:h-[100px] md:w-[170px] md:h-[170px]"
+          width={200}
+          height={200}
+          className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[200px] md:h-[200px] object-contain"
       />
       <div className="text-center sm:text-left">
-      <h2 className="text-3xl sm:text-5xl font-geometos">¡Hola! </h2>
+      <h2 className="text-3xl sm:text-5xl text-white font-geometos">¡Hola! </h2>
       <p className="text-[#5D60a6] text-xl sm:text-3xl font-geometos">Bienvenid@ a tu cuenta</p>
     </div>
   </div>

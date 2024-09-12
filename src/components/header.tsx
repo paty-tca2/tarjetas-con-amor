@@ -18,13 +18,13 @@ const Header: React.FC = () => {
 
           <div className="flex items-center">
             <button onClick={toggleSideMenu}>
-              <IoMenu className="text-black h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8" />
+              <IoMenu className="text-black h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-10 lg:w-10" />
             </button>
           </div>
 
-          <div className="flex-grow flex justify-center">
-            <Link href="/">
-              <h1 className="text-lg sm:text-lg md:text-3xl lg:text-4xl text-[#04d9b2] font-coneria font-bold text-center cursor-pointer pl-4 sm:pl-0">
+          <div className="flex-grow flex justify-center items-center absolute inset-0 pointer-events-none">
+            <Link href="/" className="pointer-events-auto">
+              <h1 className="text-lg sm:text-lg md:text-3xl lg:text-4xl text-[#04d9b2] font-coneria font-bold text-center">
                 compartiendo tus memorias...
               </h1>
             </Link>

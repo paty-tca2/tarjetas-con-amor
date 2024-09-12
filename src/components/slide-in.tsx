@@ -17,7 +17,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
       <div className={`fixed top-0 left-0 w-[70vw] sm:w-80 lg:w-96 h-[85vh] sm:h-full bg-white shadow-lg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-50 rounded-r-3xl sm:rounded-none`}>
         <div className="relative h-24 sm:h-48">
           <div className="absolute -top-3 left-0 right-0 flex justify-center">
-            <Image src="/icono-menu.png" alt="Menu Icon" width={120} height={120} className="w-28 h-28 sm:w-40 sm:h-40" />
+            <Image src="/icono-menu.svg" alt="Menu Icon" width={120} height={120} className="w-28 h-28 sm:w-40 sm:h-40" />
           </div>
           <button onClick={onClose} className="absolute top-1 right-2 sm:top-4 sm:right-4 text-[#04d9b2] font-bold">
             <IoClose className="h-8 w-8 sm:h-10 sm:w-10" />
@@ -33,7 +33,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             <li><a href="#" className="block py-2 sm:py-1 lg:py-2 text-[#5D60a6] hover:text-[#04d9b2] font-geometos font-bold text-xl sm:text-2xl lg:text-xl">CONTACTO</a></li>
           </ul>
         </nav>
-        <div className="absolute bottom-6 sm:bottom-4 left-4 right-4">
+        <div className="absolute bottom-6 sm:bottom-16 left-4 right-4">
           <div className="flex justify-center space-x-4 sm:justify-between sm:space-x-6">
             <a href="https://www.instagram.com/tarjetasconamor__oficial?igsh=MXgxdnRscmNlc3A3ZA%3D%3D&utm_source=qr"
                className="hover:scale-110 transition-transform duration-300"

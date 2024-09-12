@@ -10,7 +10,7 @@ import { Pagination } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
 
 type CardOptions = {
-  type: 'ecard' | 'standard';
+  type: 'ecard' | 'standard' | 'mediana' | 'grande';
   quantity: number;
 };
 
@@ -23,7 +23,9 @@ type CardSize = {
 
 const cardSizes: Record<CardOptions['type'], CardSize> = {
   ecard: { label: 'eCard', description: 'Envio instantaneo', price: '$99', bgColor: '#04d9b2' },
-  standard: { label: 'Standard Card', description: 'Para tus seres queridos', price: '$199', bgColor: '#5D60a6' },
+  standard: { label: 'Standard ', description: 'Para tus seres queridos', price: '$199', bgColor: '#5D60a6' },
+  mediana: { label: 'Mediana ', description: '57 x 81 cm', price: '$299', bgColor: '#5D60a6' },
+  grande: { label: 'Grande ', description: '40 x 29.5 cm', price: '$399', bgColor: '#5D60a6' },
 };
 
 export default function CardsPage() {
@@ -63,37 +65,55 @@ export default function CardsPage() {
     ? Array(4).fill(selectedTemplate.imageUrl)
     : [];
 
-    return (
-      <div className="container mx-auto pt-48 px-4 py-8">
-        <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Tarjetas personalizadas</h1>
-        
-        {/* Desktop view */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {cardTemplates.map((template) => (
-            <div 
-              key={template.id} 
-              className="relative group cursor-pointer transition-all duration-300 transform hover:scale-105"
-              onClick={() => handleCardClick(template)}
-            >
+  const categories = ['Cumpleaños', 'Exitos', 'Amor', 'Salud y Cariño', 'Peques'];
+  const [activeCategory, setActiveCategory] = useState(categories[0]);
+
+  return (
+    <div className="container mx-auto pt-48 px-4 py-8">
+      <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Selecciona tus memorias</h1>
+      
+      {/* Category tabs */}
+      <div className="flex flex-wrap justify-center gap-2 mb-8">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setActiveCategory(category)}
+            className={`px-4 py-2 rounded-full font-geometos text-white transition-colors ${
+              activeCategory === category ? 'bg-[#04d9b2]' : 'bg-[#5D60a6] hover:bg-[#04d9b2]'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      {/* Desktop view */}
+      <div className="hidden md:grid md:grid-cols-2 gap-6 max-w-xl mx-auto">
+        {cardTemplates.map((template) => (
+          <div 
+            key={template.id} 
+            className="relative group cursor-pointer transition-all duration-300 transform hover:scale-105"
+            onClick={() => handleCardClick(template)}
+          >
+            <Image 
+              src={`/templates/TEMPLATE-${template.id}-1.webp`}
+              alt={template.id} 
+              width={300} 
+              height={400} 
+              className="w-full h-120 object-cover rounded-lg"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
               <Image 
                 src={`/templates/TEMPLATE-${template.id}-1.webp`}
-                alt={template.id} 
-                width={300} 
-                height={400} 
-                className="w-full h-120 object-cover rounded-lg"
+                alt={`${template.id} page 1`}
+                width={300}
+                height={400}
+                className="w-full h-full object-cover rounded-lg"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
-                <Image 
-                  src={`/templates/TEMPLATE-${template.id}-1.webp`}
-                  alt={`${template.id} page 1`}
-                  width={300}
-                  height={400}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
 
       {/* Mobile view */}
       <div className="md:hidden">

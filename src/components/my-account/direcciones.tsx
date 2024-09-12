@@ -4,6 +4,9 @@ interface Address {
   id: string;
   name: string;
   street: string;
+  interiorNumber: string;
+  exteriorNumber: string;
+  colony: string;
   city: string;
   state: string;
   zipCode: string;
@@ -14,6 +17,9 @@ const DireccionesEnvio: React.FC = () => {
   const [newAddress, setNewAddress] = useState<Omit<Address, 'id'>>({
     name: '',
     street: '',
+    interiorNumber: '',
+    exteriorNumber: '',
+    colony: '',
     city: '',
     state: '',
     zipCode: '',
@@ -28,7 +34,7 @@ const DireccionesEnvio: React.FC = () => {
     e.preventDefault();
     const id = Date.now().toString();
     setAddresses(prev => [...prev, { id, ...newAddress }]);
-    setNewAddress({ name: '', street: '', city: '', state: '', zipCode: '' });
+    setNewAddress({ name: '', street: '', exteriorNumber: '', interiorNumber: '', colony: '', city: '', state: '', zipCode: '' });
   };
 
   return (
@@ -41,7 +47,7 @@ const DireccionesEnvio: React.FC = () => {
           name="name"
           value={newAddress.name}
           onChange={handleInputChange}
-          placeholder="Nombre"
+          placeholder="Nombre del destinatario"
           className="w-full mb-2 p-2 border font-geometos rounded"
           required
         />
@@ -51,6 +57,33 @@ const DireccionesEnvio: React.FC = () => {
           value={newAddress.street}
           onChange={handleInputChange}
           placeholder="Calle"
+          className="w-full mb-2 p-2 border font-geometos rounded"
+          required
+        />
+        <input
+          type="text"
+          name="exteriorNumber"
+          value={newAddress.exteriorNumber}
+          onChange={handleInputChange}
+          placeholder="Numero Exterior"
+          className="w-full mb-2 p-2 border font-geometos rounded"
+          required
+        />
+         <input
+          type="text"
+          name="interiorNumber"
+          value={newAddress.interiorNumber}
+          onChange={handleInputChange}
+          placeholder="Numero Interior"
+          className="w-full mb-2 p-2 border font-geometos rounded"
+          required
+        />
+        <input
+          type="text"
+          name="colony"
+          value={newAddress.colony}
+          onChange={handleInputChange}
+          placeholder="Colonia"
           className="w-full mb-2 p-2 border font-geometos rounded"
           required
         />
@@ -88,10 +121,16 @@ const DireccionesEnvio: React.FC = () => {
 
       {addresses.length > 0 ? (
         <ul className="address-list font-geometos">
-          {addresses.map((address) => (
-            <li key={address.id} className="address-item mb-4 p-4 border rounded">
+          {addresses.map((address, index) => (
+            <li key={address.id} className="address-item mb-4 p-4 border rounded relative">
+              <span className="absolute top-2 right-2 bg-[#04d9b2] text-white rounded-full w-6 h-6 flex items-center justify-center">
+                {index + 1}
+              </span>
               <p>{address.name}</p>
               <p>{address.street}</p>
+              <p>{address.exteriorNumber}</p>
+              <p>{address.interiorNumber}</p>
+              <p>{address.colony}</p>
               <p>{address.city}, {address.state}</p>
               <p>{address.zipCode}</p>
             </li>

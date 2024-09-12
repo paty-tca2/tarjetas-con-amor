@@ -24,7 +24,7 @@ export default function PersonalizePage() {
   }, [id]);
 
   const handlePreview = () => {
-    // Implement preview logic
+    // Implement preview logic if needed
   };
 
   const handleAddToBasket = () => {
@@ -41,8 +41,11 @@ export default function PersonalizePage() {
 
   return (
     <div className="container mx-auto pt-48 px-4 py-8">
-      <PersonalizeHeader onPreview={handlePreview} onAddToBasket={handleAddToBasket} />
-      <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Personaliza tu tarjeta</h1>
+      <PersonalizeHeader 
+        onAddToBasket={handleAddToBasket} 
+        template={template}
+      />
+      
       <div className="flex flex-col md:flex-row gap-6">
         {template && (
           <Canvas 
