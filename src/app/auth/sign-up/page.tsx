@@ -345,16 +345,16 @@ export default function SignUp() {
                         <div className="flex flex-col text-[#5d60a6] space-y-4 text-[0.88rem] font-geometos">
                             <div className="normal-case">
                                 <p className="pb-3">1) Recordatorios:</p>
-                                <p>Nunca vuelvas a olvidar una ocasión especial.</p>
+                                <p>Nunca vuelvas a olvidar una ocasion especial.</p>
                             </div>
                             <div>
                                 <p className="pb-3">2) Ahorra tiempo y dinero:</p>
-                                <p>Direcciones y métodos de pago seleccionados.</p>
+                                <p>Direcciones y metodos de pago seleccionados.</p>
                             </div>
                             <div>
                                 <p className="pb-3">3) Promociones:</p>
                                 <p>
-                                    Obtén potenciales descuentos de temporada y por cliente
+                                    Obten potenciales descuentos de temporada y por cliente
                                     frecuente.
                                 </p>
                             </div>
