@@ -416,7 +416,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
 
         <div className="flex flex-col items-center w-full max-w-4xl">
           {/* Canvas area and options */}
-          <div className="flex flex-col md:flex-row items-center justify-center w-full">
+          <div className="flex flex-col md:flex-row items-start justify-start w-full">
             {/* Canvas options */}
             {!isMobile && (
               <div className="w-48 mb-4 md:mb-0 md:mr-4">
@@ -426,7 +426,7 @@ const Canvas: React.FC<CanvasProps> = ({ template, selectedPage, onPageChange })
 
             {/* Canvas */}
             <div 
-              className="aspect-[3/4] rounded-lg overflow-hidden relative border-4 border-gray-300" 
+              className="aspect-[3/4] rounded-lg overflow-hidden relative border-4 border-gray-300 ml-10" 
               style={{ width: '400px', height: '533px' }}
               onClick={handleCanvasClick}
             >

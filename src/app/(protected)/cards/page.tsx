@@ -70,7 +70,7 @@ export default function CardsPage() {
 
   return (
     <div className="container mx-auto pt-48 px-4 py-8">
-      <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Selecciona tus memorias</h1>
+      <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Selecciona tu memoria</h1>
       
       {/* Category tabs */}
       <div className="flex flex-wrap justify-center gap-2 mb-8">
@@ -88,7 +88,7 @@ export default function CardsPage() {
       </div>
 
       {/* Desktop view */}
-      <div className="hidden md:grid md:grid-cols-2 gap-6 max-w-xl mx-auto">
+      <div className="hidden md:flex md:flex-wrap md:justify-center gap-6">
         {cardTemplates.map((template) => (
           <div 
             key={template.id} 
@@ -100,7 +100,7 @@ export default function CardsPage() {
               alt={template.id} 
               width={300} 
               height={400} 
-              className="w-full h-120 object-cover rounded-lg"
+              className="w-64 h-90 object-cover rounded-lg"
             />
             <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
               <Image 
@@ -135,7 +135,7 @@ export default function CardsPage() {
                   alt={template.id} 
                   width={300} 
                   height={400} 
-                  className="w-full h-120 object-cover rounded-lg"
+                  className="w-full h-90 object-cover rounded-lg"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
                   {/* ... existing hover content ... */}
