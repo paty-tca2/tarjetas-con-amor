@@ -4,16 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="146e379d-c044-4abb-a508-09344638e1d4" name="Changes" comment="add sign up">
-      <change afterPath="$PROJECT_DIR$/src/core/usecases/auth/LoginUseCase.ts" afterDir="false" />
+    <list default="true" id="146e379d-c044-4abb-a508-09344638e1d4" name="Changes" comment="added functional">
+      <change afterPath="$PROJECT_DIR$/src/components/ui/loader_modal.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/ResponseHandler.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/usecases/auth/GetProfileUseCase.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_08_2024_08_43_a__m___Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_08_2024_08_43_a_ m__[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_08_2024_05_02_p__m___Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_08_2024_05_02_p_ m__[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_30_08_2024_05_40_p__m___Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_30_08_2024_05_40_p_ m__[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/auth/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/auth/sign-up/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/sign-up/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/styles/signup.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/sign-up/styles/signup.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/my-account/cuenta.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/my-account/cuenta.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/ResponseHandler.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/infrastructure/AuthService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/infrastructure/AuthService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/repositories/AuthRepository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/repositories/AuthRepository.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/usecases/auth/RegisterUsecase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/usecases/auth/RegisterUserUseCase.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +38,13 @@
         <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
       </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="false" />
+    <option name="myAllFileTypesSelected" value="true" />
+    <option name="mySelectedFileTypes">
+      <set />
     </option>
   </component>
   <component name="Git.Settings">
@@ -55,31 +73,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Latitude/Documents/GitHub/tarjetas-con-amor/public/fonts&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Latitude\\Documents\\GitHub\\tarjetas-con-amor\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Latitude/Downloads/Modernize-Nextjs-Free-main/Modernize-Nextjs-Free-main/package",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.dev.executor": "Debug",
+    "ts.external.directory.path": "C:\\Users\\Latitude\\Documents\\GitHub\\tarjetas-con-amor\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Latitude\Documents\GitHub\tarjetas-con-amor\public\fonts" />
       <recent name="C:\Users\Latitude\Documents\GitHub\tarjetas-con-amor\public" />
+      <recent name="C:\Users\Latitude\Documents\GitHub\tarjetas-con-amor\public\fonts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Latitude\Documents\GitHub\tarjetas-con-amor\src" />
+      <recent name="C:\Users\Latitude\Documents\GitHub\tarjetas-con-amor" />
       <recent name="C:\Users\Latitude\Documents\GitHub\tarjetas-con-amor\src\app\auth\sign-up" />
       <recent name="C:\Users\Latitude\Documents\GitHub\tarjetas-con-amor\src\core" />
     </key>
@@ -120,7 +140,14 @@
       <workItem from="1724885378466" duration="36024000" />
       <workItem from="1725002311852" duration="2992000" />
       <workItem from="1725007117909" duration="13671000" />
-      <workItem from="1725052868164" duration="7545000" />
+      <workItem from="1725052868164" duration="10767000" />
+      <workItem from="1725400259255" duration="717000" />
+      <workItem from="1725471471946" duration="105000" />
+      <workItem from="1725471598919" duration="359000" />
+      <workItem from="1725473578186" duration="2409000" />
+      <workItem from="1725507108936" duration="22882000" />
+      <workItem from="1726260944943" duration="6907000" />
+      <workItem from="1726584847605" duration="17136000" />
     </task>
     <task id="LOCAL-00001" summary="added signIn and singup&#10;componnet fixes">
       <option name="closed" value="true" />
@@ -146,7 +173,23 @@
       <option name="project" value="LOCAL" />
       <updated>1725058013263</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added functional">
+      <option name="closed" value="true" />
+      <created>1725473658366</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725473658366</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added functional">
+      <option name="closed" value="true" />
+      <created>1725977783878</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725977783880</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,6 +211,7 @@
     <MESSAGE value="added signIn and singup&#10;componnet fixes" />
     <MESSAGE value="fixes" />
     <MESSAGE value="add sign up" />
-    <option name="LAST_COMMIT_MESSAGE" value="add sign up" />
+    <MESSAGE value="added functional" />
+    <option name="LAST_COMMIT_MESSAGE" value="added functional" />
   </component>
 </project>

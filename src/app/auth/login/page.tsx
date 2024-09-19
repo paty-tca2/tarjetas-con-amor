@@ -9,14 +9,16 @@ import { AuthRepositoryImpl } from "@/core/repositories/AuthRepository";
 import { Either, fold } from "fp-ts/Either";
 import {LoginUser} from "@/core/usecases/auth/LoginUseCase";
 import { useRouter } from 'next/navigation';
+import LoaderModal from "@/components/ui/loader_modal";
 
-// Inicializa el repositorio y el caso de uso
+
 const authRepository = new AuthRepositoryImpl();
 const loginUserUseCase = new LoginUser(authRepository);
 
 export default function SignIn() {
+    const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({
-        email: "",
+        identifier : "",
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
@@ -28,21 +30,27 @@ export default function SignIn() {
         });
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+        setLoading(true);
 
-        const result: Either<string, any> = await loginUserUseCase.execute(userData);
+        const result = await loginUserUseCase.execute(userData);
 
         fold(
             (error: string) => {
                 toast.error(error);
             },
             (success: any) => {
-                toast.success("Inicio de sesión exitoso");
+                Cookie.set('jwt', success.jwt);
+                Cookie.set('userId', success.user.id.toString());
                 router.push('/my-account');
             }
         )(result);
+
+
+        setLoading(false);
     };
+
 
     return (
         <div className="relative flex flex-col min-h-screen justify-center items-center">
@@ -68,14 +76,14 @@ export default function SignIn() {
                 <div className="w-full max-w-md">
                     <form className="flex flex-col mt-4 space-y-4 sm:mx-auto sm:max-w-md" onSubmit={handleSubmit}>
                         <div className="w-full">
-                            <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="email">
+                            <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="identifier">
                                 CORREO ELECTRONICO
                             </label>
                             <input
                                 className="w-full p-1 text-black"
                                 type="email"
-                                id="email"
-                                value={userData.email}
+                                id="identifier"
+                                value={userData.identifier}
                                 onChange={handleChange}
                             />
                         </div>
@@ -133,7 +141,7 @@ export default function SignIn() {
                     </div>
                 </div>
             </div>
-
+            <LoaderModal loading={loading} />
             <ToastContainer />
         </div>
     );

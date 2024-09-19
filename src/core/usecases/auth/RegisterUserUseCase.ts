@@ -2,7 +2,7 @@
 
 import {IAuthRepository} from "@/core/repositories/AuthRepository";
 
-export class RegisterUser {
+export class RegisterUserUseCase {
     private authRepository: IAuthRepository;
 
     constructor(authRepository: IAuthRepository) {

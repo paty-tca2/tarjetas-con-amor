@@ -2,16 +2,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { RegisterUser } from "@/core/usecases/auth/RegisterUsecase";
 import { AuthRepositoryImpl } from "@/core/repositories/AuthRepository";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Either, fold } from "fp-ts/Either";
 import ClipLoader from "react-spinners/ClipLoader";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import LoaderModal from "@/components/ui/loader_modal";
+import {RegisterUserUseCase} from "@/core/usecases/auth/RegisterUserUseCase";
 
 const authRepository = new AuthRepositoryImpl();
-const registerUserUseCase = new RegisterUser(authRepository);
+const registerUserUseCase = new RegisterUserUseCase(authRepository);
 
 export default function SignUp() {
     const [userData, setUserData] = useState({
@@ -94,9 +95,13 @@ export default function SignUp() {
 
         setLoading(true);
 
-        const result: Either<string, any> = await registerUserUseCase.execute(
-            userData
-        );
+        const result: Either<string, any> = await registerUserUseCase.execute({
+            email: userData.email,
+            username: userData.email,
+            password: userData.password,
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+        });
 
         fold(
             (error: string) => {
@@ -105,9 +110,19 @@ export default function SignUp() {
                 });
             },
             (success: any) => {
+
                 toast.success("Usuario registrado con éxito", {
                     position: "top-center",
                 });
+                setUserData({
+                    email: "",
+                    password: "",
+                    first_name: "",
+                    last_name: "",
+                });
+                setConfirmEmail("");
+                setConfirmPassword("");
+                setIsChecked(false);
             }
         )(result);
 
@@ -362,6 +377,7 @@ export default function SignUp() {
                     </div>
                 </div>
             </div>
+            <LoaderModal loading={loading} />
             <ToastContainer />
         </div>
     );

@@ -26,9 +26,18 @@ export class ResponseHandler {
     }
 
     private static parseErrorMessage(errorResponse: any): string {
-        if (errorResponse.errors && Array.isArray(errorResponse.errors)) {
-            return errorResponse.errors.join('\n');
+        if (errorResponse.error && errorResponse.error.details && Array.isArray(errorResponse.error.details.errors)) {
+            const validationErrors = errorResponse.error.details.errors.map((error: any) => {
+                const path = error.path.join(' -> ');
+                return `${path}: ${error.message}`;
+            }).join('\n');
+            return `Errores de validación:\n${validationErrors}`;
         }
-        return errorResponse.message || 'Unknown error occurred';
+
+        if (errorResponse.error && errorResponse.error.message) {
+            return errorResponse.error.message;
+        }
+
+        return 'Unknown error occurred';
     }
 }
