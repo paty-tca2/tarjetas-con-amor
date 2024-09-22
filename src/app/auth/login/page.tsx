@@ -10,6 +10,7 @@ import { Either, fold } from "fp-ts/Either";
 import {LoginUser} from "@/core/usecases/auth/LoginUseCase";
 import { useRouter } from 'next/navigation';
 import LoaderModal from "@/components/ui/loader_modal";
+import { Cookie } from "next/font/google";
 
 
 const authRepository = new AuthRepositoryImpl();
@@ -41,8 +42,8 @@ export default function SignIn() {
                 toast.error(error);
             },
             (success: any) => {
-                Cookie.set('jwt', success.jwt);
-                Cookie.set('userId', success.user.id.toString());
+                document.cookie = `jwt=${success.jwt}; path=/`;
+                document.cookie = `userId=${success.user.id.toString()}; path=/`;
                 router.push('/my-account');
             }
         )(result);
