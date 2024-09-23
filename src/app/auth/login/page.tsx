@@ -23,17 +23,36 @@ export default function SignIn() {
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
+    const [validationErrors, setValidationErrors] = useState({
+        identifier: false,
+        password: false,
+    });
     const router = useRouter();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
             ...userData,
             [e.target.id]: e.target.value,
         });
+        setValidationErrors({
+            ...validationErrors,
+            [e.target.id]: false,
+        });
     };
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         setLoading(true);
+
+        const errors = {
+            identifier: userData.identifier === "",
+            password: userData.password === "",
+        };
+        setValidationErrors(errors);
+
+        if (errors.identifier || errors.password) {
+            setLoading(false);
+            return;
+        }
 
         const result = await loginUserUseCase.execute(userData);
 
@@ -47,7 +66,6 @@ export default function SignIn() {
                 router.push('/my-account');
             }
         )(result);
-
 
         setLoading(false);
     };
@@ -81,12 +99,15 @@ export default function SignIn() {
                                 CORREO ELECTRONICO
                             </label>
                             <input
-                                className="w-full p-1 text-black"
+                                className={`w-full p-1 text-black ${validationErrors.identifier ? 'border border-red-500' : ''}`}
                                 type="email"
                                 id="identifier"
                                 value={userData.identifier}
                                 onChange={handleChange}
                             />
+                            {validationErrors.identifier && (
+                                <p className="text-red-500 text-xs font-geometos">Correo electrónico es requerido</p>
+                            )}
                         </div>
                         <div className="w-full">
                             <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="password">
@@ -94,7 +115,7 @@ export default function SignIn() {
                             </label>
                             <div className="relative">
                                 <input
-                                    className="w-full p-1 text-black placeholder:text-xs"
+                                    className={`w-full p-1 text-black placeholder:text-xs ${validationErrors.password ? 'border border-red-500' : ''}`}
                                     type={showPassword ? "text" : "password"}
                                     id="password"
                                     value={userData.password}
@@ -112,6 +133,9 @@ export default function SignIn() {
                                     )}
                                 </button>
                             </div>
+                            {validationErrors.password && (
+                                <p className="text-red-500 text-xs font-geometos">Contraseña es requerida</p>
+                            )}
                         </div>
 
                         <div className="w-full text-left">

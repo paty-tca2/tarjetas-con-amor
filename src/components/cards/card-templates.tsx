@@ -46,8 +46,20 @@ export const cardTemplates: CardTemplate[] = [
     pages: [
       {
         pageNumber: 1,
-        staticPlaceholders: []
-      }
+        staticPlaceholders: [
+          {
+            id: 'title',
+            type: 'text',
+            position: { x: 50, y: 30 },
+            size: { width: 300, height: 50 },
+            content: '',
+            placeholder: 'Feliz Cumpleaños',
+            font: "Lust Script",
+            color: '#04D9B2',
+          },
+          // ... other placeholders for this page
+        ]
+      },
     ]
   },
   { 

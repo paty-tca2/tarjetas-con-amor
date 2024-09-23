@@ -28,6 +28,14 @@ export default function SignUp() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [validationErrors, setValidationErrors] = useState({
+        first_name: false,
+        last_name: false,
+        email: false,
+        confirmEmail: false,
+        password: false,
+        confirmPassword: false,
+    });
 
     const handleCheckboxChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -70,6 +78,20 @@ export default function SignUp() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const errors = {
+            first_name: userData.first_name === "",
+            last_name: userData.last_name === "",
+            email: userData.email === "",
+            confirmEmail: confirmEmail === "",
+            password: userData.password === "",
+            confirmPassword: confirmPassword === "",
+        };
+        setValidationErrors(errors);
+
+        if (Object.values(errors).some(error => error)) {
+            return;
+        }
 
         if (userData.email !== confirmEmail) {
             toast.error("Los correos electrónicos no coinciden", {
@@ -177,88 +199,77 @@ export default function SignUp() {
                             onSubmit={handleSubmit}
                         >
                             <div>
-                                <label
-                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
-                                    htmlFor="first_name"
-                                    
-                                >
+                                <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="first_name">
                                     NOMBRE
                                 </label>
                                 <input
-                                    className="w-full p-1 text-black"
+                                    className={`w-full p-1 text-black ${validationErrors.first_name ? 'border border-red-500' : ''}`}
                                     type="text"
                                     id="first_name"
                                     value={userData.first_name}
                                     onChange={handleChange}
-                                    required
                                 />
+                                {validationErrors.first_name && (
+                                    <p className="text-red-500 text-xs font-geometos">Nombre es requerido</p>
+                                )}
                             </div>
                             <div>
-                                <label
-                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
-                                    htmlFor="last_name"
-                                >
+                                <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="last_name">
                                     APELLIDO
                                 </label>
                                 <input
-                                    className="w-full p-1 text-black"
+                                    className={`w-full p-1 text-black ${validationErrors.last_name ? 'border border-red-500' : ''}`}
                                     type="text"
                                     id="last_name"
                                     value={userData.last_name}
                                     onChange={handleChange}
-                                    required
                                 />
+                                {validationErrors.last_name && (
+                                    <p className="text-red-500 text-xs font-geometos">Apellido es requerido</p>
+                                )}
                             </div>
                             <div>
-                                <label
-                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
-                                    htmlFor="email"
-                                >
+                                <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="email">
                                     INTRODUCE TU CORREO
                                 </label>
                                 <input
-                                    className="w-full p-1 text-black"
+                                    className={`w-full p-1 text-black ${validationErrors.email ? 'border border-red-500' : ''}`}
                                     type="email"
                                     id="email"
                                     value={userData.email}
                                     onChange={handleChange}
-                                    required
                                 />
+                                {validationErrors.email && (
+                                    <p className="text-red-500 text-xs font-geometos">Correo electrónico es requerido</p>
+                                )}
                             </div>
                             <div>
-                                <label
-                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
-                                    htmlFor="confirmEmail"
-                                >
+                                <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="confirmEmail">
                                     CONFIRMA TU CORREO
                                 </label>
                                 <input
-                                    className="w-full p-1 text-black"
+                                    className={`w-full p-1 text-black ${validationErrors.confirmEmail ? 'border border-red-500' : ''}`}
                                     type="email"
                                     id="confirmEmail"
                                     value={confirmEmail}
                                     onChange={handleEmailChange}
-                                    required
                                 />
+                                {validationErrors.confirmEmail && (
+                                    <p className="text-red-500 text-xs font-geometos">Confirmación de correo es requerida</p>
+                                )}
                             </div>
                             <div>
-                                <label
-                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
-                                    htmlFor="password"
-                                >
+                                <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="password">
                                     CONTRASEÑA
                                 </label>
                                 <div className="relative">
                                     <input
-                                        className="w-full p-1 text-black placeholder:text-[10px] pr-10"
+                                        className={`w-full p-1 text-black placeholder:text-xs ${validationErrors.password ? 'border border-red-500' : ''}`}
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         placeholder="Una mayúscula, un número y un carácter especial"
                                         value={userData.password}
                                         onChange={handleChange}
-                                        pattern="(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}"
-                                        title="La contraseña debe contener al menos una mayúscula, un número y un carácter especial"
-                                        required
                                     />
                                     <button
                                         type="button"
@@ -272,23 +283,21 @@ export default function SignUp() {
                                         )}
                                     </button>
                                 </div>
+                                {validationErrors.password && (
+                                    <p className="text-red-500 text-xs font-geometos">Contraseña es requerida</p>
+                                )}
                             </div>
-
                             <div>
-                                <label
-                                    className="block text-white text-[0.66rem] sm:text-[0.78rem] font-geometos pb-1"
-                                    htmlFor="confirmPassword">CONFIRMA TU CONTRASEÑA
+                                <label className="block text-white text-[0.78rem] font-geometos pb-1" htmlFor="confirmPassword">
+                                    CONFIRMA TU CONTRASEÑA
                                 </label>
                                 <div className="relative">
                                     <input
-                                        className="w-full p-1 text-black pr-10"
+                                        className={`w-full p-1 text-black ${validationErrors.confirmPassword ? 'border border-red-500' : ''}`}
                                         type={showConfirmPassword ? "text" : "password"}
                                         id="confirmPassword"
                                         value={confirmPassword}
                                         onChange={handlePasswordChange}
-                                        pattern="(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}"
-                                        title="La contraseña debe contener al menos una mayúscula, un número y un carácter especial"
-                                        required
                                     />
                                     <button
                                         type="button"
@@ -302,32 +311,43 @@ export default function SignUp() {
                                         )}
                                     </button>
                                 </div>
+                                {validationErrors.confirmPassword && (
+                                    <p className="text-red-500 text-xs font-geometos">Confirmación de contraseña es requerida</p>
+                                )}
                             </div>
 
-                            <div className="flex items-center mt-4 text-center">
-                                <input
-                                    type="checkbox"
-                                    id="terms"
-                                    checked={isChecked}
-                                    onChange={handleCheckboxChange}
-                                    className="mr-2"
-                                    required
-                                    title="Por favor, acepta los términos y condiciones"
-                                />
-                                <label
-                                    htmlFor="terms"
-                                    className="text-white text-xs font-geometos"
-                                >
-                                    Acepto los{" "}
-                                    <a href="/terms" className="text-[#04d7af] underline">
-                                        terminos y condiciones
-                                    </a> y el  <a
-                                    href="/privacy"
-                                    className="text-xs font-geometos text-[#04d7af] underline"
-                                >
-                                    Aviso de privacidad
-                                </a>
-                                </label>
+                            <div className="mt-4">
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        id="terms"
+                                        checked={isChecked}
+                                        onChange={handleCheckboxChange}
+                                        className="mr-2"
+                              
+                                    />
+                                    <label
+                                        htmlFor="terms"
+                                        className="text-white text-xs font-geometos"
+                                    >
+                                        Acepto los{" "}
+                                        <a href="/terms" className="text-[#04d7af] underline">
+                                            terminos y condiciones
+                                        </a>{" "}
+                                        y el{" "}
+                                        <a
+                                            href="/privacy"
+                                            className="text-[#04d7af] underline"
+                                        >
+                                            Aviso de privacidad
+                                        </a>
+                                    </label>
+                                </div>
+                                {!isChecked && (
+                                    <p className="text-red-500 text-xs font-geometos mt-1">
+                                        Debes aceptar los términos y condiciones
+                                    </p>
+                                )}
                             </div>
 
                             <div className="my-3">
