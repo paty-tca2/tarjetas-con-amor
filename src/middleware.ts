@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
     const protectedRoutes = ["/my-account"];
 
     if (!token && protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))) {
-        return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+        return NextResponse.redirect(new URL("/auth/sign-up", req.url));
     }
 
     return NextResponse.next();

@@ -31,7 +31,7 @@ const MiCuenta: React.FC = () => {
       const token = localStorage.getItem("jwt");
       if (!token) {
         toast.error("No estás autenticado");
-        router.push("/auth/sign-in");
+        router.push("/auth/sign-up");
         return;
       }
 
