@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { CardTemplate } from '@/components/cards/card-templates';
+import { useSession } from 'next-auth/react';
 
 type CardOptions = {
   type: 'ecard' | 'standard';
@@ -21,12 +22,42 @@ const cardSizes: Record<CardOptions['type'], CardSize> = {
   standard: { label: 'Standard Card', description: 'Para tus seres queridos', price: 199, bgColor: '#5D60a6' },
 };
 
+type Address = {
+  id: number;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+};
+
 const CartPage = () => {
   const router = useRouter();
+  const { data: session } = useSession();
   const [selectedAddress, setSelectedAddress] = useState('');
   const [cartItem, setCartItem] = useState<{ template: CardTemplate; options: CardOptions } | null>(null);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const fetchAddresses = async () => {
+      if (session) {
+        try {
+          const response = await fetch('/api/user/address');
+          if (response.ok) {
+            const data = await response.json();
+            setAddresses(data);
+          } else {
+            console.error('Failed to fetch addresses');
+          }
+        } catch (error) {
+          console.error('Error fetching addresses:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchAddresses();
     const storedTemplate = localStorage.getItem('selectedTemplate');
     const storedOptions = localStorage.getItem('selectedOptions');
 
@@ -41,12 +72,7 @@ const CartPage = () => {
         localStorage.removeItem('selectedOptions');
       }
     }
-  }, []);
-
-  const addresses = [
-    { id: 1, address: 'Calle 123, Ciudad A' },
-    { id: 2, address: 'Avenida 456, Ciudad B' },
-  ];
+  }, [session]);
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAddress(e.target.value);
@@ -169,18 +195,24 @@ const CartPage = () => {
         
         <div>
           <h2 className="text-2xl font-geometos text-[#5D60a6] mb-4">Direccion de envio</h2>
-          <select
-            value={selectedAddress}
-            onChange={handleAddressChange}
-            className="w-full p-2 mb-4 font-geometos text-[#5D60a6] border border-gray-200 rounded-lg"
-          >
-            <option value="">Selecciona una direccion</option>
-            {addresses.map((address) => (
-              <option key={address.id} value={address.id}>
-                {address.address}
-              </option>
-            ))}
-          </select>
+          {isLoading ? (
+            <p>Cargando direcciones...</p>
+          ) : addresses.length > 0 ? (
+            <select
+              value={selectedAddress}
+              onChange={handleAddressChange}
+              className="w-full p-2 mb-4 font-geometos text-[#5D60a6] border border-gray-200 rounded-lg"
+            >
+              <option value="">Selecciona una direccion</option>
+              {addresses.map((address) => (
+                <option key={address.id} value={address.id.toString()}>
+                  {`${address.street}, ${address.city}, ${address.state} ${address.zipCode}`}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p className="text-xl font-geometos text-[#5D60a6]">No hay direcciones guardadas. Por favor, agrega una direccion en tu perfil.</p>
+          )}
           
           <h2 className="text-2xl font-geometos text-[#5D60a6] mb-4">Metodo de pago</h2>
           <div className="bg-white p-4 rounded-lg shadow mb-4">

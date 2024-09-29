@@ -1,15 +1,64 @@
+"use client";
+import React, { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
-import React from 'react';
+import { toast } from "react-toastify";
+import { useRouter } from 'next/navigation';
+import prisma from '@/lib/db';
 
 interface Order {
-  id: string;
-  date: string;
-  total: number;
-  // Add more properties as needed
+  date: ReactNode;
+  total: any;
+  id: number;
+  orderNumber: string;
+  totalAmount: number;
+  status: string;
+  orderDate: Date;
 }
 
 const Pedidos: React.FC = () => {
-  const orders: Order[] = []; // This would typically be fetched from an API or state
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        toast.error("No estás autenticado");
+        router.push("/auth/sign-up");
+        return;
+      }
+
+      try {
+        const userOrders = await prisma.order.findMany({
+          where: { userId: parseInt(userId) },
+          select: {
+            id: true,
+            orderNumber: true,
+            totalAmount: true,
+            status: true,
+            orderDate: true
+          }
+        });
+        setOrders(userOrders.map(order => ({
+          id: order.id,
+          orderNumber: order.orderNumber,
+          totalAmount: Number(order.totalAmount),
+          status: order.status,
+          orderDate: order.orderDate,
+          date: new Date(order.orderDate).toLocaleDateString(),
+          total: Number(order.totalAmount)
+        })));
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        toast.error("Error al cargar los pedidos");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [router]);
 
   return (
     <div className="pedidos-container text-black">

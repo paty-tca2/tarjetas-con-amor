@@ -7,6 +7,7 @@ import Pedidos from '@/components/my-account/pedidos';
 import DireccionesEnvio from '@/components/my-account/direcciones';
 import Recordatorios from '@/components/my-account/recordatorios';
 import MiCuenta from '@/components/my-account/cuenta';
+import { signOut } from 'next-auth/react';
 
 const SidebarItem = ({ icon: Icon, text, onClick }: { icon: LucideIcon| React.ElementType; text: string; onClick?: () => void }) => (
   <div className="flex items-center space-x-2 py-2 px-4 cursor-pointer group text-[#5D60a6] " onClick={onClick}>
@@ -27,7 +28,7 @@ const Sidebar = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => (
     <div className="my-6"></div>
     <SidebarItem icon={Calendar} text="Recordatorios" onClick={() => setActiveTab('recordatorios')} />
     <div className="border-t border-gray-200 my-6"></div>
-    <SidebarItem icon={LogOut} text="Cerrar sesion" />
+    <SidebarItem icon={LogOut} text="Cerrar sesion" onClick={() => signOut({ callbackUrl: '/' })} />
   </div>
 );
 
@@ -59,8 +60,12 @@ const Header = () => (
     </div>
   </div>
 );
+
 const LogoutButton = () => (
-  <button className="flex items-center space-x-2 py-2 px-4 bg-gray-100 text-[#5D60a6] font-geometos cursor-pointer w-full">
+  <button 
+    className="flex items-center space-x-2 py-2 px-4 bg-gray-100 text-[#5D60a6] font-geometos cursor-pointer w-full"
+    onClick={() => signOut({ callbackUrl: '/' })}
+  >
     <LogOut size={20} />
     <span>Cerrar sesión</span>
   </button>

@@ -3,11 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import LoaderModal from "@/components/ui/loader_modal";
+import SuccessModal from '@/components/successmoda';
 
 type FormData = {
   first_name: string;
@@ -24,6 +23,8 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
@@ -48,8 +49,9 @@ export default function SignUp() {
 
   const onSubmit = async (data: FormData) => {
     if (!isChecked) {
-      toast.error("Debes aceptar los términos y condiciones", {
-        position: "top-center",
+      setError("root.terms", {
+        type: "manual",
+        message: "Debes aceptar los términos y condiciones",
       });
       return;
     }
@@ -96,14 +98,35 @@ export default function SignUp() {
       const result = await response.json();
 
       if (response.ok) {
-        toast.success("Usuario registrado con éxito", { position: "top-center" });
-        // Handle successful signup (e.g., redirect to login page)
+        // Send welcome email
+        const emailResponse = await fetch('/api/send-welcome-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: data.email, firstName: data.first_name }),
+        });
+        
+        const emailResult = await emailResponse.json();
+        
+        if (emailResult.success) {
+          setSuccessMessage("Hemos enviado un correo de bienvenida a tu cuenta! Ya puedes ingresar!");
+        } else {
+          console.error('Error sending welcome email:', emailResult.error);
+          setSuccessMessage("Tu cuenta ha sido creada, pero hubo un problema al enviar el correo de bienvenida. Por favor, revisa tu bandeja de entrada más tarde.");
+        }
+        
+        setIsSuccessModalOpen(true);
       } else {
-        toast.error(result.message || "Error al registrar usuario", { position: "top-center" });
+        setError("root", {
+          type: "manual",
+          message: result.message || "Error al registrar usuario",
+        });
       }
     } catch (error) {
       console.error('Signup error:', error);
-      toast.error("Error al conectar con el servidor", { position: "top-center" });
+      setError("root", {
+        type: "manual",
+        message: "Error al conectar con el servidor",
+      });
     } finally {
       setLoading(false);
     }
@@ -138,7 +161,7 @@ export default function SignUp() {
                 <span style={{ color: "#04d7af" }}>cuenta?</span>
               </h1>
             </div>
-            <Link href="/auth/login">
+            <Link href="/auth/signin">
               <button
                 className="bg-[#04d9b2] hover:bg-[#5D60a6] font-geometos rounded-full text-white w-[7rem] h-10 sm:w-80 text-[1rem] sm:text-[1.25rem]">INGRESA
               </button>
@@ -346,7 +369,11 @@ export default function SignUp() {
         </div>
       </div>
       <LoaderModal loading={loading} />
-      <ToastContainer />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        message={successMessage}
+      />
     </div>
   );
 }

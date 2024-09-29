@@ -2,71 +2,90 @@
 import React, { useEffect, useState } from 'react';
 import { FaUser, FaEnvelope, FaPhone } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
-import { Either, fold } from 'fp-ts/Either';
-import { AuthRepositoryImpl } from '@/core/repositories/AuthRepository';
 import { useRouter } from 'next/navigation';
-import {GetProfileUseCase} from "@/core/usecases/auth/GetProfileUseCase";
-
-const authRepository = new AuthRepositoryImpl();
-const getProfileUseCase = new GetProfileUseCase(authRepository);
+import { useSession } from "next-auth/react";
 
 interface UserInfo {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone?: string;
 }
 
 const MiCuenta: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
   });
 
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("jwt");
-      if (!token) {
+      if (status === "loading") return;
+
+      if (!session) {
         toast.error("No estás autenticado");
-        router.push("/auth/sign-up");
+        router.push("/auth/sign-in");
         return;
       }
 
-      setLoading(true);
-
-      const result: Either<string, any> = await getProfileUseCase.execute(token);
-
-      fold(
-          (error: string) => {
-            toast.error(error);
-            setLoading(false);
-          },
-          (data: any) => {
-            setUserInfo({
-              name: data.name || '',
-              email: data.email || '',
-              phone: data.phone || '', // Aquí puedes ajustar para datos de teléfono si existen
-            });
-            setLoading(false);
-          }
-      )(result);
+      try {
+        const response = await fetch('/api/user/profile');
+        if (!response.ok) {
+          throw new Error('Failed to fetch profile');
+        }
+        const userData = await response.json();
+        setUserInfo({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+          phone: userData.phone || '',
+        });
+      } catch (error) {
+        toast.error("Error al cargar el perfil");
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchProfile();
-  }, [router]);
+  }, [session, status, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInfo(prevInfo => ({ ...prevInfo, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Agrega la lógica para guardar la información actualizada del usuario
-    console.log("Updated user info:", userInfo);
+    setLoading(true);
+
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      toast.error("No estás autenticado");
+      router.push("/auth/sign-up");
+      return;
+    }
+
+    try {
+      await fetch('/api/user/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userInfo),
+      });
+      toast.success("Perfil actualizado exitosamente");
+    } catch (error) {
+      toast.error("Error al actualizar el perfil");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,8 +100,8 @@ const MiCuenta: React.FC = () => {
                 <FaUser className="text-[#5D60a6]" />
                 <input
                     type="text"
-                    name="name"
-                    value={userInfo.name}
+                    name="firstName"
+                    value={userInfo.firstName}
                     onChange={handleInputChange}
                     className="border border-gray-300 rounded-md p-2 w-full"
                     placeholder="Nombre"

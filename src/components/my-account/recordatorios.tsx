@@ -1,21 +1,108 @@
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
+import { toast } from "react-toastify";
+import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
+import { FaTrash } from 'react-icons/fa';
 
 interface Reminder {
-  id: string;
+  id: number;
+  name: string;
+  text: string;
   day: number;
   month: number;
-  text: string;
-  name: string;
 }
 
 const Recordatorios: React.FC = () => {
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [newReminder, setNewReminder] = useState<Omit<Reminder, 'id'>>({
+    name: '',
+    text: '',
     day: 1,
     month: 1,
-    text: '',
-    name: '',
   });
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (!session) {
+      toast.error("No estás autenticado");
+      router.push("/auth/sign-in");
+      return;
+    }
+
+    fetchReminders();
+  }, [session, status, router]);
+
+  const fetchReminders = async () => {
+    try {
+      const response = await fetch('/api/user/reminder');
+      if (!response.ok) {
+        throw new Error('Failed to fetch reminders');
+      }
+      const data = await response.json();
+      setReminders(data);
+    } catch (error) {
+      toast.error("Error al cargar los recordatorios");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddReminder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!session) {
+      toast.error("No estás autenticado");
+      router.push("/auth/sign-in");
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/user/reminder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newReminder),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add reminder');
+      }
+
+      await fetchReminders(); // Refresh the list of reminders
+      setNewReminder({ name: '', text: '', day: 1, month: 1 });
+      toast.success("Recordatorio agregado exitosamente");
+    } catch (error) {
+      toast.error("Error al agregar el recordatorio");
+    }
+  };
+
+  const handleDeleteReminder = async (reminderId: number) => {
+    if (!session) {
+      toast.error("No estás autenticado");
+      router.push("/auth/sign-in");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/user/reminder/${reminderId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete reminder');
+      }
+
+      await fetchReminders(); // Refresh the list of reminders
+      toast.success("Recordatorio eliminado exitosamente");
+    } catch (error) {
+      toast.error("Error al eliminar el recordatorio");
+    }
+  };
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = parseInt(e.target.value);
@@ -33,13 +120,6 @@ const Recordatorios: React.FC = () => {
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewReminder(prev => ({ ...prev, name: e.target.value }));
-  };
-
-  const handleAddReminder = (e: React.FormEvent) => {
-    e.preventDefault();
-    const id = Date.now().toString();
-    setReminders(prev => [...prev, { id, ...newReminder }]);
-    setNewReminder({ day: 1, month: 1, text: '', name: '' });
   };
 
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
@@ -123,6 +203,12 @@ const Recordatorios: React.FC = () => {
                   <p className="font-bold">{`${reminder.day}/${reminder.month}`}</p>
                   <p className="font-semibold">{reminder.name}</p>
                   <p>{reminder.text}</p>
+                  <button
+                    onClick={() => handleDeleteReminder(reminder.id)}
+                    className="mt-2 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition-colors"
+                  >
+                    <FaTrash /> 
+                  </button>
                 </li>
               ))}
             </ul>

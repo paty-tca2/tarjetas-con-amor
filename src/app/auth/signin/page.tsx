@@ -3,8 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation';
 import LoaderModal from "@/components/ui/loader_modal";
 import { signIn } from "next-auth/react";
@@ -20,6 +18,7 @@ export default function SignIn() {
         identifier: false,
         password: false,
     });
+    const [loginError, setLoginError] = useState("");
     const router = useRouter();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,26 +30,40 @@ export default function SignIn() {
             ...validationErrors,
             [e.target.id]: false,
         });
+        setLoginError("");
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
+        setLoginError("");
 
-        const result = await signIn('credentials', {
-            identifier: userData.identifier,
-            password: userData.password,
-            redirect: false,
-        });
+        try {
+            console.log("Attempting to sign in with:", userData.identifier);
+            const result = await signIn('credentials', {
+                identifier: userData.identifier,
+                password: userData.password,
+                redirect: false,
+            });
 
-        if (result?.error) {
-            toast.error(result.error);
-        } else {
-            toast.success("Inicio de sesión exitoso");
-            router.push('/my-account');
+            console.log("SignIn result:", result);
+
+            if (result?.error) {
+                console.error("SignIn error:", result.error);
+                setLoginError(result.error);
+            } else if (result?.ok) {
+                console.log("SignIn successful, redirecting...");
+                router.push('/my-account');
+            } else {
+                console.error("Unexpected SignIn result:", result);
+                setLoginError("An unexpected error occurred");
+            }
+        } catch (error) {
+            console.error("Sign in error:", error);
+            setLoginError("Ocurrió un error durante el inicio de sesión");
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
     return (
@@ -120,6 +133,10 @@ export default function SignIn() {
                             )}
                         </div>
 
+                        {loginError && (
+                            <p className="text-red-500 text-xs font-geometos">{loginError}</p>
+                        )}
+
                         <div className="w-full text-left">
                             <a href="/privacy" className="text-xs font-geometos text-[#04d7af] underline">
                                 ¿Olvidaste tu contraseña?
@@ -149,7 +166,7 @@ export default function SignIn() {
                 </div>
             </div>
             <LoaderModal loading={loading} />
-            <ToastContainer />
+            {/* Remove the ToastContainer */}
         </div>
     );
 }
