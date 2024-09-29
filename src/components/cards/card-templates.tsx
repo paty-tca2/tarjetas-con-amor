@@ -25,16 +25,42 @@ export const cardTemplates: CardTemplate[] = [
         pageNumber: 1,
         staticPlaceholders: [
           {
+            id: 'image1',
+            type: 'image',
+            position: { x: 20, y: 20 },
+            size: { width: 150, height: 150 },
+            placeholder: 'Insert image 1',
+            color: "",
+            font: ""
+          },
+          {
+            id: 'image2',
+            type: 'image',
+            position: { x: 100, y: 100 },
+            size: { width: 200, height: 200 },
+            placeholder: 'Insert image 2',
+            color: "",
+            font: ""
+          },
+          {
+            id: 'image3',
+            type: 'image',
+            position: { x: 200, y: 50 },
+            size: { width: 150, height: 150 },
+            placeholder: 'Insert image 3',
+            color: "",
+            font: ""
+          },
+          {
             id: 'title',
             type: 'text',
-            position: { x: 50, y: 30 },
+            position: { x: 50, y: 300 },
             size: { width: 300, height: 50 },
             content: '',
-            placeholder: 'Hola',
-            font: "Lust Script", // Changed to Lust Script
-            color: '#04D9B2', // Changed to #04D9B2
+            placeholder: 'Edita tu título',
+            font: "Arial",
+            color: '#ffffff',
           },
-          // ... other placeholders for this page
         ]
       },
       // ... other pages

@@ -5,21 +5,14 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthRepositoryImpl } from "@/core/repositories/AuthRepository";
-import { Either, fold } from "fp-ts/Either";
-import {LoginUser} from "@/core/usecases/auth/LoginUseCase";
 import { useRouter } from 'next/navigation';
 import LoaderModal from "@/components/ui/loader_modal";
-import { Cookie } from "next/font/google";
-
-
-const authRepository = new AuthRepositoryImpl();
-const loginUserUseCase = new LoginUser(authRepository);
+import { signIn } from "next-auth/react";
 
 export default function SignIn() {
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({
-        identifier : "",
+        identifier: "",
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +21,7 @@ export default function SignIn() {
         password: false,
     });
     const router = useRouter();
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
             ...userData,
@@ -39,37 +33,25 @@ export default function SignIn() {
         });
     };
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        const errors = {
-            identifier: userData.identifier === "",
-            password: userData.password === "",
-        };
-        setValidationErrors(errors);
+        const result = await signIn('credentials', {
+            identifier: userData.identifier,
+            password: userData.password,
+            redirect: false,
+        });
 
-        if (errors.identifier || errors.password) {
-            setLoading(false);
-            return;
+        if (result?.error) {
+            toast.error(result.error);
+        } else {
+            toast.success("Inicio de sesión exitoso");
+            router.push('/my-account');
         }
-
-        const result = await loginUserUseCase.execute(userData);
-
-        fold(
-            (error: string) => {
-                toast.error(error);
-            },
-            (success: any) => {
-                document.cookie = `jwt=${success.jwt}; path=/`;
-                document.cookie = `userId=${success.user.id.toString()}; path=/`;
-                router.push('/my-account');
-            }
-        )(result);
 
         setLoading(false);
     };
-
 
     return (
         <div className="relative flex flex-col min-h-screen justify-center items-center">
