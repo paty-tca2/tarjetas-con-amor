@@ -18,7 +18,7 @@ type CardSize = {
 };
 
 const cardSizes: Record<CardOptions['type'], CardSize> = {
-  ecard: { label: 'eCard', description: 'Envio instantaneo', price: 99, bgColor: '#04d9b2' },
+  ecard: { label: 'eCard', description: 'Envío instantaneo', price: 99, bgColor: '#04d9b2' },
   standard: { label: 'Standard Card', description: 'Para tus seres queridos', price: 199, bgColor: '#5D60a6' },
 };
 
