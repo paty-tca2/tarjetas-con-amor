@@ -5,15 +5,18 @@ const prismaClientSingleton = () => {
   return new PrismaClient()
 }
 
-// Extend the globalThis type to include our prisma instance
-declare global {
-  var prisma: undefined | ReturnType<typeof prismaClientSingleton>
+// Define the type for the prisma client singleton
+type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>
+
+// Create a global object for prisma
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClientSingleton | undefined
 }
 
 // Create the prisma instance
-const prisma = global.prisma ?? prismaClientSingleton()
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
 
 // Assign the prisma instance to global object in non-production environments
-if (process.env.NODE_ENV !== 'production') global.prisma = prisma
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 export default prisma
