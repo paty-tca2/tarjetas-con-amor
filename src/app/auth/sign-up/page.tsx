@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import ClipLoader from "react-spinners/ClipLoader";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import LoaderModal from "@/components/ui/loader_modal";
-import SuccessModal from '@/components/successmoda';
+import MessageModal from '@/components/successmoda';
 
 type FormData = {
   first_name: string;
@@ -23,8 +23,9 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalType, setModalType] = useState<'success' | 'error'>('success');
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
@@ -108,27 +109,28 @@ export default function SignUp() {
         const emailResult = await emailResponse.json();
         
         if (emailResult.success) {
-          setSuccessMessage("Hemos enviado un correo de bienvenida a tu cuenta! Ya puedes ingresar!");
+          setModalMessage("Hemos enviado un correo de bienvenida a tu cuenta! Ya puedes ingresar!");
         } else {
           console.error('Error sending welcome email:', emailResult.error);
-          setSuccessMessage("Tu cuenta ha sido creada, pero hubo un problema al enviar el correo de bienvenida. Por favor, revisa tu bandeja de entrada más tarde.");
+          setModalMessage("Tu cuenta ha sido creada, pero hubo un problema al enviar el correo de bienvenida. Por favor, revisa tu bandeja de entrada más tarde.");
         }
         
-        setIsSuccessModalOpen(true);
+        setModalType('success');
       } else {
-        setError("root", {
-          type: "manual",
-          message: result.message || "Error al registrar usuario",
-        });
+        if (result.message === "User already exists") {
+          setModalMessage("Este correo electrónico ya está registrado. Por favor, intenta con otro o inicia sesión.");
+        } else {
+          setModalMessage(result.message || "Error al registrar usuario");
+        }
+        setModalType('error');
       }
     } catch (error) {
       console.error('Signup error:', error);
-      setError("root", {
-        type: "manual",
-        message: "Error al conectar con el servidor",
-      });
+      setModalMessage("Error al conectar con el servidor");
+      setModalType('error');
     } finally {
       setLoading(false);
+      setIsModalOpen(true);
     }
   };
 
@@ -369,10 +371,11 @@ export default function SignUp() {
         </div>
       </div>
       <LoaderModal loading={loading} />
-      <SuccessModal
-        isOpen={isSuccessModalOpen}
-        onClose={() => setIsSuccessModalOpen(false)}
-        message={successMessage}
+      <MessageModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={modalMessage}
+        type={modalType}
       />
     </div>
   );

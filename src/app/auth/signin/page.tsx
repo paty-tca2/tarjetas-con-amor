@@ -50,13 +50,17 @@ export default function SignIn() {
 
             if (result?.error) {
                 console.error("SignIn error:", result.error);
-                setLoginError(result.error);
+                if (result.error === "CredentialsSignin") {
+                    setLoginError("Correo electrónico o contraseña incorrectos");
+                } else {
+                    setLoginError("Error al iniciar sesión. Por favor, intenta de nuevo.");
+                }
             } else if (result?.ok) {
                 console.log("SignIn successful, redirecting...");
                 router.push('/my-account');
             } else {
                 console.error("Unexpected SignIn result:", result);
-                setLoginError("An unexpected error occurred");
+                setLoginError("Ocurrió un error inesperado");
             }
         } catch (error) {
             console.error("Sign in error:", error);
