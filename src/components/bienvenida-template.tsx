@@ -4,9 +4,9 @@ import { Heart, Facebook, Instagram, Twitter } from 'lucide-react';
 const EmailTemplate = (p0: { firstName: string; }) => {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white font-sans" style={{ color: '#5d60a6' }}>
-      <header className="flex flex-row-reverse justify-between items-center mb-6">
-        <img src="/logo-principal.png" alt="Logo" className="h-12" />
+      <header className="flex justify-between items-center mb-6">
         <img src="/compartiendo-tus-memorias.png" alt="Slogan" className="h-12" />
+        <img src="/logo-principal.png" alt="Logo" className="h-12" />
       </header>
 
       <main>
@@ -43,9 +43,8 @@ const EmailTemplate = (p0: { firstName: string; }) => {
 
       <footer className="mt-8">
         <div className="flex justify-center space-x-4 mb-4">
-          <a href="#" className="text-[#5d60a6] hover:text-[#04d9b1]"><Facebook size={24} /></a>
-          <a href="#" className="text-[#5d60a6] hover:text-[#04d9b1]"><Instagram size={24} /></a>
-          <a href="#" className="text-[#5d60a6] hover:text-[#04d9b1]"><Twitter size={24} /></a>
+          <a href="https://www.instagram.com/tarjetasconamor__oficial?igsh=MXgxdnRscmNlc3A3ZA%3D%3D&utm_source=qr" className="text-[#5d60a6] hover:text-[#04d9b1]"><Facebook size={24} /></a>
+          <a href="https://www.facebook.com/profile.php?id=61563723841030&mibextid=LQQJ4d&rdid=ArV1AlBfK2q2im7I&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2FTEdLD5xA13bKQYvr%2F%3Fmibextid%3DLQQJ4d" className="text-[#5d60a6] hover:text-[#04d9b1]"><Instagram size={24} /></a>
         </div>
         
         <div className="text-center text-sm">
