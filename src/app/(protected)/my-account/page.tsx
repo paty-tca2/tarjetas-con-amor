@@ -75,20 +75,22 @@ const App = () => {
   const [activeTab, setActiveTab] = useState('account');
 
   return (
-    <div className="flex flex-col md:flex-row mt-28 bg-white">
+    <div className="flex flex-col md:flex-row mt-28 bg-white h-screen">
       <Sidebar setActiveTab={setActiveTab} />
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col h-full">
         <div className="p-4 md:hidden">
           <MobileSelect activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
         <Header />
-        <div className="p-4 flex-grow">
-          {activeTab === 'pedidos' && <Pedidos />}
-          {activeTab === 'account' && <MiCuenta />}
-          {activeTab === 'direcciones' && <DireccionesEnvio />}
-          {activeTab === 'recordatorios' && <Recordatorios />}
+        <div className="p-4 flex-grow overflow-hidden">
+          <div className="h-full overflow-y-auto">
+            {activeTab === 'pedidos' && <Pedidos />}
+            {activeTab === 'account' && <MiCuenta />}
+            {activeTab === 'direcciones' && <DireccionesEnvio />}
+            {activeTab === 'recordatorios' && <Recordatorios />}
+          </div>
         </div>
-        <div className="md:hidden mt-auto">
+        <div className="md:hidden">
           <LogoutButton />
         </div>
       </div>
