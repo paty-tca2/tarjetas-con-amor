@@ -36,7 +36,9 @@ const Header: React.FC = () => {
             <Link href="/auth/sign-up">
               <FaUser className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 cursor-pointer" />
             </Link>
-            <FaShoppingCart className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            <Link href="/carrito">
+              <FaShoppingCart className="text-black h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+            </Link>
           </div>
         </header>
 

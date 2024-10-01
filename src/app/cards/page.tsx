@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 type CardOptions = {
   type: 'ecard' | 'standard' | 'mediana' | 'grande';
@@ -34,17 +35,37 @@ export default function CardsPage() {
   const [cardOptions, setCardOptions] = useState<CardOptions>({ type: 'standard', quantity: 1 });
   const [selectedPage, setSelectedPage] = useState(1);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const handleCardClick = (template: CardTemplate) => {
     setSelectedTemplate(template);
     setShowModal(true);
   };
 
-  const handleAddToBasket = () => {
-    if (selectedTemplate) {
-      localStorage.setItem('selectedTemplate', JSON.stringify(selectedTemplate));
-      localStorage.setItem('selectedOptions', JSON.stringify(cardOptions));
-      router.push('/carrito');
+  const handleAddToBasket = async () => {
+    if (selectedTemplate && session) {
+      try {
+        const price = parseFloat(cardSizes[cardOptions.type].price.replace('$', ''));
+        const response = await fetch('/api/cart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            templateId: selectedTemplate.id,
+            options: cardOptions,
+            price: price,
+          }),
+        });
+
+        if (response.ok) {
+          router.push('/carrito');
+        } else {
+          console.error('Failed to add item to cart');
+        }
+      } catch (error) {
+        console.error('Error adding item to cart:', error);
+      }
     }
   };
 

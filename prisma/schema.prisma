@@ -26,6 +26,7 @@ model User {
   addresses Address[]
   orders    Order[]
   reminders Reminder[]
+  cart      CartItem[]
 }
 
 model Address {
@@ -80,4 +81,15 @@ model Reminder {
   updatedAt    DateTime @updatedAt
 
   @@index([day, month])
+}
+
+model CartItem {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  templateId String
+  options    String   // JSON string of options
+  price      Decimal  @db.Decimal(10, 2)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

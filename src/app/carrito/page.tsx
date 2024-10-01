@@ -6,7 +6,7 @@ import { CardTemplate } from '@/components/cards/card-templates';
 import { useSession } from 'next-auth/react';
 
 type CardOptions = {
-  type: 'ecard' | 'standard';
+  type: 'ecard' | 'standard' | 'mediana' | 'grande';
   quantity: number;
 };
 
@@ -20,6 +20,8 @@ type CardSize = {
 const cardSizes: Record<CardOptions['type'], CardSize> = {
   ecard: { label: 'eCard', description: 'Envío instantaneo', price: 99, bgColor: '#04d9b2' },
   standard: { label: 'Standard Card', description: 'Para tus seres queridos', price: 199, bgColor: '#5D60a6' },
+  mediana: { label: 'Mediana', description: '57 x 81 cm', price: 299, bgColor: '#5D60a6' },
+  grande: { label: 'Grande', description: '40 x 29.5 cm', price: 399, bgColor: '#5D60a6' },
 };
 
 type Address = {
@@ -30,6 +32,13 @@ type Address = {
   zipCode: string;
 };
 
+type CartItem = {
+  id: number;
+  templateId: string;
+  options: CardOptions;
+  price: number;
+};
+
 const CartPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
@@ -37,6 +46,7 @@ const CartPage = () => {
   const [cartItem, setCartItem] = useState<{ template: CardTemplate; options: CardOptions } | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -57,7 +67,34 @@ const CartPage = () => {
       }
     };
 
+    const fetchCart = async () => {
+      if (session) {
+        try {
+          const response = await fetch('/api/cart');
+          if (response.ok) {
+            const data = await response.json();
+            // Ensure quantity is always a number
+            const validatedData = data.map((item: CartItem) => ({
+              ...item,
+              options: {
+                ...item.options,
+                quantity: Number(item.options.quantity) || 1
+              }
+            }));
+            setCartItems(validatedData);
+          } else {
+            console.error('Failed to fetch cart');
+          }
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
     fetchAddresses();
+    fetchCart();
     const storedTemplate = localStorage.getItem('selectedTemplate');
     const storedOptions = localStorage.getItem('selectedOptions');
 
@@ -82,33 +119,104 @@ const CartPage = () => {
     console.log('Processing payment...');
   };
 
-  const handleQuantityChange = (newQuantity: number) => {
-    if (cartItem) {
-      const updatedOptions = { ...cartItem.options, quantity: newQuantity };
-      setCartItem({ ...cartItem, options: updatedOptions });
-      localStorage.setItem('selectedOptions', JSON.stringify(updatedOptions));
+  const handleTypeChange = async (itemId: number, newType: CardOptions['type']) => {
+    const updatedItems = cartItems.map(item => {
+      if (item.id === itemId) {
+        const newPrice = cardSizes[newType].price;
+        return {
+          ...item,
+          options: { ...item.options, type: newType },
+          price: newPrice
+        };
+      }
+      return item;
+    });
+
+    setCartItems(updatedItems);
+
+    // Update the item in the database
+    try {
+      const response = await fetch(`/api/cart/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          options: { ...updatedItems.find(item => item.id === itemId)?.options },
+          price: cardSizes[newType].price,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update cart item');
+        // Revert the change if the update failed
+        setCartItems(cartItems);
+      }
+    } catch (error) {
+      console.error('Error updating cart item:', error);
+      // Revert the change if the update failed
+      setCartItems(cartItems);
     }
   };
 
-  const handleTypeChange = (newType: CardOptions['type']) => {
-    if (cartItem) {
-      const updatedOptions = { ...cartItem.options, type: newType };
-      setCartItem({ ...cartItem, options: updatedOptions });
-      localStorage.setItem('selectedOptions', JSON.stringify(updatedOptions));
+  const handleQuantityChange = async (itemId: number, newQuantity: number) => {
+    const updatedItems = cartItems.map(item => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          options: {
+            ...item.options,
+            quantity: newQuantity
+          }
+        };
+      }
+      return item;
+    });
+
+    setCartItems(updatedItems);
+
+    // Update the item in the database
+    try {
+      const response = await fetch(`/api/cart/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          options: updatedItems.find(item => item.id === itemId)?.options,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update cart item');
+        // Revert the change if the update failed
+        setCartItems(cartItems);
+      }
+    } catch (error) {
+      console.error('Error updating cart item:', error);
+      // Revert the change if the update failed
+      setCartItems(cartItems);
     }
   };
 
-  const handleRemoveItem = () => {
-    setCartItem(null);
-    localStorage.removeItem('selectedTemplate');
-    localStorage.removeItem('selectedOptions');
+  const handleRemoveItem = async (id: number) => {
+    try {
+      const response = await fetch(`/api/cart?id=${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        setCartItems(cartItems.filter(item => item.id !== id));
+      } else {
+        console.error('Failed to remove item from cart');
+      }
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
   };
 
   const handleContinueShopping = () => {
     router.push('/cards');
   };
 
-  if (!cartItem) {
+  if (!cartItem && cartItems.length === 0) {
     return (
       <div className="container mx-auto pt-48 px-4 py-8 text-center">
         <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6">Carrito vacío</h1>
@@ -123,7 +231,7 @@ const CartPage = () => {
     );
   }
 
-  const totalPrice = cardSizes[cartItem.options.type].price * cartItem.options.quantity;
+  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.options.quantity, 0);
 
   return (
     <div className="container mx-auto pt-48 px-4 py-8">
@@ -131,66 +239,72 @@ const CartPage = () => {
       
       <div className="grid md:grid-cols-2 gap-8">
         <div>
-          <h2 className="text-2xl font-geometos text-[#5D60a6] mb-4">Artículo en el carrito</h2>
-          <div className="bg-white p-4 rounded-lg shadow">
-            <Image 
-              src={`/templates/TEMPLATE-${cartItem.template.id}-1.webp`} 
-              alt="Card Template" 
-              width={200} 
-              height={200} 
-              className="w-full h-48 object-cover rounded-lg mb-4" 
-            />
-            <h3 className="text-xl font-geometos text-[#5D60a6]">{cartItem.template.id}</h3>
-            <p className="text-sm font-geometos text-gray-600">{cardSizes[cartItem.options.type].description}</p>
-            
-            {/* Card Type Selection */}
-            <div className="mt-4">
-              <label className="block text-sm font-geometos text-gray-600 mb-2">Tipo de tarjeta:</label>
-              <div className="flex space-x-4">
-                {(['ecard', 'standard'] as const).map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => handleTypeChange(type)}
-                    className={`px-4 py-2 rounded-full font-geometos text-sm ${
-                      cartItem.options.type === type
-                        ? 'bg-[#5D60a6] text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    {cardSizes[type].label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex items-center">
-                <button
-                  onClick={() => handleQuantityChange(Math.max(1, cartItem.options.quantity - 1))}
-                  className="bg-gray-200 px-2 py-1 rounded-l"
-                >
-                  -
-                </button>
-                <span className="bg-gray-100 px-4 py-1">{cartItem.options.quantity}</span>
-                <button
-                  onClick={() => handleQuantityChange(cartItem.options.quantity + 1)}
-                  className="bg-gray-200 px-2 py-1 rounded-r"
-                >
-                  +
-                </button>
-              </div>
-              <p className="text-lg font-geometos text-[#04d9b2]">
-                ${cardSizes[cartItem.options.type].price} x {cartItem.options.quantity}
+          <h2 className="text-2xl font-geometos text-[#5D60a6] mb-4">Artículos en el carrito</h2>
+          {cartItems.map((item) => (
+            <div key={item.id} className="bg-white p-4 rounded-lg shadow mb-4">
+              <Image 
+                src={`/templates/TEMPLATE-${item.templateId}-1.webp`} 
+                alt="Card Template" 
+                width={200} 
+                height={200} 
+                className="w-full h-48 object-cover rounded-lg mb-4" 
+              />
+              <h3 className="text-xl font-geometos text-[#5D60a6]">{item.templateId}</h3>
+              <p className="text-sm font-geometos text-gray-600">
+                {cardSizes[item.options.type as keyof typeof cardSizes]?.description || 'Descripción no disponible'}
               </p>
+              
+              {/* Card Type Selection */}
+              <div className="mt-4">
+                <label className="block text-sm font-geometos text-gray-600 mb-2">Tipo de tarjeta:</label>
+                <div className="flex space-x-4">
+                  {(Object.keys(cardSizes) as Array<keyof typeof cardSizes>).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => handleTypeChange(item.id, type)}
+                      className={`px-4 py-2 rounded-full font-geometos text-sm ${
+                        item.options.type === type
+                          ? 'bg-[#5D60a6] text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {cardSizes[type].label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center">
+                  <button
+                    onClick={() => handleQuantityChange(item.id, Math.max(1, item.options.quantity - 1))}
+                    className="bg-gray-200 px-2 py-1 rounded-l"
+                  >
+                    -
+                  </button>
+                  <span className="bg-gray-100 px-4 py-1">{item.options.quantity}</span>
+                  <button
+                    onClick={() => handleQuantityChange(item.id, item.options.quantity + 1)}
+                    className="bg-gray-200 px-2 py-1 rounded-r"
+                  >
+                    +
+                  </button>
+                </div>
+                <p className="text-lg font-geometos text-[#04d9b2]">
+                  ${item.price} x {item.options.quantity}
+                </p>
+              </div>
+              <p className="text-lg font-geometos text-[#5D60a6] mt-2">
+                Total: ${(item.price * item.options.quantity).toFixed(2)}
+              </p>
+              <button
+                onClick={() => handleRemoveItem(item.id)}
+                className="mt-4 text-red-500 hover:text-red-700 font-geometos"
+              >
+                Eliminar articulo
+              </button>
             </div>
-            <p className="text-lg font-geometos text-[#5D60a6] mt-2">Total: ${totalPrice}</p>
-            <button
-              onClick={handleRemoveItem}
-              className="mt-4 text-red-500 hover:text-red-700 font-geometos"
-            >
-              Eliminar articulo
-            </button>
-          </div>
+          ))}
         </div>
         
         <div>
