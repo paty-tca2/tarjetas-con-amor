@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/auth-options';
+import { authOptions } from '../../auth/[...nextauth]/auth-options';
+
+
 
 
 export async function GET(req: NextRequest) {
@@ -33,12 +35,12 @@ export async function POST(req: NextRequest) {
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
-
-  const cartItem = await prisma.CartItem.create({
+  const cartItem = await prisma.cartItem.create({
     data: {
       userId: user.id,
       templateId,
       options: JSON.stringify(options),
+      price: 0, // Add a default price or calculate it based on the template and options
     },
   });
 

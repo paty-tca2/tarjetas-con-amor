@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { CardTemplate } from '@/components/cards/card-templates';
 import { useSession } from 'next-auth/react';
+import { loadStripe } from '@stripe/stripe-js';
 
 type CardOptions = {
   type: 'ecard' | 'standard' | 'mediana' | 'grande';
@@ -38,6 +39,8 @@ type CartItem = {
   options: CardOptions;
   price: number;
 };
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const CartPage = () => {
   const router = useRouter();
@@ -216,16 +219,66 @@ const CartPage = () => {
     router.push('/cards');
   };
 
-  if (!cartItem && cartItems.length === 0) {
+  const handleCheckout = async () => {
+    try {
+      const stripe = await stripePromise;
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const session = await response.json();
+      const result = await stripe!.redirectToCheckout({
+        sessionId: session.sessionId,
+      });
+
+      if (result.error) {
+        console.error(result.error.message);
+      }
+    } catch (error) {
+      console.error('Error in handleCheckout:', error);
+    }
+  };
+
+  if (!session) {
+    return (
+      <div className="container mx-auto pt-48 px-4 py-8 text-center">
+        <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6">Inicia sesión para ver tu carrito</h1>
+        <p className="text-xl font-geometos text-gray-600 mb-8">Por favor, inicia sesión para acceder a tu carrito de compras.</p>
+        <button
+          onClick={() => router.push('/auth/signin')}
+          className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-6 py-3 rounded font-geometos text-lg"
+        >
+          Iniciar sesión
+        </button>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto pt-48 px-4 py-8 text-center">
+        <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6">Cargando carrito...</h1>
+      </div>
+    );
+  }
+
+  if (cartItems.length === 0) {
     return (
       <div className="container mx-auto pt-48 px-4 py-8 text-center">
         <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6">Carrito vacío</h1>
-        <p className="text-xl font-geometos text-gray-600 mb-8">No hay artículos en tu carrito.</p>
+        <p className="text-xl font-geometos text-gray-600 mb-8">No tienes artículos en tu carrito.</p>
         <button
           onClick={handleContinueShopping}
           className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-6 py-3 rounded font-geometos text-lg"
         >
-          Continuar comprando
+          Ir a comprar
         </button>
       </div>
     );
@@ -328,14 +381,12 @@ const CartPage = () => {
             <p className="text-xl font-geometos text-[#5D60a6]">No hay direcciones guardadas. Por favor, agrega una direccion en tu perfil.</p>
           )}
           
-          <h2 className="text-2xl font-geometos text-[#5D60a6] mb-4">Metodo de pago</h2>
-          <div className="bg-white p-4 rounded-lg shadow mb-4">
-            <p className="font-geometos text-[#5D60a6]">Opciones de pago en desarrollo</p>
-          </div>
+         
           
+          <h2>Total: ${totalPrice.toFixed(2)}</h2>
           <button
-            onClick={handlePayment}
-            className="w-80 bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-4 py-2 rounded-full font-geometos"
+            onClick={handleCheckout}
+            className="w-full bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-4 py-2 rounded-full font-geometos"
           >
             Proceder al pago
           </button>
