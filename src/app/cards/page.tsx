@@ -253,7 +253,7 @@ export default function CardsPage() {
                 onClick={handlePersonalize}
                 className="bg-[#5D60a6] hover:bg-[#04d9b2] text-white px-4 py-2 rounded-full font-geometos w-full md:w-auto"
               >
-                Personaliza
+                Personalizar
               </button>
               <button 
                 onClick={handleAddToBasket}
