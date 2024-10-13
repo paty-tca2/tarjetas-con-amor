@@ -1,4 +1,7 @@
-"use client"
+"use client"//se renderiza del lado del cliente
+
+
+// importacion de componentes 
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { cardTemplates, CardTemplate } from '@/components/cards/card-templates';
@@ -9,7 +12,9 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import './style.css';
 
+//opciones de tarjeta 
 type CardOptions = {
   type: 'ecard' | 'standard' | 'mediana' | 'grande';
   quantity: number;
@@ -22,13 +27,16 @@ type CardSize = {
   bgColor: string;
 };
 
+
+//declaracion del objeto para seleccionar el tamaño de la carta
 const cardSizes: Record<CardOptions['type'], CardSize> = {
-  ecard: { label: 'eCard', description: 'Envio instantaneo', price: '$99', bgColor: '#04d9b2' },
+  ecard: { label: 'eCard', description: 'Envio instantaneo', price: '$.20', bgColor: '#04d9b2' },
   standard: { label: 'Standard ', description: 'Para tus seres queridos', price: '$199', bgColor: '#5D60a6' },
   mediana: { label: 'Mediana ', description: '57 x 81 cm', price: '$299', bgColor: '#5D60a6' },
   grande: { label: 'Grande ', description: '40 x 29.5 cm', price: '$399', bgColor: '#5D60a6' },
 };
 
+//estado: uiliza para manejar el estado de la plantilla 
 export default function CardsPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<CardTemplate | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -37,11 +45,12 @@ export default function CardsPage() {
   const router = useRouter();
   const { data: session } = useSession();
 
+  //Abre un modal con los detalles de la plantilla de tarjeta seleccionada.
   const handleCardClick = (template: CardTemplate) => {
     setSelectedTemplate(template);
     setShowModal(true);
   };
-
+//envia una solicitud post con los datos de la tarjeta para agregar al carrio
   const handleAddToBasket = async () => {
     if (selectedTemplate && session) {
       try {
@@ -68,13 +77,13 @@ export default function CardsPage() {
       }
     }
   };
-
+//modificar tamaños de la tarjeta seleccionada 
   const handleSizeChange = (type: CardOptions['type']) => {
     setCardOptions({ ...cardOptions, type });
   };
 
   const onClose = () => setShowModal(false);
-
+//redirige a una persona para personalizar la tarjeta
   const handlePersonalize = () => {
     if (selectedTemplate) {
       router.push(`/personalize/${selectedTemplate.id}`);
@@ -86,14 +95,18 @@ export default function CardsPage() {
     ? Array(4).fill(selectedTemplate.imageUrl)
     : [];
 
-  const categories = ['Cumpleaños', 'Exitos', 'Amor', 'Salud y Cariño', 'Peques'];
+  const categories = ['Todos','Cumpleaños', 'Exitos', 'Amor', 'Salud y Cariño', 'Peques','Dia de muertos','Hallowen','Navidad','Dia de reyes','Dia de las madres','Dia del padre','Dia de la independencia','XV años','Conciertos'];
   const [activeCategory, setActiveCategory] = useState(categories[0]);
 
   return (
+    //selccionamos una categoria de la tarjeta
     <div className="container mx-auto pt-48 px-4 py-8">
       <h1 className="text-5xl font-geometos text-[#5D60a6] mb-6 text-center">Selecciona tu memoria</h1>
       
-      {/* Category tabs */}
+      {/* MENU DE CATEGORIAS */}
+      {/* Botón para mostrar todas las plantillas */}
+      
+      
       <div className="flex flex-wrap justify-center gap-2 mb-8">
         {categories.map((category) => (
           <button
@@ -106,11 +119,14 @@ export default function CardsPage() {
             {category}
           </button>
         ))}
+
+
       </div>
 
       {/* Desktop view */}
+      {/*VISTA PARA ESCRITORIO*/}
       <div className="hidden md:flex md:flex-wrap md:justify-center gap-6">
-        {cardTemplates.map((template) => (
+        {cardTemplates.filter((template) => template.categoria.includes(activeCategory)).map((template) => (
           <div 
             key={template.id} 
             className="relative group cursor-pointer transition-all duration-300 transform hover:scale-105"
@@ -136,7 +152,7 @@ export default function CardsPage() {
         ))}
       </div>
 
-      {/* Mobile view */}
+      {/* Mobile view 
       <div className="md:hidden">
         <Swiper
           spaceBetween={20}
@@ -159,14 +175,18 @@ export default function CardsPage() {
                   className="w-full h-90 object-cover rounded-lg"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
-                  {/* ... existing hover content ... */}
+                  {/* ... existing hover content ... 
                 </div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
+      */}
 
+
+
+      
       {showModal && selectedTemplate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
           <div className="relative bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-2xl max-h-[95vh] overflow-y-auto">
@@ -208,6 +228,7 @@ export default function CardsPage() {
                   ))}
                 </div>
               </div>
+              {/*MUESTRA VENTANA EMERGENTE PARA SELECCIONAR EL TAMAÑO CANTIDAD Y EL BOTON DE PERSO */}
               <div className="w-full md:w-1/2 md:ml-4">
                 <h2 className="text-2xl font-geometos text-[#5D60a6] mb-4">Selecciona el tamaño</h2>
                 {Object.entries(cardSizes).map(([type, { label, description, price }]) => (
@@ -231,7 +252,7 @@ export default function CardsPage() {
                     </div>
                   </div>
                 ))}
-                
+                {/*VISTA PREVIA DEL DISEÑO DE LA PLANTILLA */}
                 <div className="mb-4">
                   <label htmlFor="quantity" className="block text-sm font-geometos text-[#5D60a6] mb-2">Cantidad</label>
                   <select
@@ -254,12 +275,6 @@ export default function CardsPage() {
                 className="bg-[#5D60a6] hover:bg-[#04d9b2] text-white px-4 py-2 rounded-full font-geometos w-full md:w-auto"
               >
                 Personalizar
-              </button>
-              <button 
-                onClick={handleAddToBasket}
-                className="bg-[#04d9b2] hover:bg-[#5D60a6] text-white px-4 py-2 rounded-full font-geometos w-full md:w-auto"
-              >
-                Agregar al carrito
               </button>
             </div>
           </div>
