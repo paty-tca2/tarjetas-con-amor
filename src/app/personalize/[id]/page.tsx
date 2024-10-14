@@ -6,11 +6,13 @@ import Canvas from '@/components/personalize/canvas';
 import { CardTemplate } from '@/components/cards/card-templates';
 import PersonalizeHeader from '@/components/personalize/header-personalize';
 
+//perosanlizacion de la tajerta 
 type CardOptions = {
   type: 'ecard' | 'standard';
   quantity: number;
 };
 
+//parametros definidos para seleccionar la plantilla
 export default function PersonalizePage() {
   const { id } = useParams();
   const router = useRouter();
@@ -23,10 +25,12 @@ export default function PersonalizePage() {
     setTemplate(selectedTemplate || null);
   }, [id]);
 
+  //funcion para la vista previa de las plantillas
   const handlePreview = () => {
     // Implement preview logic if needed
   };
 
+  //funcion que guarda la tarjeta personalizada en el carrito de compras
   const handleAddToBasket = () => {
     if (template) {
       localStorage.setItem('selectedTemplate', JSON.stringify(template));
@@ -38,9 +42,10 @@ export default function PersonalizePage() {
   if (!template) {
     return <div>Loading...</div>;
   }
-
+//ncabezado para la página de personalización que probablemente incluya opciones para agregar la tarjeta al carrito.
   return (
     <div className="container mx-auto pt-48 px-4 py-8">
+      
       <PersonalizeHeader 
         onAddToBasket={handleAddToBasket} 
         template={template}

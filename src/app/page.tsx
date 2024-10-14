@@ -1,3 +1,6 @@
+
+
+// archico para importar las rutas
 // src/app/page.tsx
 import Footer from '@/components/footer';
 import Header from '@/components/header';

@@ -1,6 +1,7 @@
 export type CardTemplate = {
   id: string;
   imageUrl: string;
+  categoria:string [];
   pages: {
     pageNumber: number;
     staticPlaceholders: {
@@ -20,6 +21,7 @@ export const cardTemplates: CardTemplate[] = [
   { 
     id: '1', 
     imageUrl: '/templates/tarjeta1.png',
+    categoria:['Dia de muertos','Exitos','Dia de las madres','Dia del padre','Todos'],
     pages: [
       {
         pageNumber: 1,
@@ -69,6 +71,7 @@ export const cardTemplates: CardTemplate[] = [
   { 
     id: '2', 
     imageUrl: '/templates/tarjeta2.png',
+    categoria:['Dia de muertos','Navidad','Dia de reyes','Exitos','Conciertos','Todos'],
     pages: [
       {
         pageNumber: 1,
@@ -91,6 +94,7 @@ export const cardTemplates: CardTemplate[] = [
   { 
     id: '3', 
     imageUrl: '/templates/tarjeta3.png',
+    categoria:['Muertos','Navidad','Dia de la independencia','Todos'],
     pages: [
       {
         pageNumber: 1,
@@ -100,6 +104,7 @@ export const cardTemplates: CardTemplate[] = [
   },
   {
     id: '4',
+    categoria:['Muertos','Navidad','Todos'],
     imageUrl: '/templates/tarjeta4.png',
     pages: []
   },
